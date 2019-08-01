@@ -1,30 +1,23 @@
-Stepup-gssp-example
+Stepup webauthn
 ===================
 
 <a href="#">
-    <img src="https://travis-ci.org/OpenConext/Stepup-gssp-bundle.svg?branch=master" alt="build:">
+    <img src="https://travis-ci.org/OpenConext/Stepup-Webauthn.svg?branch=master" alt="build:">
 </a></br>
 
-Example Generic SAML Stepup Provider.
-
-This repository can be used for reference material or 
-as a base project setup for new IdP SecondFactor application.
-
-The SAML logic for receiving authentication request (AuthnRequest) and sending authentication response back is
-placed inside the Symfony bundle [stepup-gssp-bundle](https://github.com/OpenConext/Stepup-gssp-bundle). The state of the
-application is stored inside PHP sessions, each new request will invalidate the current session state.
+GSSP webauthn implementation 
 
 Locale user preference
 ----------------------
 
 The default locale is based on the user agent. When the user switches its locale the selected preference is stored inside a
-browser cookie (stepup_locale). The cookie is set on naked domain of the requested domain (for gssp.stepup.example.com this is example.com).
+browser cookie (stepup_locale). The cookie is set on naked domain of the requested domain (for webauthn.test this is example.com).
 
 Authentication and registration flows
 -------------------------------------
 
 The application provides internal (SpBundle) and a remote service provider. Instructions for this are given 
-on the homepage of this example project [Homepage](https://gssp.stepup.example.com/app_dev.php/).
+on the homepage of this example project [Homepage](https://webauthn.test/app_dev.php/).
 
 ![flow](docs/flow.png)
 <!---
@@ -48,37 +41,6 @@ SP -> User: User registered/Authenticated
 @enduml
 --->
 
-
-How to create your own Stepup Provider
-======================================
-
-There are two ways to approach this. 
-
-Copy this GSSP example repository
----------------------------------
-
-One of the benefits of using this repository is that it contains many pre-configured tools:
-
-* Metrics & test tooling [testing.md](./docs/testing.md)
-* Development environment provisioned by Vagrant 
-* Pre-configured travis.yml for CI integration
-* Default SurfContext styling [frontend_tooling.md](./docs/frontend_tooling.md)
-
-1) Clone and checkout this repository
-2) Change the project configuration variables:
-    * composer.json name and description
-    * this readme.md file
-    * Replace 'gssp.stepup.example.com' in all files with your own hostename
-3) Install the copied project. (See [Development environment](#) section of this README.md file)
-4) Implement your authentication & registration logic in DefaultController::registrationAction and DefaultController::authenticateAction. 
-5) Feel free to rename and change this example clone for your needs.
-
-Install from a clean or exiting symfony project
-------------------------------------
-
-1) [Install Symfony](http://symfony.com/doc/current/setup.html) 
-2) Follow the instructions from the [GSSP bundle](https://github.com/OpenConext/Stepup-gssp-bundle)
-
 Development environment
 ======================
 
@@ -87,16 +49,14 @@ from that machine.
 
 Requirements
 -------------------
-- ansible 2.x
 - vagrant 1.9.x
 - vagrant-hostsupdater
 - Virtualbox
-- ansible-galaxy
 
 Install
 =======
 
-``` ansible-galaxy install -r ansible/requirements.yml -p ansible/roles/ ```
+``` cd homestead && composer install ```
 
 ``` vagrant up ```
 
@@ -106,17 +66,13 @@ Go to the directory inside the VM:
 
 ``` cd /vagrant ```
 
-Install composer dependencies:
-
-``` composer install ```
-
 Build frontend assets:
 
 ``` composer encore dev ``` or ``` composer encore prod ``` for production 
 
 If everything goes as planned you can go to:
 
-[https://gssp.stepup.example.com](https://gssp.stepup.example.com)
+[https://webauthn.test](https://webauthn.test)
 
 Debugging
 ---------

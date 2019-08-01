@@ -1,9 +1,9 @@
 {
-    "name": "surfnet/stepup-gssp-example",
+    "name": "surfnet/stepup-webauthn",
     "license": "Apache-2.0",
-    "description": "Example Generic SAML Stepup Provider.",
+    "description": "Webauthn SAML Stepup Provider.",
     "type": "project",
-    "minimum-stability": "stable",
+    "minimum-stability": "alpha",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
@@ -30,11 +30,11 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=7.2",
         "incenteev/composer-parameter-handler": "^2.0",
         "sensio/distribution-bundle": "^5.0.19",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "surfnet/stepup-gssp-bundle": "dev-feature/7.2",
+        "surfnet/stepup-gssp-bundle": "3.0.0-alpha.1",
         "symfony/monolog-bundle": "^3.1.0",
         "symfony/polyfill-apcu": "^1.0",
         "symfony/symfony": "3.3.*",

@@ -101,7 +101,7 @@ class WebContext implements Context, KernelAwareContext
     public function callIdentityProviderSSOActionWithAuthnRequest()
     {
         $this->minkContext->visit('https://pieter.aai.surfnet.nl/simplesamlphp/sp.php?sp=default-sp');
-        $this->minkContext->selectOption('idp', 'https://gssp.stepup.example.com/app_dev.php/saml/metadata');
+        $this->minkContext->selectOption('idp', 'https://webauthn.test/app_dev.php/saml/metadata');
         $this->minkContext->pressButton('Login');
     }
 
@@ -112,7 +112,7 @@ class WebContext implements Context, KernelAwareContext
     {
         /** @var RequestStack $stack */
         $stack = $this->kernel->getContainer()->get('request_stack');
-        $stack->push(Request::create('https://gssp.stepup.example.com'));
+        $stack->push(Request::create('https://webauthn.test'));
         $ip = $this->kernel->getContainer()->get('surfnet_saml.hosted.identity_provider');
         $stack->pop();
 

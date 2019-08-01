@@ -4,16 +4,14 @@ dist: trusty
 
 addons:
   hosts:
-    - gssp.stepup.example.com
+    - webauthn.test
   apt:
     packages:
       - cmake
       - apache2
 
 php:
-  - 5.6
-  - 7.0
-  - 7.1
+  - 7.2
 
 cache:
   directories:
@@ -21,7 +19,7 @@ cache:
 
 before_script:
   # configure ssl
-  - sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/gssp.key -out /etc/ssl/certs/gssp.crt -subj "/C=NL/ST=Netherlands/L=Amsterdam/O=TEST/CN=gssp.stepup.example.com"
+  - sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/gssp.key -out /etc/ssl/certs/gssp.crt -subj "/C=NL/ST=Netherlands/L=Amsterdam/O=TEST/CN=webauthn.test"
 
   - sudo apt-get update
   - sudo apt-get install apache2 libapache2-mod-fastcgi
@@ -52,8 +50,8 @@ before_script:
   # Check if everything runs properly
   - ps aux | grep php-fpm
   - netstat -an | grep :9000
-  - curl --insecure https://gssp.stepup.example.com
-  - curl --insecure https://gssp.stepup.example.com/bootstrap.min.js
+  - curl --insecure https://webauthn.test
+  - curl --insecure https://webauthn.test/bootstrap.min.js
 
 script:
   # Test if the website is actually running
