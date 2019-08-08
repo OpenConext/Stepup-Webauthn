@@ -1,6 +1,0 @@
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
-
-gssp_saml:
-    resource: '@SurfnetGsspBundle/Resources/config/routing.yml'

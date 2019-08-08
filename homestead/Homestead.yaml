@@ -1,4 +1,4 @@
-ip: 192.168.77.42
+ip: 192.168.77.53
 memory: 4096
 cpus: 2
 provider: virtualbox
@@ -14,7 +14,12 @@ folders:
 sites:
     -
         map: webauthn.test
-        to: /home/vagrant/code/web
-        type: symfony2
+        to: /home/vagrant/code/public
+        type: symfony4
+        php: '7.2'
 name: webauthn
 hostname: webauthn
+databases:
+  - test
+features:
+    - mariadb: true

@@ -10,6 +10,10 @@
 
 cd /home/vagrant/code
 
+# load any extensions you like here
+sudo apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install libmagickwand-dev \
+imagemagick php-imagick php7.2-gmp
+
 sudo cp /home/vagrant/code/homestead/php.ini /etc/php/7.2/mods-available/custom.ini
 sudo phpenmod -v 7.2 custom
 composer install

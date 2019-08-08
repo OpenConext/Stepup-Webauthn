@@ -6,7 +6,7 @@
 ###########################
 
 /.web-server-pid
-/app/config/parameters.yml
+/config/packages/parameters.yml
 /build/
 /var/*
 !/var/cache
@@ -25,6 +25,7 @@
 /web/js/
 /node_modules/
 /web/build
+.env
 
 # Vagrant files #
 #################
@@ -39,3 +40,39 @@ homestead/vendor
 ######################
 .DS_Store
 .DS_Store?
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> behat/symfony2-extension ###
+behat.yml
+###< behat/symfony2-extension ###

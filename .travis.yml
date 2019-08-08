@@ -4,7 +4,7 @@ dist: trusty
 
 addons:
   hosts:
-    - webauthn.test
+    - gssp.stepup.example.com
   apt:
     packages:
       - cmake
@@ -19,7 +19,7 @@ cache:
 
 before_script:
   # configure ssl
-  - sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/gssp.key -out /etc/ssl/certs/gssp.crt -subj "/C=NL/ST=Netherlands/L=Amsterdam/O=TEST/CN=webauthn.test"
+  - sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/gssp.key -out /etc/ssl/certs/gssp.crt -subj "/C=NL/ST=Netherlands/L=Amsterdam/O=TEST/CN=gssp.stepup.example.com"
 
   - sudo apt-get update
   - sudo apt-get install apache2 libapache2-mod-fastcgi
@@ -44,17 +44,20 @@ before_script:
   - sudo service apache2 restart
 
   # Install dependencies
+  - cp .env.ci .env
+  - cp config/packages/parameters.yml.dist config/packages/parameters.yml
   - composer install
-  - composer encore dev
+  - yarn install
+  - yarn encore dev
 
   # Check if everything runs properly
   - ps aux | grep php-fpm
   - netstat -an | grep :9000
-  - curl --insecure https://webauthn.test
-  - curl --insecure https://webauthn.test/bootstrap.min.js
+  # Test if the website is actually running
+  - curl --insecure https://gssp.stepup.example.com
+  - curl --insecure https://gssp.stepup.example.com/fonts/FontAwesome.otf
 
 script:
-  # Test if the website is actually running
   - composer test
 
 after_script:
