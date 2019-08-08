@@ -17,24 +17,36 @@
 
 namespace App\Controller;
 
+use App\Repository\UserRepository;
+use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
 use Surfnet\GsspBundle\Service\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Webauthn\Bundle\Service\PublicKeyCredentialCreationOptionsFactory;
 
 class DefaultController extends AbstractController
 {
     private $authenticationService;
     private $registrationService;
+    private $userRepository;
+    private $publicKeyCredentialCreationOptionsFactory;
+    private $creationOptionsStore;
 
     public function __construct(
         AuthenticationService $authenticationService,
-        RegistrationService $registrationService
+        RegistrationService $registrationService,
+        UserRepository $userRepository,
+        PublicKeyCredentialCreationOptionsFactory $publicKeyCredentialCreationOptionsFactory,
+        PublicKeyCredentialCreationOptionsStore $creationOptionsStore
     ) {
         $this->authenticationService = $authenticationService;
         $this->registrationService = $registrationService;
+        $this->userRepository = $userRepository;
+        $this->publicKeyCredentialCreationOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
+        $this->creationOptionsStore = $creationOptionsStore;
     }
 
     /**
@@ -56,23 +68,26 @@ class DefaultController extends AbstractController
      */
     public function registrationAction(Request $request)
     {
-        if ($request->get('action') === 'error') {
-            $this->registrationService->reject($request->get('message'));
+        if ($request->isMethod('post') && $request->get('action') === 'cancel') {
+            $this->registrationService->reject('User canceled');
             return $this->registrationService->replyToServiceProvider();
         }
 
-        if ($request->get('action') === 'register') {
-            $this->registrationService->register($request->get('NameID'));
+        if ($request->isMethod('post') && $request->get('action') === 'register') {
             return $this->registrationService->replyToServiceProvider();
         }
 
-        $requiresRegistration = $this->registrationService->registrationRequired();
-        $response = new Response(null, $requiresRegistration ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        if (!$this->registrationService->registrationRequired()) {
+            throw new UnrecoverableErrorException('No registration required');
+        }
 
-        return $this->render('default/registration.html.twig', [
-            'requiresRegistration' => $requiresRegistration,
-            'NameID' => uniqid('test-prefix-', 'test-entropy'),
-        ], $response);
+        $userEntity = $this->userRepository->createUserEntity('', '', null);
+        $publicKeyCredentialCreationOptions = $this->publicKeyCredentialCreationOptionsFactory->create('default', $userEntity);
+        $this->creationOptionsStore->set($publicKeyCredentialCreationOptions);
+        return $this->render('default\registration.html.twig', [
+            'NameID' => uniqid('test-prefix-', true),
+            'publicKeyOptions' => $publicKeyCredentialCreationOptions,
+        ]);
     }
 
     /**
