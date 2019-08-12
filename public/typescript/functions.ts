@@ -20,7 +20,7 @@ export const deSerializedPublicKeyCredentialCreationOptions: (options: Serialize
       challenge: Base64UrlSafeToUInt8(challenge),
       pubKeyCredParams,
       timeout,
-      excludeCredentials: optionalBase64UrlSafeToUInt8Ids(excludeCredentials) as any,
+      excludeCredentials: optionalBase64UrlSafeToUInt8Ids(excludeCredentials),
       authenticatorSelection,
       attestation,
       extensions,
@@ -40,4 +40,4 @@ export const serializePublicKeyCredential: (credentials: PublicKeyCredential) =>
       type,
     });
 
-export const isPublicKeyCredentialType: (type: CredentialType | null) => type is PublicKeyCredential = (({ type }: any) => type === 'public-key') as any;
+export const isPublicKeyCredentialType: (type: CredentialType | null) => type is PublicKeyCredential = ((key: any) => key && key.type === 'public-key') as any;

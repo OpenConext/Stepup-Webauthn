@@ -1,0 +1,30 @@
+default:
+    formatters:
+        progress:
+            paths: false
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: features/bootstrap/bootstrap.php
+                class: App\Kernel
+        Behat\MinkExtension:
+            base_url: https://webauthn.test
+            default_session: 'symfony2'
+            goutte:
+               guzzle_parameters:
+                    curl.CURLOPT_SSL_VERIFYPEER: false
+                    curl.CURLOPT_CERTINFO: false
+                    ssl.certificate_authority: false
+                    verify: false
+            sessions:
+                symfony2:
+                    symfony2: ~
+        Behatch\Extension: ~
+    suites:
+        default:
+            paths: [ Features ]
+            contexts:
+                - Test\Features\Context\ErrorReportContext
+                - Test\Features\Context\RegistrationContext
+                - Behat\MinkExtension\Context\MinkContext
+                - behatch:context:xml

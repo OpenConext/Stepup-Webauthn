@@ -58,6 +58,7 @@ final class SPController extends AbstractController
 
     /**
      * @Route("/demo/sp", name="sp_demo")
+     * @Route("/", name="homepage")
      *
      * See @see RegistrationService for a more clean example.
      *

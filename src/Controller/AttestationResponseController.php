@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2017 SURFnet B.V.
+ * Copyright 2019 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\PublicKeyCredentialSource;
+use App\PublicKeyCredentialCreationOptionsStore;
 use Assert\Assertion;
 use Psr\Http\Message\ServerRequestInterface;
 use Surfnet\GsspBundle\Service\RegistrationService;
@@ -37,29 +38,11 @@ use Webauthn\PublicKeyCredentialSourceRepository;
 
 final class AttestationResponseController
 {
-    /**
-     * @var PublicKeyCredentialUserEntityRepository
-     */
     private $userEntityRepository;
-    /**
-     * @var PublicKeyCredentialSourceRepository
-     */
     private $credentialSourceRepository;
-    /**
-     * @var PublicKeyCredentialLoader
-     */
     private $publicKeyCredentialLoader;
-    /**
-     * @var AuthenticatorAttestationResponseValidator
-     */
     private $attestationResponseValidator;
-    /**
-     * @var PublicKeyCredentialCreationOptionsStore
-     */
     private $store;
-    /**
-     * @var RegistrationService
-     */
     private $registrationService;
 
     public function __construct(
@@ -79,7 +62,7 @@ final class AttestationResponseController
     }
 
     /**
-     * Replace this example code with whatever you need/
+     * Handles the attestation key response.
      *
      * @Route("/verify-attestation-response", methods={"POST"}, name="verify-attestation-response", )
      *
@@ -99,12 +82,11 @@ final class AttestationResponseController
             $publicKeyCredentialCreationOptions = $this->store->get();
             $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
             $this->userEntityRepository->saveUserEntity($publicKeyCredentialCreationOptions->getUser());
-            $credentialSource = PublicKeyCredentialSource::createFromPublicKeyCredentials(
+            $credentialSource = PublicKeyCredentialSource::create(
                 $publicKeyCredential,
                 $publicKeyCredentialCreationOptions->getUser()->getId()
             );
             $this->credentialSourceRepository->saveCredentialSource($credentialSource);
-
             // Set nameId of user.
             $this->registrationService->register($publicKeyCredentialCreationOptions->getUser()->getId());
             // Clear public key credentials options.

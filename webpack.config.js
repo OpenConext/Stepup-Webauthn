@@ -6,7 +6,13 @@ Encore
     .cleanupOutputBeforeBuild()
     .addStyleEntry('global', './public/scss/application.scss')
     .addEntry('registration', './public/typescript/registration.ts')
-    .enableSassLoader()
+    .enableSassLoader(function (options) {
+        // https://github.com/sass/node-sass#options.
+        options.includePaths = [
+            'node_modules/bootstrap-sass/assets/stylesheets'
+        ];
+        options.outputStyle = 'expanded';
+    })
     .enableTypeScriptLoader()
     .cleanupOutputBeforeBuild()
     .enableSingleRuntimeChunk()

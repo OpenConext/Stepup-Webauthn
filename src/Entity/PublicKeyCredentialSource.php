@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2017 SURFnet B.V.
+ * Copyright 2019 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,10 +45,7 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
         return $this->id;
     }
 
-    /**
-     * TODO: fix base class self to this reference.
-     */
-    public static function createFromPublicKeyCredentials(PublicKeyCredential $publicKeyCredential, string $userHandle): self
+    public static function create(PublicKeyCredential $publicKeyCredential, string $userHandle): self
     {
         $response = $publicKeyCredential->getResponse();
         Assertion::isInstanceOf($response, AuthenticatorAttestationResponse::class, 'This method is only available with public key credential containing an authenticator attestation response.');
@@ -57,7 +54,6 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
         $authenticatorData = $response->getAttestationObject()->getAuthData();
         $attestedCredentialData = $authenticatorData->getAttestedCredentialData();
         Assertion::notNull($attestedCredentialData, 'No attested credential data available');
-
         return new static(
             $publicKeyCredentialDescriptor->getId(),
             $publicKeyCredentialDescriptor->getType(),

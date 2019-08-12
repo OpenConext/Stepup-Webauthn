@@ -361,6 +361,9 @@
             "phpcs.xml.dist"
         ]
     },
+    "surfnet/stepup-bundle": {
+        "version": "4.1.0-beta.2"
+    },
     "surfnet/stepup-gssp-bundle": {
         "version": "3.0.0-alpha.2"
     },
