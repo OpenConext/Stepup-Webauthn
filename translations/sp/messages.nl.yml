@@ -6,6 +6,7 @@ saml.relay_state: Relay state
 saml.status: Status
 saml.error: Foutmelding
 
+page.sp.return_to: Keer terug naar de service provider
 page.sp.title: Demo service provider
 page.sp.sub_title: Demo service provider
 

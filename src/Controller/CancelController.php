@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2018 SURFnet B.V.
+ * Copyright 2019 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +16,12 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Exception\NoRegistrationRequiredException;
+use App\Exception\NoAuthnrequestException;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,9 +46,9 @@ class CancelController extends AbstractController
 
     /**
      * @Route("/cancel", name="app_cancel", methods={"GET"})
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function cancelAction()
+    public function cancel()
     {
         $this->logger->notice('User cancelled the request');
         if ($this->authenticationService->authenticationRequired()) {
@@ -62,6 +66,31 @@ class CancelController extends AbstractController
 
         $this->logger->error('There is no pending request from SP');
 
-        throw new NoRegistrationRequiredException();
+        throw new NoAuthnrequestException();
+    }
+
+    /**
+     * @Route("/abort", name="app_abort", methods={"GET"})
+     * @throws InvalidArgumentException
+     */
+    public function abort()
+    {
+        $this->logger->notice('User abort the request');
+        if ($this->authenticationService->authenticationRequired()) {
+            $this->authenticationService->reject('User abort the request');
+
+            $this->logger->info('Redirect to sso return endpoint with authentication reject response');
+            return $this->authenticationService->replyToServiceProvider();
+        }
+        if ($this->registrationService->registrationRequired()) {
+            $this->registrationService->reject('User abort the request');
+
+            $this->logger->info('Redirect to sso return endpoint with registration reject response');
+            return $this->registrationService->replyToServiceProvider();
+        }
+
+        $this->logger->error('There is no pending request from SP');
+
+        throw new NoAuthnrequestException();
     }
 }

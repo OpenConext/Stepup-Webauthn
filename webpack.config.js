@@ -6,6 +6,7 @@ Encore
     .cleanupOutputBeforeBuild()
     .addStyleEntry('global', './public/scss/application.scss')
     .addEntry('registration', './public/typescript/registration.ts')
+    .addEntry('authentication', './public/typescript/authentication.ts')
     .enableSassLoader(function (options) {
         // https://github.com/sass/node-sass#options.
         options.includePaths = [

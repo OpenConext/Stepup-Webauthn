@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2018 SURFnet B.V.
+ * Copyright 2019 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,13 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Exception\NoRegistrationRequiredException;
+use App\Exception\AttestationCertificateNotSupportedException;
+use App\Exception\NoAuthnrequestException;
+use App\Exception\UserNotFoundException;
 use DateTime;
 use Exception;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
@@ -29,20 +33,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ExceptionController extends BaseExceptionController
 {
-        public function showAction(Request $request, Exception $exception)
+    public function showAction(Request $request, Exception $exception)
     {
         $statusCode = $this->getStatusCode($exception);
 
+        $template = 'Exception\error.html.twig';
         if ($statusCode == 404) {
             $template = 'Exception\error404.html.twig';
-        } else {
-            $template = 'Exception\error.html.twig';
         }
 
         $response = new Response('', $statusCode);
 
         $timestamp = (new DateTime)->format(DateTime::ISO8601);
-        $hostname  = $request->getHost();
+        $hostname = $request->getHost();
         $requestId = $this->get('surfnet_stepup.request.request_id');
         $errorCode = Art::forException($exception);
         $userAgent = $request->headers->get('User-Agent');
@@ -51,12 +54,12 @@ final class ExceptionController extends BaseExceptionController
         return $this->render(
             $template,
             [
-                'timestamp'   => $timestamp,
-                'hostname'    => $hostname,
-                'request_id'  => $requestId->get(),
-                'error_code'  => $errorCode,
-                'user_agent'  => $userAgent,
-                'ip_address'  => $ipAddress,
+                'timestamp' => $timestamp,
+                'hostname' => $hostname,
+                'request_id' => $requestId->get(),
+                'error_code' => $errorCode,
+                'user_agent' => $userAgent,
+                'ip_address' => $ipAddress,
             ] + $this->getPageTitleAndDescription($exception),
             $response
         );
@@ -70,9 +73,17 @@ final class ExceptionController extends BaseExceptionController
     {
         $translator = $this->getTranslator();
 
-        if ($exception instanceof NoRegistrationRequiredException) {
-            $title = $translator->trans('registration.not_required.title');
-            $description = $translator->trans('registration.not_required.description');
+        if ($exception instanceof UserNotFoundException) {
+            $title = $translator->trans('user_not_found.title');
+            $description = $translator->trans('user_not_found.description');
+        }
+        if ($exception instanceof NoAuthnrequestException) {
+            $title = $translator->trans('error_title');
+            $description = $translator->trans('status.no_active_request');
+        }
+        if ($exception instanceof AttestationCertificateNotSupportedException) {
+            $title = $translator->trans('error_title');
+            $description = $translator->trans('status.authenticator_not_supported');
         }
 
         if (isset($title) && isset($description)) {
@@ -89,12 +100,16 @@ final class ExceptionController extends BaseExceptionController
      * @param Exception $exception
      * @return int HTTP status code
      */
-    protected function getStatusCode(Exception $exception)
-    {
-        if ($exception instanceof NoRegistrationRequiredException) {
+    protected function getStatusCode(
+        Exception $exception
+    ) {
+        if ($exception instanceof NoAuthnrequestException) {
             return Response::HTTP_BAD_REQUEST;
         }
         if ($exception instanceof UnrecoverableErrorException) {
+            return Response::HTTP_BAD_REQUEST;
+        }
+        if ($exception instanceof AttestationCertificateNotSupportedException) {
             return Response::HTTP_BAD_REQUEST;
         }
         return parent::getStatusCode($exception);

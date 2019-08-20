@@ -21,8 +21,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\PublicKeyCredentialSource;
+use App\Entity\User;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Webauthn\PublicKeyCredentialUserEntity;
 use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepository as BasePublicKeyCredentialSourceRepository;
 
 final class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceRepository
@@ -35,10 +35,9 @@ final class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialS
     /**
      * @return PublicKeyCredentialSource[]
      */
-    public function allForUser(PublicKeyCredentialUserEntity $user): array
+    public function allForUser(User $user): array
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-
         return $qb->select('c')
             ->from($this->getClass(), 'c')
             ->where('c.userHandle = :user_handle')
@@ -48,4 +47,3 @@ final class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialS
         ;
     }
 }
-

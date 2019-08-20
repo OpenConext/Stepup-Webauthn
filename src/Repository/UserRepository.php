@@ -56,6 +56,11 @@ final class UserRepository implements ServiceEntityRepositoryInterface, BasePubl
         $this->manager->flush();
     }
 
+    public function getByUserId(string $id): User
+    {
+        return $this->manager->find(User::class, $id);
+    }
+
     public function findOneByUsername(string $username): ?PublicKeyCredentialUserEntity
     {
         $qb = $this->manager->createQueryBuilder();
@@ -84,9 +89,9 @@ final class UserRepository implements ServiceEntityRepositoryInterface, BasePubl
         ;
     }
 
-    public function createUserEntity(string $username,string $displayName,?string $icon) : PublicKeyCredentialUserEntity
+    public function createUserEntity(string $username, string $displayName, ?string $icon) : PublicKeyCredentialUserEntity
     {
-        return new User(Uuid::uuid4()->toString(), $username,$displayName);
+        return new User(Uuid::uuid4()->toString(), $username, $displayName);
     }
 
     public function saveUserEntity(PublicKeyCredentialUserEntity $userEntity) : void

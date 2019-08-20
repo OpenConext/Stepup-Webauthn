@@ -22,11 +22,11 @@ namespace App;
 
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\ValueStore\SessionValueStore;
-use Webauthn\PublicKeyCredentialCreationOptions;
+use Webauthn\PublicKeyCredentialRequestOptions;
 
-class PublicKeyCredentialCreationOptionsStore
+class PublicKeyCredentialRequestOptionsStore
 {
-    const KEY = 'PUBLIC_KEY_CREDENTIAL_CREATION_OPTIONS';
+    const KEY = 'PUBLIC_KEY_CREDENTIAL_REQUEST_OPTIONS';
     private $store;
 
     public function __construct(SessionValueStore $sessionValueStore)
@@ -34,15 +34,15 @@ class PublicKeyCredentialCreationOptionsStore
         $this->store = $sessionValueStore;
     }
 
-    public function get(): PublicKeyCredentialCreationOptions
+    public function get(): PublicKeyCredentialRequestOptions
     {
         if (!$this->store->has(self::KEY) || $this->store->get(self::KEY) === null) {
-            throw new UnrecoverableErrorException('Unable to find the public key credential creation options');
+            throw new UnrecoverableErrorException('Unable to find the public key credential request options');
         }
         return $this->store->get(self::KEY);
     }
 
-    public function set(PublicKeyCredentialCreationOptions $options): void
+    public function set(PublicKeyCredentialRequestOptions $options): void
     {
         $this->store->set(self::KEY, $options);
     }

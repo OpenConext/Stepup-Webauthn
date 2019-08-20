@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2019 SURFnet B.V.
  *
@@ -15,22 +16,21 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Exception\NoRegistrationRequiredException;
+use App\Exception\NoAuthnrequestException;
 use App\PublicKeyCredentialCreationOptionsStore;
 use App\Repository\UserRepository;
 use Psr\Log\LoggerInterface;
-use Surfnet\GsspBundle\Service\AuthenticationService;
 use Surfnet\GsspBundle\Service\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Webauthn\Bundle\Service\PublicKeyCredentialCreationOptionsFactory;
 
 final class RegistrationController extends AbstractController
 {
-    private $authenticationService;
     private $registrationService;
     private $userRepository;
     private $publicKeyCredentialCreationOptionsFactory;
@@ -38,14 +38,12 @@ final class RegistrationController extends AbstractController
     private $logger;
 
     public function __construct(
-        AuthenticationService $authenticationService,
         RegistrationService $registrationService,
         UserRepository $userRepository,
         PublicKeyCredentialCreationOptionsFactory $publicKeyCredentialCreationOptionsFactory,
         PublicKeyCredentialCreationOptionsStore $creationOptionsStore,
         LoggerInterface $logger
     ) {
-        $this->authenticationService = $authenticationService;
         $this->registrationService = $registrationService;
         $this->userRepository = $userRepository;
         $this->publicKeyCredentialCreationOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
@@ -60,13 +58,13 @@ final class RegistrationController extends AbstractController
      *
      * @Route("/registration", name="app_identity_registration")
      */
-    public function registrationAction()
+    public function __invoke()
     {
         $this->logger->info('Verifying if there is a pending registration from SP');
 
         if (!$this->registrationService->registrationRequired()) {
             $this->logger->warning('Registration is not required');
-            throw new NoRegistrationRequiredException();
+            throw new NoAuthnrequestException();
         }
 
         $this->logger->info('There is a pending registration');
@@ -80,7 +78,7 @@ final class RegistrationController extends AbstractController
 
         $this->logger->info('Registration is not finalized create public key credential creation options');
 
-        $userEntity = $this->userRepository->createUserEntity('', '', null);
+        $userEntity = $this->userRepository->createUserEntity('SURFsecureID', 'SURFsecureID', null);
         $publicKeyCredentialCreationOptions = $this->publicKeyCredentialCreationOptionsFactory->create(
             'default',
             $userEntity

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f04fba6d0dcb5dd054d6025dae3013ec",
+    "content-hash": "d805c025bb2ace2b1faf7d6684169eb2",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2580,25 +2580,23 @@
         },
         {
             "name": "spomky-labs/cbor-php",
-            "version": "v1.0.4",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Spomky-Labs/cbor-php.git",
-                "reference": "20913abb88d26a936d10b3e6b59608aacf0699c1"
+                "reference": "f937d527b05bb3ec3f6b8670ece38ccaf9a0eddd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Spomky-Labs/cbor-php/zipball/20913abb88d26a936d10b3e6b59608aacf0699c1",
-                "reference": "20913abb88d26a936d10b3e6b59608aacf0699c1",
+                "url": "https://api.github.com/repos/Spomky-Labs/cbor-php/zipball/f937d527b05bb3ec3f6b8670ece38ccaf9a0eddd",
+                "reference": "f937d527b05bb3ec3f6b8670ece38ccaf9a0eddd",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^3.2",
-                "ext-bcmath": "*",
                 "ext-gmp": "*",
                 "php": "^7.1|^8.0",
-                "spomky-labs/base64url": "^1.0|^2.0",
-                "thecodingmachine/safe": "^0.1.13"
+                "spomky-labs/base64url": "^1.0|^2.0"
             },
             "require-dev": {
                 "php-coveralls/php-coveralls": "^2.0",
@@ -2607,9 +2605,11 @@
                 "phpstan/phpstan-deprecation-rules": "^0.11",
                 "phpstan/phpstan-phpunit": "^0.11",
                 "phpstan/phpstan-strict-rules": "^0.11",
-                "phpunit/phpunit": "^8.0",
-                "rector/rector": "^0.5",
-                "thecodingmachine/phpstan-safe-rule": "^0.1.2"
+                "phpunit/phpunit": "^7.5|^8.0",
+                "rector/rector": "^0.5"
+            },
+            "suggest": {
+                "ext-bcmath": "BCMath extension needed to handle the Big Float and Decimal Fraction Tags"
             },
             "type": "library",
             "extra": {
@@ -2642,7 +2642,7 @@
                 "RFC7049",
                 "cbor"
             ],
-            "time": "2019-07-24T15:38:30+00:00"
+            "time": "2019-08-15T14:53:55+00:00"
         },
         {
             "name": "surfnet/stepup-bundle",
@@ -9769,16 +9769,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.12.0",
+            "version": "v1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "201d0e050dca336c44f93657ce1f34f3b3868432"
+                "reference": "c4388410e2fb6321e77c5dd6e3cb2dba821f9fe6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/201d0e050dca336c44f93657ce1f34f3b3868432",
-                "reference": "201d0e050dca336c44f93657ce1f34f3b3868432",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/c4388410e2fb6321e77c5dd6e3cb2dba821f9fe6",
+                "reference": "c4388410e2fb6321e77c5dd6e3cb2dba821f9fe6",
                 "shasum": ""
             },
             "require": {
@@ -9833,7 +9833,7 @@
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2019-07-09T22:19:18+00:00"
+            "time": "2019-08-18T17:34:03+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",

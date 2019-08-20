@@ -12,10 +12,24 @@ export interface SerializedPublicKeyCredentialCreationOptions extends Omit<Publi
   excludeCredentials?: SerializedPublicKeyCredentialDescriptor[];
 }
 
-export interface SerializedAuthenticatorResponse extends Omit<AuthenticatorResponse, 'clientDataJSON'> {
-  clientDataJSON: string;
-  attestationObject: string | null;
+export interface SerializedPublicKeyCredentialRequestOptions extends Omit<PublicKeyCredentialRequestOptions, 'challenge' | 'allowCredentials'> {
+  challenge: string;
+  allowCredentials?: SerializedPublicKeyCredentialDescriptor[];
 }
+
+export interface SerializedAuthenticatorAttestationResponse extends Omit<AuthenticatorAttestationResponse, 'clientDataJSON' | 'attestationObject'> {
+  clientDataJSON: string;
+  attestationObject: string | undefined;
+}
+
+export interface SerializedAuthenticatorAssertionResponse extends Omit<AuthenticatorAssertionResponse, 'clientDataJSON' | 'userHandle' | 'signature' | 'authenticatorData'> {
+  clientDataJSON: string;
+  userHandle: string | undefined;
+  signature: string;
+  authenticatorData: string;
+}
+
+export type SerializedAuthenticatorResponse = SerializedAuthenticatorAttestationResponse | SerializedAuthenticatorAssertionResponse;
 
 export interface SerializedPublicKeyCredential extends Omit<PublicKeyCredential, 'rawId' | 'response'> {
   rawId: string;
@@ -31,7 +45,19 @@ export enum RegistrationState {
   PUBLIC_KEY_CREDENTIALS_SERIALIZED,
   SENDING_PUBLIC_KEY_CREDENTIALS,
   RECEIVED_SERVER_RESPONSE,
-  RECEIVED_SERVER_ERROR_RESPONSE,
-  UNSUPORTED_PUBLIC_KEY_CREDENTIALS,
+  UNSUPPORTED_PUBLIC_KEY_CREDENTIALS,
+  ERROR,
+}
+
+export enum AuthenticationState {
+  DESERIALIZE_ASSERTION_RESPONSE_OPTIONS,
+  ASSERTION_RESPONSE_OPTIONS_DE_SERIALIZED,
+  REQUEST_USER_FOR_ASSERTION,
+  PUBLIC_KEY_CREDENTIALS,
+  SERIALIZE_PUBLIC_KEY_CREDENTIALS,
+  PUBLIC_KEY_CREDENTIALS_SERIALIZED,
+  SENDING_PUBLIC_KEY_CREDENTIALS,
+  RECEIVED_SERVER_AUTHENTICATION_RESPONSE,
+  UNSUPPORTED_PUBLIC_KEY_CREDENTIALS,
   ERROR,
 }

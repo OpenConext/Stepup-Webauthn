@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2019 SURFnet B.V.
  *
@@ -15,38 +16,59 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\PublicKeyCredentialCreationOptionsStore;
+use App\Exception\AttestationCertificateNotSupportedException;
+use App\Exception\NoActiveAuthenrequestException;
+use App\Exception\UserNotFoundException;
+use App\PublicKeyCredentialRequestOptionsStore;
+use App\Repository\PublicKeyCredentialSourceRepository;
 use App\Repository\UserRepository;
+use App\Service\AttestationCertificateAcceptanceService;
+use App\WithContextLogger;
+use Psr\Log\LoggerInterface;
+use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
-use Surfnet\GsspBundle\Service\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Webauthn\Bundle\Service\PublicKeyCredentialCreationOptionsFactory;
+use Throwable;
+use Webauthn\Bundle\Service\PublicKeyCredentialRequestOptionsFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AuthenticationController extends AbstractController
 {
     private $authenticationService;
-    private $registrationService;
     private $userRepository;
-    private $publicKeyCredentialCreationOptionsFactory;
-    private $creationOptionsStore;
+    private $publicKeyCredentialRequestOptionsFactory;
+    private $requestOptionsStore;
+    private $logger;
+    private $publicKeyCredentialSourceRepository;
+    private $store;
+    private $attestationCertificateAcceptanceService;
 
     public function __construct(
         AuthenticationService $authenticationService,
-        RegistrationService $registrationService,
         UserRepository $userRepository,
-        PublicKeyCredentialCreationOptionsFactory $publicKeyCredentialCreationOptionsFactory,
-        PublicKeyCredentialCreationOptionsStore $creationOptionsStore
+        LoggerInterface $logger,
+        PublicKeyCredentialRequestOptionsFactory $publicKeyCredentialCreationOptionsFactory,
+        PublicKeyCredentialSourceRepository $publicKeyCredentialSourceRepository,
+        PublicKeyCredentialRequestOptionsStore $creationOptionsStore,
+        PublicKeyCredentialRequestOptionsStore $store,
+        AttestationCertificateAcceptanceService $attestationCertificateAcceptanceService
     ) {
         $this->authenticationService = $authenticationService;
-        $this->registrationService = $registrationService;
         $this->userRepository = $userRepository;
-        $this->publicKeyCredentialCreationOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
-        $this->creationOptionsStore = $creationOptionsStore;
+        $this->publicKeyCredentialRequestOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
+        $this->requestOptionsStore = $creationOptionsStore;
+        $this->logger = $logger;
+        $this->publicKeyCredentialSourceRepository = $publicKeyCredentialSourceRepository;
+        $this->store = $store;
+        $this->attestationCertificateAcceptanceService = $attestationCertificateAcceptanceService;
     }
 
     /**
@@ -56,27 +78,63 @@ class AuthenticationController extends AbstractController
      *
      * @Route("/authentication", name="app_identity_authentication")
      */
-    public function authenticationAction(Request $request)
+    public function __invoke(Request $request)
     {
+        $this->logger->info('Verifying if there is a pending authentication request from SP');
+
+        if (!$this->authenticationService->authenticationRequired()) {
+            $this->logger->error('There is no pending authentication request from SP');
+            throw new NoActiveAuthenrequestException();
+        }
+
         $nameId = $this->authenticationService->getNameId();
+        $logger = WithContextLogger::from($this->logger, ['nameId' => $nameId]);
 
-        if ($request->get('action') === 'error') {
-            $this->authenticationService->reject($request->get('message'));
+        $logger->info('Verifying if authentication is finalized');
+
+        if ($this->authenticationService->isAuthenticated()) {
+            $logger->info('Authentication is finalized returning to service provider');
             return $this->authenticationService->replyToServiceProvider();
         }
 
-        if ($request->get('action') === 'authenticate') {
-            // The application should very if the user matches the nameId.
-            $this->authenticationService->authenticate();
-            return $this->authenticationService->replyToServiceProvider();
+        try {
+            $user = $this->userRepository->getByUserId($nameId);
+        } catch (Throwable $exception) {
+            $logger->error(sprintf(
+                'User with nameId "%s" not found, error "%s"',
+                $nameId,
+                $exception->getMessage()
+            ));
+            throw new UserNotFoundException();
         }
 
-        $requiresAuthentication = $this->authenticationService->authenticationRequired();
-        $response = new Response(null, $requiresAuthentication ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        $this->logger->info('Registration is not finalized create public key credential creation options');
 
-        return $this->render('default/authentication.html.twig', [
-            'requiresAuthentication' => $requiresAuthentication,
-            'NameID' => $nameId ?: 'unknown',
-        ], $response);
+        $allowedCredentials = $this->publicKeyCredentialSourceRepository->allForUser($user);
+
+        if (count($allowedCredentials) !== 1) {
+            $logger->error('One credential source allowed');
+            throw new UnrecoverableErrorException('One credential source allowed');
+        }
+
+        $logger->info('Verify if attestation certificate is supported');
+        if (!$this->attestationCertificateAcceptanceService->isSupported($allowedCredentials[0])) {
+            $logger->warning('Attestation certificate is no longer supported');
+            throw new AttestationCertificateNotSupportedException();
+        }
+
+        $publicKeyCredentialRequestOptions = $this->publicKeyCredentialRequestOptionsFactory->create(
+            'default',
+            $allowedCredentials
+        );
+
+        $this->store->set($publicKeyCredentialRequestOptions);
+
+        $logger->info('Return authentication page with public key credential request options');
+
+        return $this->render(
+            'default/authentication.html.twig',
+            ['publicKeyOptions' => $publicKeyCredentialRequestOptions]
+        );
     }
 }

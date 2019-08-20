@@ -43,7 +43,7 @@
     "nyholm/psr7": "^1.1",
     "web-auth/cose-lib": "^2.0",
     "spomky-labs/cbor-php": "^1.0",
-    "surfnet/stepup-bundle": "4.1.0-beta.3"
+    "surfnet/stepup-bundle": "^4.1.0-beta.3"
   },
   "require-dev": {
     "behat/symfony2-extension": "^2.1",
@@ -92,6 +92,9 @@
     "phpmd": "vendor/bin/phpmd ./src text phpmd.xml  --suffixes php",
     "phpcs": [
       "vendor/bin/phpcs --standard=phpcs.xml --report=full --warning-severity=0 ./src"
+    ],
+    "phpcbf": [
+      "vendor/bin/phpcbf --standard=phpcs.xml ./src"
     ],
     "phpcpd": [
       "vendor/bin/phpcpd  ./src",

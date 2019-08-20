@@ -6,6 +6,8 @@
 
 {% block body %}
     <h2>{{ 'page.acs.sub_title'|trans }}</h2>
+    <a href="{{ path('sp_demo', {nameId: nameId.value}) }}">{{ 'page.sp.return_to'|trans }}</a>
+    <br/><br/>
 
     <table>
         <tbody>

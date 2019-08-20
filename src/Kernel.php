@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2019 SURFnet B.V.
  *
@@ -14,6 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+declare(strict_types=1);
 
 namespace App;
 

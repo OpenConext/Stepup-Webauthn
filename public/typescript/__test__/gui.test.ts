@@ -3,7 +3,7 @@ import { retryClicked } from '../gui';
 it('Should show retry button when active', async () => {
 
   const button = document.createElement('button');
-  button.id = 'retryButton';
+  button.id = 'retry_button';
   document.body.append(button);
   button.classList.add('hidden');
 

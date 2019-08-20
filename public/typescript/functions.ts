@@ -1,8 +1,29 @@
-import { anyPass, complement, isEmpty, isNil, lensPath, map, over, pickBy, propSatisfies, unless } from 'ramda';
+import {
+  always,
+  anyPass,
+  complement,
+  cond,
+  isEmpty,
+  isNil,
+  lensPath,
+  map,
+  over,
+  pickBy,
+  propSatisfies,
+  T as TRUE,
+  unless,
+} from 'ramda';
 import { decode, encode } from 'urlsafe-base64';
-import { SerializedPublicKeyCredential, SerializedPublicKeyCredentialCreationOptions } from './models';
+import {
+  SerializedAuthenticatorAssertionResponse,
+  SerializedAuthenticatorAttestationResponse,
+  SerializedAuthenticatorResponse,
+  SerializedPublicKeyCredential,
+  SerializedPublicKeyCredentialCreationOptions,
+  SerializedPublicKeyCredentialRequestOptions,
+} from './models';
 
-export const Base64UrlSafeToUInt8 = (base64: string): BufferSource => Uint8Array.from(decode(base64));
+export const Base64UrlSafeToUInt8 = (base64: string): BufferSource => Uint8Array.from(decode(base64)).buffer;
 export const UInt8ToBase64UrlSafe = (buffer: BufferSource): string => encode(Buffer.from(buffer as any));
 
 export const idLens = lensPath(['id']);
@@ -26,18 +47,49 @@ export const deSerializedPublicKeyCredentialCreationOptions: (options: Serialize
       extensions,
     }));
 
-export const isAuthenticatorAttestationResponse: (response: AuthenticatorResponse | AuthenticatorAttestationResponse) => response is AuthenticatorAttestationResponse = propSatisfies(complement(isNil), 'attestationObject') as any;
+export const deSerializedPublicKeyCredentialRequestOptions: (options: SerializedPublicKeyCredentialRequestOptions) => PublicKeyCredentialRequestOptions =
+  ({ challenge, extensions, timeout, allowCredentials, rpId, userVerification }) =>
+    removeEmptyAndUndefined(({
+      rpId,
+      challenge: Base64UrlSafeToUInt8(challenge),
+      timeout,
+      allowCredentials: optionalBase64UrlSafeToUInt8Ids(allowCredentials),
+      userVerification,
+      extensions,
+    }));
+
+export const isAuthenticatorAttestationResponse: (response: AuthenticatorResponse) => response is AuthenticatorAttestationResponse = propSatisfies(complement(isNil), 'attestationObject') as any;
+export const isAuthenticatorAssertionResponse: (response: AuthenticatorResponse) => response is AuthenticatorAssertionResponse = propSatisfies(complement(isNil), 'signature') as any;
+
+export const serializeAuthenticatorAttestationResponse: (response: AuthenticatorAttestationResponse) => SerializedAuthenticatorAttestationResponse =
+  ({ clientDataJSON, attestationObject }) => ({
+    clientDataJSON: UInt8ToBase64UrlSafe(clientDataJSON),
+    attestationObject: UInt8ToBase64UrlSafe(attestationObject),
+  });
+
+export const serializeAuthenticatorAssertionResponse: (response: AuthenticatorAssertionResponse) => SerializedAuthenticatorAssertionResponse =
+  ({ clientDataJSON, authenticatorData, signature, userHandle }) => ({
+    clientDataJSON: UInt8ToBase64UrlSafe(clientDataJSON),
+    userHandle: userHandle ? UInt8ToBase64UrlSafe(userHandle) : undefined,
+    signature: UInt8ToBase64UrlSafe(signature),
+    authenticatorData: UInt8ToBase64UrlSafe(authenticatorData),
+  });
+
+export const serializeAuthenticatorResponse: (response: AuthenticatorResponse) => SerializedAuthenticatorResponse = cond([
+  [isAuthenticatorAttestationResponse, serializeAuthenticatorAttestationResponse],
+  [isAuthenticatorAssertionResponse, serializeAuthenticatorAssertionResponse],
+  [TRUE, always(null)],
+]);
 
 export const serializePublicKeyCredential: (credentials: PublicKeyCredential) => SerializedPublicKeyCredential =
   ({ id, rawId, response, type }) =>
     ({
       id,
       rawId: UInt8ToBase64UrlSafe(rawId),
-      response: {
-        clientDataJSON: UInt8ToBase64UrlSafe(response.clientDataJSON),
-        attestationObject: isAuthenticatorAttestationResponse(response) ? UInt8ToBase64UrlSafe(response.attestationObject) : null,
-      },
+      response: serializeAuthenticatorResponse(response),
       type,
     });
 
 export const isPublicKeyCredentialType: (type: CredentialType | null) => type is PublicKeyCredential = ((key: any) => key && key.type === 'public-key') as any;
+
+export const isWebAuthnSupported = () => typeof navigator.credentials !== 'undefined';

@@ -1,4 +1,32 @@
-default.title: Security key authentication
-registration.not_required.title: Oeps!
-registration.not_required.description: Geen active authenticatie aanvraag.
+# Registration
+
+registration.sub_title: Registration
+status_registration_initial: Registreer met jou security key.
+
+# Authentication
+
+authentication.sub_title: Authenticeren
+status.authentication_initial: Authenticeer met jou security key.
+
+# General status messages
+
+status.general_error: Oeps! Er is iets fout gegaan, probeer het opnieuw.
+status.webauthn_not_supported: Webauthn wordt niet ondersteund door uw browser.
+status.no_active_request: Geen active aanvraag, keer terug naar uw service provider.
+status.authenticator_not_supported: Security device wordt niet ondersteund, probeer een andere.
+
+# General
+
+## Buttons
+
+retry: Probeer opnieuw
 cancel: Annuleren
+abort: Afbreken
+
+## Site general
+
+site_title: Authenticeren met je security key
+error_title: Oeps!
+
+user_not_found.title: Gebruiker onbekend
+user_not_found.description: Er is iets fout gegaan, probeer het later opnieuw.

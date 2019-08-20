@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2017 SURFnet B.V.
+ * Copyright 2019 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +16,13 @@
  * limitations under the License.
  */
 
-namespace Tests\AppBundle\Controller;
+declare(strict_types=1);
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+namespace App\Exception;
 
-class DefaultControllerTest extends WebTestCase
+use RuntimeException;
+
+class NoAuthnrequestException extends RuntimeException
 {
-    public function testIndex()
-    {
-        $client = static::createClient();
 
-        $crawler = $client->request('GET', '/');
-
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertStringContainsString('Welcome to the Generic SAML Stepup Provider SDK', $crawler->filter('h2')->text());
-    }
 }

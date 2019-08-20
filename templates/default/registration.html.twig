@@ -1,29 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-    {{ 'page.registration.title'|trans }}
-{% endblock %}
-
 {% block body %}
-    <h2>{{ 'page.registration.sub_title'|trans }}</h2>
+    <h2>{{ 'registration.sub_title'|trans }}</h2>
 
-    <button id="retryButton" class="hidden">Retry</button>
-
-    <div id="status"></div>
-
-    <form id="registrationForm" method="post">
-        <button
-                type="submit"
-                id="register"
-                name="action"
-                class="hidden"
-                value="register">
-        </button>
-    </form>
+    <div>
+        <div class="status initial">
+            {{ 'status_registration_initial'|trans }}
+        </div>
+        {% include 'default/general_status.twig' %}
+    </div>
 
     {% block javascripts %}
         <script>
             var publicKeyOptions = {{ publicKeyOptions | json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE')) | raw }};
+            var responseUrl = {{ url('verify-attestation') | json_encode | raw }};
         </script>
         {{ encore_entry_script_tags('registration') }}
     {% endblock %}

@@ -3,17 +3,17 @@ import {
   Base64UrlSafeToUInt8,
   Base64UrlSafeToUInt8Id,
   Base64UrlSafeToUInt8Ids,
-  deSerializedPublicKeyCredentialCreationOptions,
+  deSerializedPublicKeyCredentialCreationOptions, deSerializedPublicKeyCredentialRequestOptions,
   idLens,
   isAuthenticatorAttestationResponse,
   optionalBase64UrlSafeToUInt8Ids,
   removeEmptyAndUndefined,
   serializePublicKeyCredential,
 } from '../functions';
-import { SerializedPublicKeyCredentialCreationOptions } from '../models';
+import { SerializedPublicKeyCredentialCreationOptions, SerializedPublicKeyCredentialRequestOptions } from '../models';
 
 it('base64ToUInt8', () => {
-  expect(Base64UrlSafeToUInt8('z4Ag4oiIIOKEnQ==')).toEqual(new Uint8Array([207, 128, 32, 226, 136, 136, 32, 226, 132, 157]));
+  expect(Base64UrlSafeToUInt8('z4Ag4oiIIOKEnQ==')).toEqual((new Uint8Array([207, 128, 32, 226, 136, 136, 32, 226, 132, 157])).buffer);
 });
 
 it('idLens', () => {
@@ -25,7 +25,7 @@ it('idLens', () => {
 
 it('base64ToUInt8Id', () => {
   expect(Base64UrlSafeToUInt8Id({ id: 'z4Ag4oiIIOKEnQ==', foo: 'bar' })).toEqual({
-    id: new Uint8Array([207, 128, 32, 226, 136, 136, 32, 226, 132, 157]),
+    id: (new Uint8Array([207, 128, 32, 226, 136, 136, 32, 226, 132, 157])).buffer,
     foo: 'bar',
   });
 });
@@ -36,11 +36,11 @@ it('base64ToUInt8Ids', () => {
     bar: 'foo',
   }])).toEqual([
     {
-      id: new Uint8Array([207, 128, 32, 226, 136, 136, 32, 226, 132, 157]),
+      id: (new Uint8Array([207, 128, 32, 226, 136, 136, 32, 226, 132, 157])).buffer,
       foo: 'bar',
     },
     {
-      id: new Uint8Array([52, 51, 53, 51, 52, 53, 51, 52]),
+      id: (new Uint8Array([52, 51, 53, 51, 52, 53, 51, 52])).buffer,
       bar: 'foo',
     },
   ]);
@@ -52,11 +52,11 @@ it('optionalBase64ToUInt8Ids can convert', () => {
     bar: 'foo',
   }])).toEqual([
     {
-      id: new Uint8Array([207, 128, 32, 226, 136, 136, 32, 226, 132, 157]),
+      id: (new Uint8Array([207, 128, 32, 226, 136, 136, 32, 226, 132, 157])).buffer,
       foo: 'bar',
     },
     {
-      id: new Uint8Array([52, 51, 53, 51, 52, 53, 51, 52]),
+      id: (new Uint8Array([52, 51, 53, 51, 52, 53, 51, 52])).buffer,
       bar: 'foo',
     },
   ]);
@@ -116,12 +116,12 @@ it('deSerializedPublicKeyCredentialCreationOptions should remove empty options',
 
 it('isAuthenticatorAttestationResponse', () => {
   expect(isAuthenticatorAttestationResponse({
-    clientDataJSON: Uint8Array.from([1, 2, 3]),
+    clientDataJSON: Uint8Array.from([1, 2, 3]).buffer,
   })).toBeFalsy();
   expect(isAuthenticatorAttestationResponse({
-    clientDataJSON: Uint8Array.from([1, 2, 3]),
-    attestationObject: Uint8Array.from([4, 5, 6]),
-  })).toBeTruthy();
+    clientDataJSON: Uint8Array.from([1, 2, 3]).buffer,
+    attestationObject: Uint8Array.from([4, 5, 6]).buffer,
+  } as any)).toBeTruthy();
 });
 
 it('serializePublicKeyCredential', () => {
@@ -136,15 +136,12 @@ it('serializePublicKeyCredential', () => {
   expect(serializePublicKeyCredential(credentials)).toStrictEqual({
     id: '1234',
     rawId: 'BwgJ',
-    response: {
-      attestationObject: null,
-      clientDataJSON: 'AQID',
-    },
+    response: null,
     type: 'public-key',
   });
 });
 
-it('serializePublicKeyCredential with AttestationResponse', () => {
+it('serializePublicKeyCredential with AuthenticatorAttestationResponse', () => {
   const credentials: Omit<PublicKeyCredential, 'response'> & { response: AuthenticatorAttestationResponse } = {
     response: {
       clientDataJSON: Uint8Array.from([1, 2, 3]),
@@ -163,5 +160,56 @@ it('serializePublicKeyCredential with AttestationResponse', () => {
       clientDataJSON: 'AQID',
     },
     type: 'public-key',
+  });
+});
+
+it('serializePublicKeyCredential with AuthenticatorAssertionResponse', () => {
+  const credentials: Omit<PublicKeyCredential, 'response'> & { response: AuthenticatorAssertionResponse } = {
+    response: {
+      clientDataJSON: Uint8Array.from([1, 2, 3]),
+      authenticatorData: Uint8Array.from([4, 5, 6]),
+      signature: Uint8Array.from([10, 11, 12]),
+      userHandle: Uint8Array.from([11, 12, 13]),
+    },
+    rawId: Uint8Array.from([7, 8, 9]),
+    type: 'public-key',
+    id: '1234',
+  };
+
+  expect(serializePublicKeyCredential(credentials)).toStrictEqual({
+    id: '1234',
+    rawId: 'BwgJ',
+    response: {
+      authenticatorData: 'BAUG',
+      clientDataJSON: 'AQID',
+      signature: 'CgsM',
+      userHandle: 'CwwN',
+    },
+    type: 'public-key',
+  });
+});
+
+it('deSerializedPublicKeyCredentialRequestOptions', () => {
+  const options: SerializedPublicKeyCredentialRequestOptions = {
+    challenge: 'Y-',
+    rpId: 'webauthn.test',
+    userVerification: 'required',
+    allowCredentials: [{
+      id: 'AI-Q',
+      type: 'public-key',
+      transports: [],
+    }],
+    timeout: 30000,
+  };
+  expect(deSerializedPublicKeyCredentialRequestOptions(options)).toStrictEqual({
+    challenge: Uint8Array.from([99]).buffer,
+    rpId: 'webauthn.test',
+    userVerification: 'required',
+    allowCredentials: [{
+      id: Uint8Array.from([0, 143, 144]).buffer,
+      type: 'public-key',
+      transports: [],
+    }],
+    timeout: 30000,
   });
 });
