@@ -10,6 +10,7 @@ return [
     Symfony\Bundle\WebProfilerBundle\WebProfilerBundle::class => ['dev' => true, 'test' => true],
     Surfnet\SamlBundle\SurfnetSamlBundle::class => ['all' => true],
     Surfnet\GsspBundle\SurfnetGsspBundle::class => ['all' => true],
+    Surfnet\StepupBundle\SurfnetStepupBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     SpomkyLabs\CborBundle\SpomkyLabsCborBundle::class => ['all' => true],
     Webauthn\Bundle\WebauthnBundle::class => ['all' => true],

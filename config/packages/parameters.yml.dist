@@ -2,8 +2,17 @@
 # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
 # https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
-    # A secret key that's used to generate certain security-related tokens
-    secret: ThisTokenIsNotSoSecretChangeIt
+    support_url:
+        en_GB: "https://support.example.org/faq-strong-authentication"
+        nl_NL: "https://support.example.org/faq-sterke-authenticatie"
+    locales:
+        - nl_NL
+        - en_GB
+
+    # WebAuthn user display name
+    user_display_name: SURFsecureID
+    webauthn_name: SURFsecureID
+    webauthn_logo: 'https://webauthn.test/images/surfconext-logo.png'
 
     saml_idp_publickey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer'
     saml_idp_privatekey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem'

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2017 SURFnet B.V.
+ * Copyright 2019 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+declare(strict_types=1);
 
 namespace Dev\Controller;
 
@@ -58,6 +61,7 @@ final class SPController extends AbstractController
 
     /**
      * @Route("/demo/sp", name="sp_demo")
+     * @Route("/", name="homepage")
      *
      * See @see RegistrationService for a more clean example.
      *
@@ -66,7 +70,7 @@ final class SPController extends AbstractController
     public function demoSpAction(Request $request)
     {
         if (!$request->isMethod(Request::METHOD_POST)) {
-            return $this->render('dev/sp.html.twig');
+            return $this->render('dev/sp.html.twig', ['nameId' => $request->get('nameId')]);
         }
         $authnRequest = AuthnRequestFactory::createNewRequest($this->serviceProvider, $this->identityProvider);
 

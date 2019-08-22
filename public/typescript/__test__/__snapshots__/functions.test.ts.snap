@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`deSerializedPublicKeyCredentialCreationOptions 1`] = `
+Object {
+  "attestation": "none",
+  "authenticatorSelection": Object {
+    "requireResidentKey": false,
+    "userVerification": "preferred",
+  },
+  "challenge": ArrayBuffer [],
+  "excludeCredentials": Array [
+    Object {
+      "id": ArrayBuffer [],
+      "type": "public-key",
+    },
+  ],
+  "extensions": Object {
+    "loc": true,
+  },
+  "pubKeyCredParams": Array [
+    Object {
+      "alg": -7,
+      "type": "public-key",
+    },
+  ],
+  "rp": Object {
+    "id": "foo.example.com",
+    "name": "My Super Secured Application",
+  },
+  "timeout": 20000,
+  "user": Object {
+    "displayName": "Mighty Mike",
+    "id": ArrayBuffer [],
+    "name": "@cypher-Angel-3000",
+  },
+}
+`;
+
+exports[`deSerializedPublicKeyCredentialCreationOptions should remove empty options 1`] = `
+Object {
+  "attestation": "none",
+  "authenticatorSelection": Object {
+    "requireResidentKey": false,
+    "userVerification": "preferred",
+  },
+  "challenge": ArrayBuffer [],
+  "extensions": Object {
+    "loc": true,
+  },
+  "rp": Object {
+    "id": "foo.example.com",
+    "name": "My Super Secured Application",
+  },
+  "timeout": 20000,
+  "user": Object {
+    "displayName": "Mighty Mike",
+    "id": ArrayBuffer [],
+    "name": "@cypher-Angel-3000",
+  },
+}
+`;

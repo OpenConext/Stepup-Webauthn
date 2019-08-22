@@ -1,0 +1,23 @@
+
+<div class="status hidden general_error">
+    {{ 'status.general_error'|trans }}
+</div>
+
+<div class="status hidden no_active_request">
+    {{ 'status.no_active_request'|trans }}
+</div>
+
+<div class="status hidden authenticator_not_supported">
+    {{ 'status.authenticator_not_supported'|trans }}
+</div>
+
+<div class="status hidden webauthn_not_supported">
+    {{ 'status.webauthn_not_supported'|trans }}
+    <br/>
+    <br/>
+    <a href="{{ path('app_abort') }}">{{ 'abort'|trans }}</a>
+</div>
+
+<br/>
+
+<button id="retry_button" class="hidden">{{ 'retry'|trans }}</button>

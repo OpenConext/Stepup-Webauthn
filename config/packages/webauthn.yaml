@@ -1,0 +1,24 @@
+webauthn:
+    credential_repository: App\Repository\PublicKeyCredentialSourceRepository
+    user_repository: App\Repository\UserRepository
+    token_binding_support_handler: Webauthn\TokenBinding\IgnoreTokenBindingHandler
+    creation_profiles:
+        default:
+            public_key_credential_parameters:
+                - !php/const Cose\Algorithms::COSE_ALGORITHM_ES256
+            rp:
+                name: '%webauthn_name%'
+                icon: '%webauthn_logo%'
+            challenge_length: 64
+            timeout: 60000
+            authenticator_selection_criteria:
+                attachment_mode: !php/const Webauthn\AuthenticatorSelectionCriteria::AUTHENTICATOR_ATTACHMENT_NO_PREFERENCE
+                require_resident_key: false
+                user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_PREFERRED
+            #  this is needed for SURFsecureID as we want to whitelist authenticators by vendor/certification (default is none)
+            attestation_conveyance: !php/const Webauthn\PublicKeyCredentialCreationOptions::ATTESTATION_CONVEYANCE_PREFERENCE_DIRECT
+    request_profiles:
+        default:
+            challenge_length: 64
+            timeout: 30000
+            user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_PREFERRED
