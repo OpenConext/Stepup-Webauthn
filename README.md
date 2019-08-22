@@ -54,7 +54,7 @@ Tests and metrics
 To run all required test you can run the following commands from the dev env:
 
 ```bash 
-    composer test 
+ composer test 
 ```
 
 Every part can be run separately. Check "scripts" section of the composer.json file for the different options.
@@ -64,8 +64,10 @@ Quick application deployment guide
 
 ### 1. Install dependencies
 
-yarn install
-composer install
+```
+ yarn install
+ composer install
+```
 
 ### 2. Create configuration files
 
@@ -76,8 +78,10 @@ Copy and configure:
 
 ### 3. Build public assets
 
-composer dump-env prod
-yarn encore prod 
+```
+ composer dump-env prod
+ yarn encore prod 
+```
 
 ### 4. Create database and schema 
 
