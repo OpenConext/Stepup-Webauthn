@@ -9,8 +9,10 @@ parameters:
         - nl_NL
         - en_GB
 
-    # A secret key that's used to generate certain security-related tokens
-    secret: ThisTokenIsNotSoSecretChangeIt
+    # WebAuthn user display name
+    user_display_name: SURFsecureID
+    webauthn_name: SURFsecureID
+    webauthn_logo: 'https://webauthn.test/images/surfconext-logo.png'
 
     saml_idp_publickey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer'
     saml_idp_privatekey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem'

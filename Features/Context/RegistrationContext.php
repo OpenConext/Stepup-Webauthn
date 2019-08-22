@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2017 SURFnet B.V.
+ * Copyright 2019 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +16,8 @@
  * limitations under the License.
  */
 
+declare(strict_types=1);
+
 namespace Test\Features\Context;
 
 use Behat\Behat\Context\Context;
@@ -28,12 +31,12 @@ class RegistrationContext implements Context, KernelAwareContext
     /**
      * @var MinkContext
      */
-    protected $minkContext;
+    private $minkContext;
 
     /**
      * @var KernelInterface
      */
-    protected $kernel;
+    private $kernel;
 
     /**
      * Sets HttpKernel instance.

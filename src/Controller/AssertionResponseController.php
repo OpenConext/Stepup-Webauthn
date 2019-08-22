@@ -20,9 +20,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\ValidationJsonResponse;
 use App\PublicKeyCredentialRequestOptionsStore;
-use App\Service\AttestationCertificateAcceptanceService;
+use App\ValidationJsonResponse;
 use App\WithContextLogger;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -37,7 +36,7 @@ use Webauthn\AuthenticatorAssertionResponseValidator;
 use Webauthn\PublicKeyCredentialLoader;
 
 /**
- *  @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class AssertionResponseController
 {
@@ -95,7 +94,7 @@ final class AssertionResponseController
             return ValidationJsonResponse::invalidPublicKeyCredentialResponse();
         }
 
-        $logger->info('Verify if there is an excising public key credential assertion options in session');
+        $logger->info('Verify if there is an existing public key credential assertion options in session');
         try {
             $publicKeyCredentialRequestOptions = $this->store->get();
         } catch (Throwable $exception) {

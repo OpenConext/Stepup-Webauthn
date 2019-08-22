@@ -36,19 +36,22 @@ final class RegistrationController extends AbstractController
     private $publicKeyCredentialCreationOptionsFactory;
     private $creationOptionsStore;
     private $logger;
+    private $userDisplayName;
 
     public function __construct(
         RegistrationService $registrationService,
         UserRepository $userRepository,
         PublicKeyCredentialCreationOptionsFactory $publicKeyCredentialCreationOptionsFactory,
         PublicKeyCredentialCreationOptionsStore $creationOptionsStore,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        string $userDisplayName
     ) {
         $this->registrationService = $registrationService;
         $this->userRepository = $userRepository;
         $this->publicKeyCredentialCreationOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
         $this->creationOptionsStore = $creationOptionsStore;
         $this->logger = $logger;
+        $this->userDisplayName = $userDisplayName;
     }
 
     /**
@@ -76,9 +79,9 @@ final class RegistrationController extends AbstractController
             return $this->registrationService->replyToServiceProvider();
         }
 
-        $this->logger->info('Registration is not finalized create public key credential creation options');
+        $this->logger->info('Registration is not finalized. Create public key credential creation options');
 
-        $userEntity = $this->userRepository->createUserEntity('SURFsecureID', 'SURFsecureID', null);
+        $userEntity = $this->userRepository->createUser($this->userDisplayName);
         $publicKeyCredentialCreationOptions = $this->publicKeyCredentialCreationOptionsFactory->create(
             'default',
             $userEntity

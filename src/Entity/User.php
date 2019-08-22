@@ -66,7 +66,7 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
     }
 
     /**
-     * Webauthn project does not care about roles of any user.
+     * WebAuthn project does not care about roles of any user.
      *
      * @return array
      */

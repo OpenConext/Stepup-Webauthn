@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2017 SURFnet B.V.
+ * Copyright 2019 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+declare(strict_types=1);
 
 namespace Test\Features\Context;
 
@@ -35,17 +38,17 @@ class WebContext implements Context, KernelAwareContext
     /**
      * @var MinkContext
      */
-    protected $minkContext;
+    private $minkContext;
 
     /**
      * @var KernelInterface
      */
-    protected $kernel;
+    private $kernel;
 
     /**
      * @var string
      */
-    protected $previousMinkSession;
+    private $previousMinkSession;
 
     /**
      * Sets HttpKernel instance.

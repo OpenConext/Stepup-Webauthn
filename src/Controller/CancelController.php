@@ -77,13 +77,13 @@ class CancelController extends AbstractController
     {
         $this->logger->notice('User abort the request');
         if ($this->authenticationService->authenticationRequired()) {
-            $this->authenticationService->reject('User abort the request');
+            $this->authenticationService->reject('User aborted the request');
 
             $this->logger->info('Redirect to sso return endpoint with authentication reject response');
             return $this->authenticationService->replyToServiceProvider();
         }
         if ($this->registrationService->registrationRequired()) {
-            $this->registrationService->reject('User abort the request');
+            $this->registrationService->reject('User aborted the request');
 
             $this->logger->info('Redirect to sso return endpoint with registration reject response');
             return $this->registrationService->replyToServiceProvider();

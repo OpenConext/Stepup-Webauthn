@@ -16,6 +16,7 @@ services:
             $stateHandler: '@surfnet_gssp.state_handler.service'
             $supportUrl: '%support_url%'
             $locales: '%locales%'
+            $userDisplayName: '%user_display_name%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

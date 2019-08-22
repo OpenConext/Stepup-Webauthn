@@ -89,9 +89,16 @@ final class UserRepository implements ServiceEntityRepositoryInterface, BasePubl
         ;
     }
 
+    public function createUser(string $displayName) : PublicKeyCredentialUserEntity
+    {
+        $id = Uuid::uuid4()->toString();
+        return new User($id, $id, $displayName);
+    }
+
     public function createUserEntity(string $username, string $displayName, ?string $icon) : PublicKeyCredentialUserEntity
     {
-        return new User(Uuid::uuid4()->toString(), $username, $displayName);
+        $id = Uuid::uuid4()->toString();
+        return new User($id, $id, $displayName);
     }
 
     public function saveUserEntity(PublicKeyCredentialUserEntity $userEntity) : void

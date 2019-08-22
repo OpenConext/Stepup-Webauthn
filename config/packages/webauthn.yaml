@@ -7,8 +7,8 @@ webauthn:
             public_key_credential_parameters:
                 - !php/const Cose\Algorithms::COSE_ALGORITHM_ES256
             rp:
-                name: 'SURFsecureID'
-                icon: 'https://webauthn.test/images/surfconext-logo.png'
+                name: '%webauthn_name%'
+                icon: '%webauthn_logo%'
             challenge_length: 64
             timeout: 60000
             authenticator_selection_criteria:

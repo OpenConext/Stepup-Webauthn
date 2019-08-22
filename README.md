@@ -1,11 +1,11 @@
-Stepup webauthn
+Stepup WebAuthn GSSP
 ===================
 
 <a href="#">
     <img src="https://travis-ci.org/OpenConext/Stepup-Webauthn.svg?branch=master" alt="build:">
 </a></br>
 
-GSSP webauthn implementation.
+GSSP WebAuthn implementation.
 
 Integrates https://github.com/web-auth/webauthn-framework as GSSP.
 
@@ -59,7 +59,40 @@ To run all required test you can run the following commands from the dev env:
 
 Every part can be run separately. Check "scripts" section of the composer.json file for the different options.
 
-Release instructions
+Quick application deployment guide
+=====================
+
+### 1. Install dependencies
+
+yarn install
+composer install
+
+### 2. Create configuration files
+
+Copy and configure:
+ 
+```.env.dist``` to  ```.env```
+```config/packages/parameters.yml.dist``` to ```config/packages/parameters.yml```
+
+### 3. Build public assets
+
+composer dump-env prod
+yarn encore prod 
+
+### 4. Create database and schema 
+
+```
+ bin/console doctrine:database:create
+ bin/console doctrine:migration:migrate
+```
+
+### 5. Warm-up cache
+
+```
+APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear
+```
+
+Version release instructions
 =====================
 
 Please read: https://github.com/OpenConext/Stepup-Deploy/wiki/Release-Management for more information on the release strategy used in Stepup projects.

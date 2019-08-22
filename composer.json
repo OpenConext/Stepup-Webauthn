@@ -1,7 +1,7 @@
 {
   "name": "surfnet/stepup-webauthn",
   "license": "Apache-2.0",
-  "description": "Webauthn SAML Stepup Provider.",
+  "description": "WebAuthn Generic SAML Stepup Provider.",
   "type": "project",
   "minimum-stability": "stable",
   "prefer-stable": true,
@@ -88,7 +88,7 @@
       "@phpcs",
       "@phpcpd"
     ],
-    "license-headers": "vendor/bin/docheader check src/ dev/ tests/",
+    "license-headers": "vendor/bin/docheader check src/ dev/ Features/ tests/",
     "phpmd": "vendor/bin/phpmd ./src text phpmd.xml  --suffixes php",
     "phpcs": [
       "vendor/bin/phpcs --standard=phpcs.xml --report=full --warning-severity=0 ./src"

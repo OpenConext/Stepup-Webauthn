@@ -22,6 +22,9 @@ namespace App;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * Return status response for web gui. @see public/typescript/gui files.
+ */
 class ValidationJsonResponse extends JsonResponse
 {
 

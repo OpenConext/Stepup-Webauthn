@@ -104,7 +104,7 @@ final class AttestationResponseController
             return ValidationJsonResponse::invalidPublicKeyCredentialResponse();
         }
 
-        $this->logger->info('Verify if there is an excising public key credential creation options in session');
+        $this->logger->info('Verify if there is an existing public key credential creation options in session');
 
         try {
             $publicKeyCredentialCreationOptions = $this->store->get();
@@ -122,6 +122,7 @@ final class AttestationResponseController
             $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
         } catch (Throwable $exception) {
             $logger->warning(sprintf('Invalid attestation "%s"', $exception));
+            return ValidationJsonResponse::invalid();
         }
 
         $credentialSource = PublicKeyCredentialSource::create(
