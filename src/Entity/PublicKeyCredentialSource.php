@@ -20,12 +20,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use Assert\Assertion;
 use Base64Url\Base64Url;
 use Doctrine\ORM\Mapping as ORM;
-use Webauthn\AuthenticatorAttestationResponse;
-use Webauthn\PublicKeyCredential;
-use Webauthn\PublicKeyCredentialDescriptor;
 use Webauthn\PublicKeyCredentialSource as BasePublicKeyCredentialSource;
 
 /**
@@ -46,37 +42,6 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
     public function getId(): string
     {
         return $this->publicKeyCredentialId;
-    }
-
-    public static function create(PublicKeyCredential $publicKeyCredential, string $userHandle): self
-    {
-        $response = $publicKeyCredential->getResponse();
-        Assertion::isInstanceOf(
-            $response,
-            AuthenticatorAttestationResponse::class,
-            'This method is only available with public key credential containing an authenticator attestation response.'
-        );
-        $publicKeyCredentialDescriptor = $publicKeyCredential->getPublicKeyCredentialDescriptor([
-            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_INTERNAL,
-            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_USB,
-            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_BLE,
-            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_NFC
-        ]);
-        $attestationStatement = $response->getAttestationObject()->getAttStmt();
-        $authenticatorData = $response->getAttestationObject()->getAuthData();
-        $attestedCredentialData = $authenticatorData->getAttestedCredentialData();
-        Assertion::notNull($attestedCredentialData, 'No attested credential data available');
-        return new static(
-            $publicKeyCredentialDescriptor->getId(),
-            $publicKeyCredentialDescriptor->getType(),
-            $publicKeyCredentialDescriptor->getTransports(),
-            $attestationStatement->getType(),
-            $attestationStatement->getTrustPath(),
-            $attestedCredentialData->getAaguid(),
-            $attestedCredentialData->getCredentialPublicKey(),
-            $userHandle,
-            $authenticatorData->getSignCount()
-        );
     }
 
     /**

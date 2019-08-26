@@ -26,7 +26,7 @@ use App\Exception\UserNotFoundException;
 use App\PublicKeyCredentialRequestOptionsStore;
 use App\Repository\PublicKeyCredentialSourceRepository;
 use App\Repository\UserRepository;
-use App\Service\AttestationCertificateAcceptanceService;
+use App\Service\AttestationCertificateTrustStore;
 use App\WithContextLogger;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
@@ -45,11 +45,10 @@ class AuthenticationController extends AbstractController
     private $authenticationService;
     private $userRepository;
     private $publicKeyCredentialRequestOptionsFactory;
-    private $requestOptionsStore;
     private $logger;
     private $publicKeyCredentialSourceRepository;
     private $store;
-    private $attestationCertificateAcceptanceService;
+    private $trustStore;
 
     public function __construct(
         AuthenticationService $authenticationService,
@@ -57,18 +56,16 @@ class AuthenticationController extends AbstractController
         LoggerInterface $logger,
         PublicKeyCredentialRequestOptionsFactory $publicKeyCredentialCreationOptionsFactory,
         PublicKeyCredentialSourceRepository $publicKeyCredentialSourceRepository,
-        PublicKeyCredentialRequestOptionsStore $creationOptionsStore,
         PublicKeyCredentialRequestOptionsStore $store,
-        AttestationCertificateAcceptanceService $attestationCertificateAcceptanceService
+        AttestationCertificateTrustStore $trustStore
     ) {
         $this->authenticationService = $authenticationService;
         $this->userRepository = $userRepository;
         $this->publicKeyCredentialRequestOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
-        $this->requestOptionsStore = $creationOptionsStore;
         $this->logger = $logger;
         $this->publicKeyCredentialSourceRepository = $publicKeyCredentialSourceRepository;
         $this->store = $store;
-        $this->attestationCertificateAcceptanceService = $attestationCertificateAcceptanceService;
+        $this->trustStore = $trustStore;
     }
 
     /**
@@ -118,8 +115,10 @@ class AuthenticationController extends AbstractController
         }
 
         $logger->info('Verify if attestation certificate is supported');
-        if (!$this->attestationCertificateAcceptanceService->isSupported($allowedCredentials[0])) {
-            $logger->warning('Attestation certificate is no longer supported');
+        try {
+            $this->trustStore->validate($allowedCredentials[0]);
+        } catch (Throwable $exception) {
+            $logger->warning(sprintf('Attestation certificate is no longer supported "%s"', $exception->getMessage()));
             throw new AttestationCertificateNotSupportedException();
         }
 

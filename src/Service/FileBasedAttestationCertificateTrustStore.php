@@ -21,11 +21,15 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\PublicKeyCredentialSource;
+use App\Exception\AttestationStatementNotFoundException;
+use Webauthn\AttestationStatement\AttestationStatement;
 
-class FileBasedAttestationCertificateAcceptanceService implements AttestationCertificateAcceptanceService
+class FileBasedAttestationCertificateTrustStore implements AttestationCertificateTrustStore
 {
-    public function isSupported(PublicKeyCredentialSource $source): bool
+    public function validate(PublicKeyCredentialSource $source): void
     {
-        return true;
+        if ($source->getAttestationType() === AttestationStatement::TYPE_NONE) {
+            throw new AttestationStatementNotFoundException();
+        }
     }
 }

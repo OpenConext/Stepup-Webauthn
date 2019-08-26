@@ -1,0 +1,27 @@
+-
+    - info
+    - 'Verifying if there is a pending registration from SP'
+    - {  }
+-
+    - info
+    - 'Verify valid public key credential response'
+    - {  }
+-
+    - info
+    - 'Verify if there is an existing public key credential creation options in session'
+    - {  }
+-
+    - info
+    - 'Validate attestation response'
+    -
+        nameId: userId123
+-
+    - info
+    - 'Verify if attestation certificate is supported'
+    -
+        nameId: userId123
+-
+    - warning
+    - 'Missing attestation statement'
+    -
+        nameId: userId123

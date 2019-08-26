@@ -20,9 +20,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\PublicKeyCredentialSource;
+use App\Exception\AttestationStatementNotFoundException;
 use App\PublicKeyCredentialCreationOptionsStore;
-use App\Service\AttestationCertificateAcceptanceService;
+use App\Repository\PublicKeyCredentialSourceRepository;
+use App\Service\AttestationCertificateTrustStore;
 use App\ValidationJsonResponse;
 use App\WithContextLogger;
 use Psr\Http\Message\ServerRequestInterface;
@@ -37,10 +38,9 @@ use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\AuthenticatorAttestationResponseValidator;
 use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepository;
 use Webauthn\PublicKeyCredentialLoader;
-use Webauthn\PublicKeyCredentialSourceRepository;
 
 /**
- *  @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 final class AttestationResponseController
 {
@@ -51,7 +51,7 @@ final class AttestationResponseController
     private $store;
     private $registrationService;
     private $logger;
-    private $attestationCertificateAcceptanceService;
+    private $trustStore;
 
     public function __construct(
         PublicKeyCredentialLoader $publicKeyCredentialLoader,
@@ -59,7 +59,7 @@ final class AttestationResponseController
         PublicKeyCredentialUserEntityRepository $userEntityRepository,
         PublicKeyCredentialSourceRepository $credentialSourceRepository,
         PublicKeyCredentialCreationOptionsStore $store,
-        AttestationCertificateAcceptanceService $attestationCertificateAcceptanceService,
+        AttestationCertificateTrustStore $trustStore,
         RegistrationService $registrationService,
         LoggerInterface $logger
     ) {
@@ -70,7 +70,7 @@ final class AttestationResponseController
         $this->store = $store;
         $this->registrationService = $registrationService;
         $this->logger = $logger;
-        $this->attestationCertificateAcceptanceService = $attestationCertificateAcceptanceService;
+        $this->trustStore = $trustStore;
     }
 
     /**
@@ -82,7 +82,7 @@ final class AttestationResponseController
      * @param Request $request
      * @return Response
      */
-    public function __invoke(ServerRequestInterface $psr7Request, Request $request): Response
+    public function action(ServerRequestInterface $psr7Request, Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending registration from SP');
 
@@ -97,10 +97,10 @@ final class AttestationResponseController
             $publicKeyCredential = $this->publicKeyCredentialLoader->load($request->getContent());
             $response = $publicKeyCredential->getResponse();
             if (!$response instanceof AuthenticatorAttestationResponse) {
-                throw new UnrecoverableErrorException();
+                throw new UnrecoverableErrorException(sprintf('"%s" is invalid response type', get_class($response)));
             }
         } catch (Throwable $throwable) {
-            $this->logger->warning(sprintf('Invalid public key credential response "%s"', $throwable));
+            $this->logger->warning(sprintf('Invalid public key credential response "%s"', $throwable->getMessage()));
             return ValidationJsonResponse::invalidPublicKeyCredentialResponse();
         }
 
@@ -121,25 +121,31 @@ final class AttestationResponseController
         try {
             $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
         } catch (Throwable $exception) {
-            $logger->warning(sprintf('Invalid attestation "%s"', $exception));
+            $logger->warning(sprintf('Invalid attestation "%s"', $exception->getMessage()));
             return ValidationJsonResponse::invalid();
         }
 
-        $credentialSource = PublicKeyCredentialSource::create(
+        $credentialSource = $this->credentialSourceRepository->create(
             $publicKeyCredential,
             $nameId
         );
 
         $logger->info('Verify if attestation certificate is supported');
-        if (!$this->attestationCertificateAcceptanceService->isSupported($credentialSource)) {
-            $logger->warning('Attestation certificate is not supported');
+
+        try {
+            $this->trustStore->validate($credentialSource);
+        } catch (Throwable $exception) {
+            if ($exception instanceof AttestationStatementNotFoundException) {
+                $logger->warning(sprintf('Missing attestation statement'));
+                return ValidationJsonResponse::missingAttestationStatement();
+            }
+            $logger->warning(sprintf('Attestation certificate is not supported "%s"', $exception->getMessage()));
             return ValidationJsonResponse::deviceNotSupported();
         }
 
         $logger->info('Saving user');
 
         $this->userEntityRepository->saveUserEntity($publicKeyCredentialCreationOptions->getUser());
-
         $this->credentialSourceRepository->saveCredentialSource($credentialSource);
 
         $logger->info('Register user');

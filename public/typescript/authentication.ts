@@ -11,7 +11,7 @@ import { reload, retryClicked, showWebAuthnNotSupportedStatus } from './gui';
 import { updateState } from './gui/authentication';
 import { verifyPublicKeyCredentials, whenResponseIsOk } from './http';
 import { AuthenticationState as S, SerializedPublicKeyCredentialRequestOptions } from './models';
-import { requestUserAssertion } from './operators';
+import { concatIfElse, requestUserAssertion } from './operators';
 
 /**
  * Variable from template, @see templates\default\registration.html.twig
@@ -31,8 +31,9 @@ declare const publicKeyOptions: SerializedPublicKeyCredentialRequestOptions;
     updateState(S.REQUEST_USER_FOR_ASSERTION),
     requestUserAssertion,
     updateState(S.PUBLIC_KEY_CREDENTIALS),
-    concatMap((credentials) => isPublicKeyCredentialType(credentials) ?
-      of(credentials).pipe(
+    concatIfElse(
+      isPublicKeyCredentialType,
+      s => s.pipe(
         updateState(S.SERIALIZE_PUBLIC_KEY_CREDENTIALS),
         map(serializePublicKeyCredential),
         updateState(S.PUBLIC_KEY_CREDENTIALS_SERIALIZED),
@@ -41,9 +42,8 @@ declare const publicKeyOptions: SerializedPublicKeyCredentialRequestOptions;
         updateState(S.RECEIVED_SERVER_AUTHENTICATION_RESPONSE),
         whenResponseIsOk(),
         reload(),
-      )
-      :
-      of(credentials).pipe(
+      ),
+      s => s.pipe(
         updateState(S.UNSUPPORTED_PUBLIC_KEY_CREDENTIALS),
         () => throwError(S.UNSUPPORTED_PUBLIC_KEY_CREDENTIALS),
       ),

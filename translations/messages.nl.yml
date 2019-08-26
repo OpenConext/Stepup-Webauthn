@@ -2,6 +2,7 @@
 
 registration.sub_title: Registratie
 status.registration_initial: Registreer met jouw security key.
+status.missing_attestation_statement: Probeer het opnieuw en verleen toegang om je sleutel te bekijken.
 
 # Authentication
 

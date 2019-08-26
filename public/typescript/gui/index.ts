@@ -30,6 +30,7 @@ function showStatus(name: string) {
 export const showInitialStatus = () => showStatus('initial');
 export const showGeneralErrorStatus = () => showStatus('general_error');
 export const showNoActiveRequestStatus = () => showStatus('no_active_request');
+export const showMissingAttestationStatementStatus = () => showStatus('missing_attestation_statement');
 export const showAuthenticatorNotSupportedStatus = () => showStatus('authenticator_not_supported');
 export const showWebAuthnNotSupportedStatus = () => showStatus('webauthn_not_supported');
 
@@ -50,6 +51,9 @@ export const handleServerResponse = (status: string) => {
       break;
     case 'noRegistrationRequired':
       showNoActiveRequestStatus();
+      break;
+    case 'missingAttestationStatement':
+      showMissingAttestationStatementStatus();
       break;
     case 'error':
       showGeneralErrorStatus();

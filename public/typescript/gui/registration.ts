@@ -13,6 +13,7 @@ export const updateState = (type: S) => tap<any>((value) => {
       break;
     case S.PUBLIC_KEY_CREDENTIALS_SERIALIZED:
       const credentials: SerializedPublicKeyCredential = value;
+      // tslint:disable-next-line:no-console
       console.log('clientDataJSON', decode(credentials.response.clientDataJSON).toString());
       break;
     case S.ERROR:

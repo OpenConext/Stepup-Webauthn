@@ -67,4 +67,9 @@ class ValidationJsonResponse extends JsonResponse
     {
         return new self(['status' => 'error'], 400);
     }
+
+    public static function missingAttestationStatement()
+    {
+        return new self(['status' => 'missingAttestationStatement'], 400);
+    }
 }
