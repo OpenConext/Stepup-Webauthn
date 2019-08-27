@@ -26,5 +26,8 @@
     "select2": "^4",
     "ts-jest": "^24.0.2",
     "urlsafe-base64": "^1.0.0"
+  },
+  "resolutions": {
+    "js-yaml": ">=3.13.1"
   }
 }

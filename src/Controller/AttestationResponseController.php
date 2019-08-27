@@ -97,7 +97,7 @@ final class AttestationResponseController
             $publicKeyCredential = $this->publicKeyCredentialLoader->load($request->getContent());
             $response = $publicKeyCredential->getResponse();
             if (!$response instanceof AuthenticatorAttestationResponse) {
-                throw new UnrecoverableErrorException(sprintf('"%s" is invalid response type', get_class($response)));
+                throw new UnrecoverableErrorException(sprintf('"%s" is an invalid response type', get_class($response)));
             }
         } catch (Throwable $throwable) {
             $this->logger->warning(sprintf('Invalid public key credential response "%s"', $throwable->getMessage()));
@@ -136,7 +136,7 @@ final class AttestationResponseController
             $this->trustStore->validate($credentialSource);
         } catch (Throwable $exception) {
             if ($exception instanceof AttestationStatementNotFoundException) {
-                $logger->warning(sprintf('Missing attestation statement'));
+                $logger->warning('Missing attestation statement');
                 return ValidationJsonResponse::missingAttestationStatement();
             }
             $logger->warning(sprintf('Attestation certificate is not supported "%s"', $exception->getMessage()));
