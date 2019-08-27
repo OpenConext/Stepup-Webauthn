@@ -21,15 +21,33 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\PublicKeyCredentialSource;
+use App\Exception\AttestationCertificateNotSupportedException;
 use App\Exception\AttestationStatementNotFoundException;
+use App\Exception\InvalidTrustPathException;
 use Webauthn\AttestationStatement\AttestationStatement;
+use Webauthn\TrustPath\CertificateTrustPath;
 
-class FileBasedAttestationCertificateTrustStore implements AttestationCertificateTrustStore
+class InMemoryAttestationCertificateTrustStore implements AttestationCertificateTrustStore
 {
+    private $trustedCertificates;
+
+    public function __construct(array $trustedCertificates)
+    {
+        $this->trustedCertificates = $trustedCertificates;
+    }
+
     public function validate(PublicKeyCredentialSource $source): void
     {
         if ($source->getAttestationType() === AttestationStatement::TYPE_NONE) {
             throw new AttestationStatementNotFoundException();
+        }
+        $trustPath = $source->getTrustPath();
+        if (!$trustPath instanceof CertificateTrustPath) {
+            throw new InvalidTrustPathException();
+        }
+        $certificates = $trustPath->getCertificates();
+        if (!in_array(implode(PHP_EOL, $certificates), $this->trustedCertificates)) {
+            throw new AttestationCertificateNotSupportedException();
         }
     }
 }

@@ -1,3 +1,4 @@
+import { bind, empty } from 'ramda';
 import { fromEvent, Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { decode } from 'urlsafe-base64';
@@ -55,6 +56,9 @@ export const handleServerResponse = (status: string) => {
       break;
   }
 };
+
+// tslint:disable-next-line:no-console
+export const log: (...args: any[]) => void = typeof console !== 'undefined' ? bind(console.info, console) : empty;
 
 export const retryClicked = () => new Observable((subscriber) => {
   const retryButton = document.getElementById('retry_button');
