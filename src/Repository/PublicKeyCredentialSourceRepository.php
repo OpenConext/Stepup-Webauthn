@@ -24,6 +24,7 @@ use App\Entity\PublicKeyCredentialSource;
 use App\Entity\User;
 use Assert\Assertion;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Webauthn\AttestationStatement\AttestationObject;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepository as BasePublicKeyCredentialSourceRepository;
 use Webauthn\PublicKeyCredential;
@@ -50,8 +51,10 @@ class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceR
             PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_BLE,
             PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_NFC
         ]);
-        $attestationStatement = $response->getAttestationObject()->getAttStmt();
-        $authenticatorData = $response->getAttestationObject()->getAuthData();
+        /** @var AttestationObject $attestationObject */
+        $attestationObject = $response->getAttestationObject();
+        $attestationStatement = $attestationObject->getAttStmt();
+        $authenticatorData = $attestationObject->getAuthData();
         $attestedCredentialData = $authenticatorData->getAttestedCredentialData();
         Assertion::notNull($attestedCredentialData, 'No attested credential data available');
         return new PublicKeyCredentialSource(
@@ -63,7 +66,8 @@ class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceR
             $attestedCredentialData->getAaguid(),
             $attestedCredentialData->getCredentialPublicKey(),
             $userHandle,
-            $authenticatorData->getSignCount()
+            $authenticatorData->getSignCount(),
+            $attestationStatement->getFmt()
         );
     }
 

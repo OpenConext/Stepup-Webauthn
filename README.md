@@ -19,8 +19,8 @@ from that machine.
 
 Requirements
 -------------------
-- vagrant 2.2.x
-    - vagrant-hostsupdater (1.1.1.160, global)
+- Vagrant 2.2.x
+    - vagrant-hostsupdater (1.1.1.160, global, optional)
     - vagrant-vbguest (0.19.0, global)
 - Virtualbox
 
@@ -29,7 +29,11 @@ Install
 
 ### 1. Create virtual machine
 
-``` cd homestead && composer install ```
+``` cd homestead ``` 
+ 
+``` composer install ```
+
+Go to root of the project (```cd ..```) 
 
 ``` vagrant up ```
 
@@ -40,17 +44,24 @@ If everything goes as planned you can develop inside the virtual machine
 ### 2. Build frontend assets:
 
 ``` yarn install ```
+
 ``` yarn encore dev ``` or ``` yarn encore prod ``` for production 
+
+``` ./bin/console assets:install ```
 
 ### 3. Create configuration files
 
 Copy and configure:
  
-```.env.dist``` to  ```.env```
+```.env.vm``` to  ```.env```
 ```config/packages/parameters.yml.dist``` to ```config/packages/parameters.yml```
 
 If everything goes as planned you can go to:
 
+### 4. Create database
+``` 
+ bin/console doctrine:migration:migrate
+``` 
 [https://webauthn.test](https://webauthn.test)
 
 Debugging
@@ -86,21 +97,27 @@ Copy and configure:
 ```.env.dist``` to  ```.env```
 ```config/packages/parameters.yml.dist``` to ```config/packages/parameters.yml```
 
-### 3. Build public assets
+### 4. Create env local file
 
 ```
  composer dump-env prod
- yarn encore prod 
 ```
 
-### 4. Create database and schema 
+### 5. Build public assets
+
+```
+ yarn encore prod
+ ./bin/console assets:install
+```
+
+### 6. Create database and schema 
 
 ```
  bin/console doctrine:database:create
  bin/console doctrine:migration:migrate
 ```
 
-### 5. Warm-up cache
+### 7. Warm-up cache
 
 ```
 APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear

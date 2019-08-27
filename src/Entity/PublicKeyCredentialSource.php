@@ -22,10 +22,13 @@ namespace App\Entity;
 
 use Base64Url\Base64Url;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
 use Webauthn\PublicKeyCredentialSource as BasePublicKeyCredentialSource;
+use Webauthn\TrustPath\TrustPath;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @ORM\Table(name="public_key_credential_sources")
  * @ORM\Entity(repositoryClass="App\Repository\PublicKeyCredentialSourceRepository")
  */
@@ -38,6 +41,43 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string")
+     */
+    private $fmt;
+
+    public function __construct(
+        string $publicKeyCredentialId,
+        string $type,
+        array $transports,
+        string $attestationType,
+        TrustPath $trustPath,
+        UuidInterface $aaguid,
+        string $credentialPublicKey,
+        string $userHandle,
+        int $counter,
+        string $fmt
+    ) {
+        parent::__construct(
+            $publicKeyCredentialId,
+            $type,
+            $transports,
+            $attestationType,
+            $trustPath,
+            $aaguid,
+            $credentialPublicKey,
+            $userHandle,
+            $counter
+        );
+        $this->fmt = $fmt;
+    }
+
+    public function getFmt(): string
+    {
+        return $this->fmt;
+    }
 
     public function getId(): string
     {
