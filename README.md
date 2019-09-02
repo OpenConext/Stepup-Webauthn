@@ -53,15 +53,17 @@ If everything goes as planned you can develop inside the virtual machine
 
 Copy and configure:
  
-```.env.vm``` to  ```.env```
-```config/packages/parameters.yml.dist``` to ```config/packages/parameters.yml```
+```cp .env.vm .env```
 
-If everything goes as planned you can go to:
+```cp config/packages/parameters.yml.dist config/packages/parameters.yml```
 
 ### 4. Create database
 ``` 
  bin/console doctrine:migration:migrate
 ``` 
+
+If everything goes as planned you can go to:
+
 [https://webauthn.test](https://webauthn.test)
 
 Debugging
