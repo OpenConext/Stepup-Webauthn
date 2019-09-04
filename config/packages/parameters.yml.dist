@@ -13,7 +13,7 @@ parameters:
     user_display_name: SURFsecureID
     webauthn_name: SURFsecureID
     webauthn_logo: 'https://webauthn.test/images/surfconext-logo.png'
-    trusted_certificates_directory: '%kernel.root_dir%/../config/trusted_certificates'
+    trusted_certificates_directory: '%kernel.root_dir%/../dev/trusted_certificates'
 
     saml_idp_publickey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer'
     saml_idp_privatekey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem'

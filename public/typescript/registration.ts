@@ -19,7 +19,7 @@ declare const publicKeyOptions: SerializedPublicKeyCredentialCreationOptions;
 
 fromSerializedPublicKeyCredentialCreationOptions(hae, publicKeyOptions)
   .pipe(
-    whenWebAuthnSupported(),
+    whenWebAuthnSupported(hae),
     requestUserAttestation(hae),
     concatIfElse(
       isPublicKeyCredentialType,

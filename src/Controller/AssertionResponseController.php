@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Exception\NoActiveAuthenrequestException;
 use App\PublicKeyCredentialRequestOptionsStore;
 use App\ValidationJsonResponse;
 use App\WithContextLogger;
@@ -75,7 +76,7 @@ final class AssertionResponseController
 
         if (!$this->authenticationService->authenticationRequired()) {
             $this->logger->warning('No authentication required');
-            return ValidationJsonResponse::noAuthenticationRequired();
+            return ValidationJsonResponse::noAuthenticationRequired(new NoActiveAuthenrequestException());
         }
         $nameId = $this->authenticationService->getNameId();
         $logger = WithContextLogger::from($this->logger, ['nameId' => $nameId]);
@@ -87,11 +88,11 @@ final class AssertionResponseController
             $publicKeyCredential = $this->publicKeyCredentialLoader->load($content);
             $response = $publicKeyCredential->getResponse();
             if (!$response instanceof AuthenticatorAssertionResponse) {
-                throw new UnrecoverableErrorException(sprintf('"%s" is wrong response type', get_class($response)));
+                throw new UnrecoverableErrorException('Invalid response type');
             }
         } catch (Throwable $exception) {
             $logger->warning(sprintf('Invalid public key credential response "%s"', $exception->getMessage()));
-            return ValidationJsonResponse::invalidPublicKeyCredentialResponse();
+            return ValidationJsonResponse::invalidPublicKeyCredentialResponse($exception);
         }
 
         $logger->info('Verify if there is an existing public key credential assertion options in session');
@@ -99,7 +100,7 @@ final class AssertionResponseController
             $publicKeyCredentialRequestOptions = $this->store->get();
         } catch (Throwable $exception) {
             $logger->warning(sprintf('Invalid attestation response "%s"', $exception->getMessage()));
-            return ValidationJsonResponse::noPendingCredentialAssertOptions();
+            return ValidationJsonResponse::noPendingCredentialAssertOptions($exception);
         }
 
         $logger->info('Validate assertion response');
@@ -114,7 +115,7 @@ final class AssertionResponseController
             );
         } catch (Throwable $throwable) {
             $logger->warning(sprintf('Invalid attestation "%s"', $throwable->getMessage()));
-            return ValidationJsonResponse::invalid();
+            return ValidationJsonResponse::invalid($throwable);
         }
 
         $logger->info('Attestation success, user verified');

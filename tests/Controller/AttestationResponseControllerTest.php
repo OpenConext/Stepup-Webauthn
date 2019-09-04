@@ -24,6 +24,7 @@ use App\Controller\AttestationResponseController;
 use App\Entity\PublicKeyCredentialSource;
 use App\Entity\User;
 use App\Exception\AttestationStatementNotFoundException;
+use App\Exception\NoActiveAuthenrequestException;
 use App\PublicKeyCredentialCreationOptionsStore;
 use App\Repository\PublicKeyCredentialSourceRepository;
 use App\Service\AttestationCertificateTrustStore;
@@ -31,6 +32,7 @@ use App\ValidationJsonResponse;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\RegistrationService;
 use Symfony\Component\Debug\BufferingLogger;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +68,7 @@ class AttestationResponseControllerTest extends TestCase
     {
         $this->registrationService->shouldReceive(['registrationRequired' => false]);
         $this->assertEquals(
-            ValidationJsonResponse::noRegistrationRequired(),
+            ValidationJsonResponse::noRegistrationRequired(new NoActiveAuthenrequestException()),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -75,9 +77,10 @@ class AttestationResponseControllerTest extends TestCase
     public function test__when_there_is_an_invalid_public_key_credential_response()
     {
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
-        $this->setAuthenticatorResponse(Mockery::mock(AuthenticatorAssertionResponse::class));
+        $response = Mockery::mock(AuthenticatorAssertionResponse::class);
+        $this->setAuthenticatorResponse($response);
         $this->assertEquals(
-            ValidationJsonResponse::invalidPublicKeyCredentialResponse(),
+            ValidationJsonResponse::invalidPublicKeyCredentialResponse(new UnrecoverableErrorException('Invalid response type')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -87,8 +90,9 @@ class AttestationResponseControllerTest extends TestCase
     {
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
         $this->setAuthenticatorResponse(Mockery::mock(AuthenticatorAttestationResponse::class));
+        $this->store->shouldReceive('get')->andThrow(UnrecoverableErrorException::class, 'Some Error');
         $this->assertEquals(
-            ValidationJsonResponse::noPendingCredentialCreationOptions(),
+            ValidationJsonResponse::noPendingCredentialCreationOptions(new UnrecoverableErrorException('Some Error')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -113,7 +117,7 @@ class AttestationResponseControllerTest extends TestCase
             )
             ->andThrow(\Exception::class, 'Invalid');
         $this->assertEquals(
-            ValidationJsonResponse::invalid(),
+            ValidationJsonResponse::invalid(new \Exception('Invalid')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -149,7 +153,7 @@ class AttestationResponseControllerTest extends TestCase
             ->with($credentialSource)
             ->andThrow(\Exception::class, 'Not supported');
         $this->assertEquals(
-            ValidationJsonResponse::deviceNotSupported(),
+            ValidationJsonResponse::deviceNotSupported(new \Exception('Not supported')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -185,7 +189,7 @@ class AttestationResponseControllerTest extends TestCase
             ->with($credentialSource)
             ->andThrow(AttestationStatementNotFoundException::class);
         $this->assertEquals(
-            ValidationJsonResponse::missingAttestationStatement(),
+            ValidationJsonResponse::missingAttestationStatement(new AttestationStatementNotFoundException()),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();

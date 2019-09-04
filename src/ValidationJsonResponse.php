@@ -20,6 +20,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use Exception;
+use Surfnet\StepupBundle\Exception\Art;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -28,24 +30,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ValidationJsonResponse extends JsonResponse
 {
 
-    public static function invalidPublicKeyCredentialResponse()
+    public static function invalidPublicKeyCredentialResponse(Exception $e)
     {
-        return new self(['status' => 'error'], 400);
+        return new self(['status' => 'error', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function noAuthenticationRequired()
+    public static function noAuthenticationRequired(Exception $e)
     {
-        return new self(['status' => 'noAuthenticationRequired'], 400);
+        return new self(['status' => 'noAuthenticationRequired', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function deviceNotSupported()
+    public static function deviceNotSupported(Exception $e)
     {
-        return new self(['status' => 'deviceNotSupported'], 400);
+        return new self(['status' => 'deviceNotSupported', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function noPendingCredentialAssertOptions()
+    public static function noPendingCredentialAssertOptions(Exception $e)
     {
-        return new self(['status' => 'error'], 400);
+        return new self(['status' => 'error', 'error_code' => Art::forException($e)], 400);
     }
 
     public static function valid()
@@ -53,23 +55,23 @@ class ValidationJsonResponse extends JsonResponse
         return new self(['status' => 'ok']);
     }
 
-    public static function invalid()
+    public static function invalid(Exception $e)
     {
-        return new self(['status' => 'invalid'], 400);
+        return new self(['status' => 'invalid', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function noRegistrationRequired()
+    public static function noRegistrationRequired(Exception $e)
     {
-        return new self(['status' => 'noRegistrationRequired'], 400);
+        return new self(['status' => 'noRegistrationRequired', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function noPendingCredentialCreationOptions()
+    public static function noPendingCredentialCreationOptions(Exception $e)
     {
-        return new self(['status' => 'error'], 400);
+        return new self(['status' => 'error', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function missingAttestationStatement()
+    public static function missingAttestationStatement(Exception $e)
     {
-        return new self(['status' => 'missingAttestationStatement'], 400);
+        return new self(['status' => 'missingAttestationStatement', 'error_code' => Art::forException($e)], 400);
     }
 }

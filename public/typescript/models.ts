@@ -40,6 +40,7 @@ export interface SerializedPublicKeyCredential extends Omit<PublicKeyCredential,
 
 export enum ApplicationEvent {
   // Generic
+  NOT_SUPPORTED,
   SERIALIZE_PUBLIC_KEY_CREDENTIALS,
   PUBLIC_KEY_CREDENTIALS_SERIALIZED,
   SENDING_PUBLIC_KEY_CREDENTIALS,

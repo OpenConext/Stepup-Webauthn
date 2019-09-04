@@ -1,4 +1,3 @@
-
 <div class="status hidden general_error">
     {{ 'status.general_error'|trans }}
 </div>
@@ -13,11 +12,45 @@
 
 <div class="status hidden webauthn_not_supported">
     {{ 'status.webauthn_not_supported'|trans }}
-    <br/>
-    <br/>
+    <br />
+    <br />
     <a href="{{ path('app_abort') }}">{{ 'abort'|trans }}</a>
 </div>
 
-<br/>
+<div class="status hidden" id="error_table">
+    <br />
+    <table class="table table-bordered">
+        <tr>
+            <th>{{ 'stepup.error.timestamp'|trans }}</th>
+            <td id="error_timestamp">{{ timestamp }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'stepup.error.hostname'|trans }}</th>
+            <td>{{ hostname }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'stepup.error.request_id'|trans }}</th>
+            <td>{{ request_id }}</td>
+        </tr>
+        <tr>
+            <th>{{ 'stepup.error.error_code'|trans }}</th>
+            <td id="error_code"></td>
+        </tr>
+        {% if user_agent %}
+            <tr>
+                <th>{{ 'stepup.error.user_agent'|trans }}</th>
+                <td>{{ user_agent }}</td>
+            </tr>
+        {% endif %}
+        <tr>
+            <th>{{ 'stepup.error.ip_address'|trans }}</th>
+            <td>{{ ip_address }}</td>
+        </tr>
+    </table>
+
+    <p>{{ 'stepup.error.support_page.text'|trans({'%support_url%': global_view_parameters.supportUrl })|raw }}</p>
+</div>
+
+<br />
 
 <button id="retry_button" class="hidden">{{ 'retry'|trans }}</button>

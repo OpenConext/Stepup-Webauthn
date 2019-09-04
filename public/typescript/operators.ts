@@ -9,7 +9,7 @@ import {
   isWebAuthnSupported,
   serializePublicKeyCredential,
 } from './functions';
-import { retryClicked, showWebAuthnNotSupportedStatus } from './gui';
+import { retryClicked } from './gui';
 import { verifyPublicKeyCredentials } from './http';
 import {
   ApplicationEvent as S,
@@ -22,14 +22,14 @@ export type FireApplicationEvent = (event: S) => <T>(source: T) => T;
 export const requestUserAttestation = (fe: FireApplicationEvent) => concatMap((publicKey: PublicKeyCredentialCreationOptions) =>
   of(publicKey).pipe(
     fe(S.REQUEST_USER_FOR_ATTESTATION),
-    () => from(navigator.credentials.create({ publicKey })),
+    concatMap(() => from(navigator.credentials.create({ publicKey }))),
     fe(S.PUBLIC_KEY_CREDENTIALS),
   ));
 
 export const requestUserAssertion = (fe: FireApplicationEvent) => concatMap((publicKey: PublicKeyCredentialCreationOptions) =>
   of(publicKey).pipe(
     fe(S.REQUEST_USER_FOR_ASSERTION),
-    () => from(navigator.credentials.get({ publicKey })),
+    concatMap(() => from(navigator.credentials.get({ publicKey }))),
     fe(S.PUBLIC_KEY_CREDENTIALS),
   ));
 
@@ -80,9 +80,9 @@ export const retryWhenClicked = (fe: FireApplicationEvent) =>
     mergeMap(retryClicked),
   )));
 
-export const whenWebAuthnSupported = () => takeWhile<any>(() => {
+export const whenWebAuthnSupported = (fe: FireApplicationEvent) => takeWhile<any>(() => {
   if (!isWebAuthnSupported()) {
-    showWebAuthnNotSupportedStatus();
+    of(1).pipe(fe(S.NOT_SUPPORTED)).subscribe();
     return false;
   }
   return true;

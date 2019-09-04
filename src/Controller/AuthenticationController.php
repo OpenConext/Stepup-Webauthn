@@ -27,6 +27,7 @@ use App\PublicKeyCredentialRequestOptionsStore;
 use App\Repository\PublicKeyCredentialSourceRepository;
 use App\Repository\UserRepository;
 use App\Service\AttestationCertificateTrustStore;
+use App\Service\ClientMetadataService;
 use App\WithContextLogger;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
@@ -49,6 +50,7 @@ class AuthenticationController extends AbstractController
     private $publicKeyCredentialSourceRepository;
     private $store;
     private $trustStore;
+    private $clientMetadataService;
 
     public function __construct(
         AuthenticationService $authenticationService,
@@ -57,7 +59,8 @@ class AuthenticationController extends AbstractController
         PublicKeyCredentialRequestOptionsFactory $publicKeyCredentialCreationOptionsFactory,
         PublicKeyCredentialSourceRepository $publicKeyCredentialSourceRepository,
         PublicKeyCredentialRequestOptionsStore $store,
-        AttestationCertificateTrustStore $trustStore
+        AttestationCertificateTrustStore $trustStore,
+        ClientMetadataService $clientMetadataService
     ) {
         $this->authenticationService = $authenticationService;
         $this->userRepository = $userRepository;
@@ -66,6 +69,7 @@ class AuthenticationController extends AbstractController
         $this->publicKeyCredentialSourceRepository = $publicKeyCredentialSourceRepository;
         $this->store = $store;
         $this->trustStore = $trustStore;
+        $this->clientMetadataService = $clientMetadataService;
     }
 
     /**
@@ -133,7 +137,8 @@ class AuthenticationController extends AbstractController
 
         return $this->render(
             'default/authentication.html.twig',
-            ['publicKeyOptions' => $publicKeyCredentialRequestOptions]
+            ['publicKeyOptions' => $publicKeyCredentialRequestOptions] +
+            $this->clientMetadataService->generateMetadata($request)
         );
     }
 }
