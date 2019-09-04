@@ -23,11 +23,13 @@ namespace App\Controller;
 use App\Exception\NoAuthnrequestException;
 use App\PublicKeyCredentialCreationOptionsStore;
 use App\Repository\UserRepository;
+use App\Service\ClientMetadataService;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Service\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Webauthn\Bundle\Service\PublicKeyCredentialCreationOptionsFactory;
+use Symfony\Component\HttpFoundation\Request;
 
 final class RegistrationController extends AbstractController
 {
@@ -37,6 +39,7 @@ final class RegistrationController extends AbstractController
     private $creationOptionsStore;
     private $logger;
     private $userDisplayName;
+    private $clientMetadataService;
 
     public function __construct(
         RegistrationService $registrationService,
@@ -44,6 +47,7 @@ final class RegistrationController extends AbstractController
         PublicKeyCredentialCreationOptionsFactory $publicKeyCredentialCreationOptionsFactory,
         PublicKeyCredentialCreationOptionsStore $creationOptionsStore,
         LoggerInterface $logger,
+        ClientMetadataService $clientMetadataService,
         string $userDisplayName
     ) {
         $this->registrationService = $registrationService;
@@ -52,6 +56,7 @@ final class RegistrationController extends AbstractController
         $this->creationOptionsStore = $creationOptionsStore;
         $this->logger = $logger;
         $this->userDisplayName = $userDisplayName;
+        $this->clientMetadataService = $clientMetadataService;
     }
 
     /**
@@ -61,7 +66,7 @@ final class RegistrationController extends AbstractController
      *
      * @Route("/registration", name="app_identity_registration")
      */
-    public function __invoke()
+    public function __invoke(Request $request)
     {
         $this->logger->info('Verifying if there is a pending registration from SP');
 
@@ -92,7 +97,9 @@ final class RegistrationController extends AbstractController
 
         return $this->render(
             'default\registration.html.twig',
-            ['publicKeyOptions' => $publicKeyCredentialCreationOptions]
+            [
+                'publicKeyOptions' => $publicKeyCredentialCreationOptions
+            ] + $this->clientMetadataService->generateMetadata($request)
         );
     }
 }

@@ -10,6 +10,9 @@ import {
   over,
   pickBy,
   propSatisfies,
+  reduce,
+  splitEvery,
+  replace,
   T as TRUE,
   unless,
 } from 'ramda';
@@ -93,3 +96,13 @@ export const serializePublicKeyCredential: (credentials: PublicKeyCredential) =>
 export const isPublicKeyCredentialType: (type: CredentialType | null) => type is PublicKeyCredential = ((key: any) => key && key.type === 'public-key') as any;
 
 export const isWebAuthnSupported = () => typeof navigator.credentials !== 'undefined';
+
+/**
+ * Simple hashing function for message to error codes.
+ */
+export const toSimpleHash = (input: string): number => reduce(
+    // tslint:disable-next-line:no-bitwise
+    (hash, char) => Math.abs(((hash << 5) - hash) + char.charCodeAt(0)),
+    0,
+    splitEvery(1, replace(/".*?"|'.*?'/g, '', input)),
+  );

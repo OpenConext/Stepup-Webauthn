@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Exception\AttestationStatementNotFoundException;
+use App\Exception\NoActiveAuthenrequestException;
 use App\PublicKeyCredentialCreationOptionsStore;
 use App\Repository\PublicKeyCredentialSourceRepository;
 use App\Service\AttestationCertificateTrustStore;
@@ -88,7 +89,7 @@ final class AttestationResponseController
 
         if (!$this->registrationService->registrationRequired()) {
             $this->logger->warning('Registration is not required');
-            return ValidationJsonResponse::noRegistrationRequired();
+            return ValidationJsonResponse::noRegistrationRequired(new NoActiveAuthenrequestException());
         }
 
         $this->logger->info('Verify valid public key credential response');
@@ -97,20 +98,20 @@ final class AttestationResponseController
             $publicKeyCredential = $this->publicKeyCredentialLoader->load($request->getContent());
             $response = $publicKeyCredential->getResponse();
             if (!$response instanceof AuthenticatorAttestationResponse) {
-                throw new UnrecoverableErrorException(sprintf('"%s" is an invalid response type', get_class($response)));
+                throw new UnrecoverableErrorException('Invalid response type');
             }
-        } catch (Throwable $throwable) {
-            $this->logger->warning(sprintf('Invalid public key credential response "%s"', $throwable->getMessage()));
-            return ValidationJsonResponse::invalidPublicKeyCredentialResponse();
+        } catch (Throwable $e) {
+            $this->logger->warning(sprintf('Invalid public key credential response "%s"', $e->getMessage()));
+            return ValidationJsonResponse::invalidPublicKeyCredentialResponse($e);
         }
 
         $this->logger->info('Verify if there is an existing public key credential creation options in session');
 
         try {
             $publicKeyCredentialCreationOptions = $this->store->get();
-        } catch (Throwable $throwable) {
+        } catch (Throwable $e) {
             $this->logger->warning('No pending public key credential creation options in session');
-            return ValidationJsonResponse::noPendingCredentialCreationOptions();
+            return ValidationJsonResponse::noPendingCredentialCreationOptions($e);
         }
 
         $nameId = $publicKeyCredentialCreationOptions->getUser()->getId();
@@ -120,9 +121,9 @@ final class AttestationResponseController
 
         try {
             $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
-        } catch (Throwable $exception) {
-            $logger->warning(sprintf('Invalid attestation "%s"', $exception->getMessage()));
-            return ValidationJsonResponse::invalid();
+        } catch (Throwable $e) {
+            $logger->warning(sprintf('Invalid attestation "%s"', $e->getMessage()));
+            return ValidationJsonResponse::invalid($e);
         }
 
         $credentialSource = $this->credentialSourceRepository->create(
@@ -134,13 +135,13 @@ final class AttestationResponseController
 
         try {
             $this->trustStore->validate($credentialSource);
-        } catch (Throwable $exception) {
-            if ($exception instanceof AttestationStatementNotFoundException) {
+        } catch (Throwable $e) {
+            if ($e instanceof AttestationStatementNotFoundException) {
                 $logger->warning('Missing attestation statement');
-                return ValidationJsonResponse::missingAttestationStatement();
+                return ValidationJsonResponse::missingAttestationStatement($e);
             }
-            $logger->warning(sprintf('Attestation certificate is not supported "%s"', $exception->getMessage()));
-            return ValidationJsonResponse::deviceNotSupported();
+            $logger->warning(sprintf('Attestation certificate is not supported "%s"', $e->getMessage()));
+            return ValidationJsonResponse::deviceNotSupported($e);
         }
 
         $logger->info('Saving user');

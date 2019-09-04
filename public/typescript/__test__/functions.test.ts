@@ -8,7 +8,7 @@ import {
   isAuthenticatorAttestationResponse,
   optionalBase64UrlSafeToUInt8Ids,
   removeEmptyAndUndefined,
-  serializePublicKeyCredential,
+  serializePublicKeyCredential, toSimpleHash,
 } from '../functions';
 import { SerializedPublicKeyCredentialCreationOptions, SerializedPublicKeyCredentialRequestOptions } from '../models';
 
@@ -212,4 +212,15 @@ it('deSerializedPublicKeyCredentialRequestOptions', () => {
     }],
     timeout: 30000,
   });
+});
+
+it('toSimpleHash', () => {
+  expect(toSimpleHash('Test exception')).toEqual(1210941671);
+  expect(toSimpleHash('Test "1234"')).toEqual(80698798);
+  expect(toSimpleHash('Test "456"')).toEqual(80698798);
+  expect(toSimpleHash('Test \'456\'')).toEqual(80698798);
+  expect(toSimpleHash('Test \'1234\'')).toEqual(80698798);
+
+  expect(toSimpleHash('Foo \'1234\' Bar \'5678\'')).toEqual(1113119119);
+  expect(toSimpleHash('Foo \'8765\' Bar \'4321\'')).toEqual(1113119119);
 });

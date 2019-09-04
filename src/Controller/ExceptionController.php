@@ -23,7 +23,7 @@ namespace App\Controller;
 use App\Exception\AttestationCertificateNotSupportedException;
 use App\Exception\NoAuthnrequestException;
 use App\Exception\UserNotFoundException;
-use DateTime;
+use App\Service\ClientMetadataService;
 use Exception;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\StepupBundle\Controller\ExceptionController as BaseExceptionController;
@@ -33,6 +33,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ExceptionController extends BaseExceptionController
 {
+    private $clientMetadataService;
+
+    public function __construct(ClientMetadataService $exceptionMetadataService)
+    {
+        $this->clientMetadataService = $exceptionMetadataService;
+    }
+
     public function showAction(Request $request, Exception $exception)
     {
         $statusCode = $this->getStatusCode($exception);
@@ -44,23 +51,13 @@ final class ExceptionController extends BaseExceptionController
 
         $response = new Response('', $statusCode);
 
-        $timestamp = (new DateTime)->format(DateTime::ISO8601);
-        $hostname = $request->getHost();
-        $requestId = $this->get('surfnet_stepup.request.request_id');
         $errorCode = Art::forException($exception);
-        $userAgent = $request->headers->get('User-Agent');
-        $ipAddress = $request->getClientIp();
 
         return $this->render(
             $template,
-            [
-                'timestamp' => $timestamp,
-                'hostname' => $hostname,
-                'request_id' => $requestId->get(),
-                'error_code' => $errorCode,
-                'user_agent' => $userAgent,
-                'ip_address' => $ipAddress,
-            ] + $this->getPageTitleAndDescription($exception),
+            $this->clientMetadataService->generateMetadata($request) +
+            ['error_code' => $errorCode] +
+            $this->getPageTitleAndDescription($exception),
             $response
         );
     }

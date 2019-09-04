@@ -9,6 +9,6 @@
         nameId: JohnDoe123
 -
     - warning
-    - 'Invalid public key credential response ""Mockery_6_Webauthn_AuthenticatorAttestationResponse" is wrong response type"'
+    - 'Invalid public key credential response "Invalid response type"'
     -
         nameId: JohnDoe123
