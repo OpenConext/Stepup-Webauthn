@@ -18,6 +18,9 @@ cache:
     - ~/.composer/cache/files
 
 before_script:
+  # Update packages
+  - curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+
   # configure ssl
   - sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/gssp.key -out /etc/ssl/certs/gssp.crt -subj "/C=NL/ST=Netherlands/L=Amsterdam/O=TEST/CN=webauthn.test"
 
@@ -55,7 +58,7 @@ before_script:
   - netstat -an | grep :9000
   # Test if the website is actually running
   - curl --insecure https://webauthn.test
-  - curl --insecure https://webauthn.test/public/images/surfconext-logo.png
+  - curl --insecure https://webauthn.test/public/images/header-logo.png
 
 script:
   - composer test
