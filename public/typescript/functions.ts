@@ -11,8 +11,8 @@ import {
   pickBy,
   propSatisfies,
   reduce,
-  splitEvery,
   replace,
+  splitEvery,
   T as TRUE,
   unless,
 } from 'ramda';
@@ -100,9 +100,12 @@ export const isWebAuthnSupported = () => typeof navigator.credentials !== 'undef
 /**
  * Simple hashing function for message to error codes.
  */
-export const toSimpleHash = (input: string): number => reduce(
-    // tslint:disable-next-line:no-bitwise
-    (hash, char) => Math.abs(((hash << 5) - hash) + char.charCodeAt(0)),
-    0,
-    splitEvery(1, replace(/".*?"|'.*?'/g, '', input)),
-  );
+export const createArtCode = (input: string): string => `F${reduce(
+  // tslint:disable-next-line:no-bitwise
+  (hash, char) => Math.abs(((hash << 5) - hash) + char.charCodeAt(0)),
+  0,
+  splitToChars(removeVariables(input)),
+)}`;
+
+const splitToChars = splitEvery(1);
+const removeVariables = replace(/".*?"|'.*?'/g, '');
