@@ -2,7 +2,7 @@ import { bind, empty } from 'ramda';
 import { fromEvent, Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { decode } from 'urlsafe-base64';
-import { toSimpleHash } from './functions';
+import { createArtCode } from './functions';
 import { ApplicationEvent as S, SerializedPublicKeyCredential } from './models';
 import { FireApplicationEvent } from './operators';
 
@@ -12,7 +12,7 @@ export const handleApplicationEvent: FireApplicationEvent = (type: S) => tap((va
   switch (type) {
     case S.NOT_SUPPORTED:
       showWebAuthnNotSupportedStatus();
-      setErrorCode(`F${toSimpleHash(S[type])}`);
+      setErrorCode(createArtCode(S[type]));
       break;
 
     case S.REQUEST_USER_FOR_ATTESTATION:
@@ -31,7 +31,7 @@ export const handleApplicationEvent: FireApplicationEvent = (type: S) => tap((va
         break;
       }
       showGeneralErrorStatus();
-      setErrorCode(`F${toSimpleHash(value.toString())}`);
+      setErrorCode(createArtCode(value.toString()));
       break;
   }
 }) as any;

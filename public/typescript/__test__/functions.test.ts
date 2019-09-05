@@ -8,7 +8,7 @@ import {
   isAuthenticatorAttestationResponse,
   optionalBase64UrlSafeToUInt8Ids,
   removeEmptyAndUndefined,
-  serializePublicKeyCredential, toSimpleHash,
+  serializePublicKeyCredential, createArtCode,
 } from '../functions';
 import { SerializedPublicKeyCredentialCreationOptions, SerializedPublicKeyCredentialRequestOptions } from '../models';
 
@@ -214,13 +214,13 @@ it('deSerializedPublicKeyCredentialRequestOptions', () => {
   });
 });
 
-it('toSimpleHash', () => {
-  expect(toSimpleHash('Test exception')).toEqual(1210941671);
-  expect(toSimpleHash('Test "1234"')).toEqual(80698798);
-  expect(toSimpleHash('Test "456"')).toEqual(80698798);
-  expect(toSimpleHash('Test \'456\'')).toEqual(80698798);
-  expect(toSimpleHash('Test \'1234\'')).toEqual(80698798);
+it('createArtCode', () => {
+  expect(createArtCode('Test exception')).toEqual('F1210941671');
+  expect(createArtCode('Test "1234"')).toEqual('F80698798');
+  expect(createArtCode('Test "456"')).toEqual('F80698798');
+  expect(createArtCode('Test \'456\'')).toEqual('F80698798');
+  expect(createArtCode('Test \'1234\'')).toEqual('F80698798');
 
-  expect(toSimpleHash('Foo \'1234\' Bar \'5678\'')).toEqual(1113119119);
-  expect(toSimpleHash('Foo \'8765\' Bar \'4321\'')).toEqual(1113119119);
+  expect(createArtCode('Foo \'1234\' Bar \'5678\'')).toEqual('F1113119119');
+  expect(createArtCode('Foo \'8765\' Bar \'4321\'')).toEqual('F1113119119');
 });
