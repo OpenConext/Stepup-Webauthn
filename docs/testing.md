@@ -27,7 +27,9 @@ test code as well as production code;
  - PHP Mess Detector checks a number of metrics, and if they exceed a certain treshold the build will fail;
  - PHP CodeSniffer ensures that the code adheres to the chosen coding standard (PSR-2);
  - PHP Copy-Paste Detector ensures that there is no substantial duplication within the source code.
- 
+ - Typescript Linter
+ - Typescript for type checking
+
 You can run these tools manually with composer:
 
 ```bash
@@ -47,6 +49,8 @@ You can run these tools manually with composer:
 
 ```bash
 composer phpunit
+
+composer jest
 ``` 
 
 ## Acceptance testing
@@ -60,7 +64,7 @@ Acceptance tests will be written for all command handlers and will be run as par
 You can run these tools manually with composer:
 
 ```bash
-composer behat
+composer phpunit
 ``` 
 
 ## Security testing
@@ -69,7 +73,7 @@ Using an automated tool, the list of dependencies of the project is being checke
 vulnerabilities as part of every CI build. If any of the dependencies contains a known vulnerability, the build will
 fail.
 
-Tools: SensioLabs Security Checker
+Tools: SensioLabs Security Checker and yarn audit
 
 You can run these tools manually with composer:
 

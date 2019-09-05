@@ -6,8 +6,7 @@ import { ApplicationEvent as S, SerializedPublicKeyCredential } from './models';
 import { FireApplicationEvent } from './operators';
 
 export const handleApplicationEvent: FireApplicationEvent = (type: S) => tap((value: any) => {
-  // tslint:disable-next-line:no-console
-  console.log(S[type], value);
+  log(S[type], value);
 
   switch (type) {
     case S.REQUEST_USER_FOR_ATTESTATION:
@@ -15,8 +14,7 @@ export const handleApplicationEvent: FireApplicationEvent = (type: S) => tap((va
       break;
     case S.PUBLIC_KEY_CREDENTIALS_SERIALIZED:
       const credentials: SerializedPublicKeyCredential = value;
-      // tslint:disable-next-line:no-console
-      console.log('clientDataJSON', decode(credentials.response.clientDataJSON).toString());
+      log('clientDataJSON', decode(credentials.response.clientDataJSON).toString());
       break;
     case S.REQUEST_USER_FOR_ASSERTION:
       showInitialStatus();
@@ -58,7 +56,7 @@ export const handleServerResponse = (status: string) => {
 };
 
 // tslint:disable-next-line:no-console
-export const log: (...args: any[]) => void = typeof console !== 'undefined' ? bind(console.info, console) : empty;
+const log: (...args: any[]) => void = typeof console !== 'undefined' ? bind(console.info, console) : empty;
 
 export const retryClicked = () => new Observable((subscriber) => {
   const retryButton = document.getElementById('retry_button');

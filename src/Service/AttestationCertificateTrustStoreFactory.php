@@ -37,7 +37,7 @@ final class AttestationCertificateTrustStoreFactory
     public function __invoke(): AttestationCertificateTrustStore
     {
         $finder = new Finder();
-        $finder->files()->in($this->trustedCertificatesDirectory)->name('*.cer');
+        $finder->files()->in($this->trustedCertificatesDirectory);
         $certificates = [];
         foreach ($finder as $file) {
             $certificates[] = $file->getContents();

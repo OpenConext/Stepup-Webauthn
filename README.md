@@ -45,7 +45,7 @@ If everything goes as planned you can develop inside the virtual machine
 
 ``` yarn install ```
 
-``` yarn encore dev ``` or ``` yarn encore prod ``` for production 
+``` yarn encore dev ```
 
 ``` ./bin/console assets:install ```
 
@@ -66,6 +66,26 @@ If everything goes as planned you can go to:
 
 [https://webauthn.test](https://webauthn.test)
 
+### Development
+
+All frond-end logic is written in sass and typescript. You can run a watcher to update these automatically
+
+Configuration
+-------------------
+
+### WebAuthn Creation/request profiles
+
+For this application default creation/request profiles are created. The application
+now only support 'default' profile. [config/packages/webauthn.yaml](config/packages/webauthn.yaml)
+
+You can override the default one, see all configuration option on
+[webauthn-framework](https://github.com/web-auth/webauthn-framework/blob/master/doc/symfony/index.md) 
+
+### Trust store [src/Service/InMemoryAttestationCertificateTrustStore.php](src/Service/InMemoryAttestationCertificateTrustStore.php)
+
+All WebAuthn request Attestation Statement with a certificate trust path. All trusted certificates should be stored on disk.
+The directory can be configured inside the parameters.yml file [config/packages/parameters.yml](config/packages/parameters.yml)
+
 Debugging
 -------------------
 Xdebug is configured when provisioning your development Vagrant box. 
@@ -82,7 +102,7 @@ To run all required test you can run the following commands from the dev env:
 
 Every part can be run separately. Check "scripts" section of the composer.json file for the different options.
 
-Quick application deployment guide
+Quick application production deployment guide
 =====================
 
 ### 1. Install dependencies
@@ -97,29 +117,26 @@ Quick application deployment guide
 Copy and configure:
  
 ```.env.dist``` to  ```.env```
+
 ```config/packages/parameters.yml.dist``` to ```config/packages/parameters.yml```
 
-### 4. Create env local file
+```composer dump-env prod```
 
-```
- composer dump-env prod
-```
-
-### 5. Build public assets
+### 3. Build public assets
 
 ```
  yarn encore prod
  ./bin/console assets:install
 ```
 
-### 6. Create database and schema 
+### 4. Create database and schema 
 
 ```
  bin/console doctrine:database:create
  bin/console doctrine:migration:migrate
 ```
 
-### 7. Warm-up cache
+### 5. Warm-up cache
 
 ```
 APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear
