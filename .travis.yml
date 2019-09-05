@@ -22,6 +22,7 @@ before_script:
   - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
   - nvm install 8.11.3
   - curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
+  - export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
   # configure ssl
   - sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/gssp.key -out /etc/ssl/certs/gssp.crt -subj "/C=NL/ST=Netherlands/L=Amsterdam/O=TEST/CN=webauthn.test"
