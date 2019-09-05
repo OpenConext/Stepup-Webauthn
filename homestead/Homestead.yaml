@@ -17,6 +17,11 @@ sites:
         to: /home/vagrant/code/public
         type: symfony4
         php: '7.2'
+    -
+        map: webauthn-archive.test
+        to: /home/vagrant/code/archive/public
+        type: symfony4
+        php: '7.2'
 name: webauthn
 hostname: webauthn
 databases:

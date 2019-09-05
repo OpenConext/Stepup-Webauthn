@@ -44,10 +44,10 @@
     "nyholm/psr7": "^1.1",
     "web-auth/cose-lib": "^2.0",
     "spomky-labs/cbor-php": "^1.0",
-    "surfnet/stepup-bundle": "^4.1.0-beta.3"
+    "surfnet/stepup-bundle": "^4.1.0-beta.3",
+    "symfony/dotenv": "^4.3"
   },
   "require-dev": {
-    "symfony/dotenv": "~4",
     "symfony/maker-bundle": "^1.12",
     "symfony/profiler-pack": "~1",
     "jakub-onderka/php-parallel-lint": "~1",
@@ -120,7 +120,15 @@
     "auto-scripts": {
       "cache:clear": "symfony-cmd",
       "assets:install %PUBLIC_DIR%": "symfony-cmd"
-    }
+    },
+    "pre-archive-cmd": [
+      "composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader",
+      "yarn install",
+      "yarn encore prod",
+      "composer dump-env prod",
+      "./bin/console assets:install",
+      "APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear"
+    ]
   },
   "repositories": [
     {
@@ -138,11 +146,32 @@
   ],
   "archive": {
     "exclude": [
-      "node_modules",
-      "coverage",
-      "homestead",
-      "build",
-      ".git"
+      "!.env",
+      "!.env.local.php",
+      "!var/cache/prod",
+      "!public/build",
+      "/node_modules",
+      "/dev",
+      "/translations/sp",
+      "/coverage",
+      "/homestead",
+      "tests",
+      "/build",
+      "/travis-ci-apache.conf",
+      "/tsconfig.json",
+      "/tslint.json",
+      "/Vagrantfile",
+      "/webpack.config.js",
+      "/jest.config.js",
+      "/.docheader",
+      "/.env.ci",
+      "/.env.test",
+      "/.env.vm",
+      "/*.xml",
+      "/*.xml.dist",
+      "/config/routes/dev",
+      "/config/packages/dev",
+      "/config/packages/test"
   ]
 }
 }
