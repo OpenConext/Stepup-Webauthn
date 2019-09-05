@@ -19,6 +19,8 @@ cache:
 
 before_script:
   # Update packages
+  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
+  - nvm install 8.11.3
   - curl --compressed -o- -L https://yarnpkg.com/install.sh | bash
 
   # configure ssl
