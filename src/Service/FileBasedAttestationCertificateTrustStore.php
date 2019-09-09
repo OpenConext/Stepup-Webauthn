@@ -18,5 +18,18 @@
 
 declare(strict_types=1);
 
-putenv('APP_ENV='.$_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = 'test');
-require dirname(__DIR__, 2).'/config/bootstrap.php';
+namespace App\Service;
+
+use App\Entity\PublicKeyCredentialSource;
+use App\Exception\AttestationStatementNotFoundException;
+use Webauthn\AttestationStatement\AttestationStatement;
+
+class FileBasedAttestationCertificateTrustStore implements AttestationCertificateTrustStore
+{
+    public function validate(PublicKeyCredentialSource $source): void
+    {
+        if ($source->getAttestationType() === AttestationStatement::TYPE_NONE) {
+            throw new AttestationStatementNotFoundException();
+        }
+    }
+}

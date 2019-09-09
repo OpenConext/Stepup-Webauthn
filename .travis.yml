@@ -59,7 +59,6 @@ before_script:
 
 script:
   - composer test
-  - yarn jest
 
 after_script:
   - cat $TRAVIS_BUILD_DIR/error.log

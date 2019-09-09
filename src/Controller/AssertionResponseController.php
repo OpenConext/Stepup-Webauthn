@@ -69,7 +69,7 @@ final class AssertionResponseController
      * @param Request $request
      * @return Response
      */
-    public function __invoke(ServerRequestInterface $psr7Request, Request $request): Response
+    public function action(ServerRequestInterface $psr7Request, Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending authentication from SP');
 
@@ -87,10 +87,10 @@ final class AssertionResponseController
             $publicKeyCredential = $this->publicKeyCredentialLoader->load($content);
             $response = $publicKeyCredential->getResponse();
             if (!$response instanceof AuthenticatorAssertionResponse) {
-                throw new UnrecoverableErrorException();
+                throw new UnrecoverableErrorException(sprintf('"%s" is wrong response type', get_class($response)));
             }
         } catch (Throwable $exception) {
-            $logger->warning(sprintf('Invalid public key credential response "%s"', $exception));
+            $logger->warning(sprintf('Invalid public key credential response "%s"', $exception->getMessage()));
             return ValidationJsonResponse::invalidPublicKeyCredentialResponse();
         }
 
@@ -98,7 +98,7 @@ final class AssertionResponseController
         try {
             $publicKeyCredentialRequestOptions = $this->store->get();
         } catch (Throwable $exception) {
-            $logger->warning(sprintf('Invalid attestation response "%s"', $exception));
+            $logger->warning(sprintf('Invalid attestation response "%s"', $exception->getMessage()));
             return ValidationJsonResponse::noPendingCredentialAssertOptions();
         }
 
@@ -113,7 +113,7 @@ final class AssertionResponseController
                 $nameId
             );
         } catch (Throwable $throwable) {
-            $logger->warning(sprintf('Invalid attestation "%s"', $throwable));
+            $logger->warning(sprintf('Invalid attestation "%s"', $throwable->getMessage()));
             return ValidationJsonResponse::invalid();
         }
 

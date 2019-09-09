@@ -26,6 +26,9 @@ Requirements
 
 Install
 -------------------
+
+### 1. Create virtual machine
+
 ``` cd homestead && composer install ```
 
 ``` vagrant up ```
@@ -34,10 +37,17 @@ If everything goes as planned you can develop inside the virtual machine
 
 ``` vagrant ssh ```
 
-Build frontend assets:
+### 2. Build frontend assets:
 
 ``` yarn install ```
 ``` yarn encore dev ``` or ``` yarn encore prod ``` for production 
+
+### 3. Create configuration files
+
+Copy and configure:
+ 
+```.env.dist``` to  ```.env```
+```config/packages/parameters.yml.dist``` to ```config/packages/parameters.yml```
 
 If everything goes as planned you can go to:
 

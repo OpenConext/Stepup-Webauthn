@@ -22,14 +22,49 @@ namespace App\Repository;
 
 use App\Entity\PublicKeyCredentialSource;
 use App\Entity\User;
+use Assert\Assertion;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepository as BasePublicKeyCredentialSourceRepository;
+use Webauthn\PublicKeyCredential;
+use Webauthn\PublicKeyCredentialDescriptor;
 
-final class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceRepository
+class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, PublicKeyCredentialSource::class);
+    }
+
+    public function create(PublicKeyCredential $publicKeyCredential, string $userHandle): PublicKeyCredentialSource
+    {
+        $response = $publicKeyCredential->getResponse();
+        Assertion::isInstanceOf(
+            $response,
+            AuthenticatorAttestationResponse::class,
+            'This method is only available with public key credential containing an authenticator attestation response.'
+        );
+        $publicKeyCredentialDescriptor = $publicKeyCredential->getPublicKeyCredentialDescriptor([
+            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_INTERNAL,
+            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_USB,
+            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_BLE,
+            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_NFC
+        ]);
+        $attestationStatement = $response->getAttestationObject()->getAttStmt();
+        $authenticatorData = $response->getAttestationObject()->getAuthData();
+        $attestedCredentialData = $authenticatorData->getAttestedCredentialData();
+        Assertion::notNull($attestedCredentialData, 'No attested credential data available');
+        return new PublicKeyCredentialSource(
+            $publicKeyCredentialDescriptor->getId(),
+            $publicKeyCredentialDescriptor->getType(),
+            $publicKeyCredentialDescriptor->getTransports(),
+            $attestationStatement->getType(),
+            $attestationStatement->getTrustPath(),
+            $attestedCredentialData->getAaguid(),
+            $attestedCredentialData->getCredentialPublicKey(),
+            $userHandle,
+            $authenticatorData->getSignCount()
+        );
     }
 
     /**
@@ -43,7 +78,6 @@ final class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialS
             ->where('c.userHandle = :user_handle')
             ->setParameter(':user_handle', $user->getId())
             ->getQuery()
-            ->execute()
-        ;
+            ->execute();
     }
 }

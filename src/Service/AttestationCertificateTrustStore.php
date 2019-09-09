@@ -17,15 +17,11 @@
  */
 
 declare(strict_types=1);
-
 namespace App\Service;
 
 use App\Entity\PublicKeyCredentialSource;
 
-class FileBasedAttestationCertificateAcceptanceService implements AttestationCertificateAcceptanceService
+interface AttestationCertificateTrustStore
 {
-    public function isSupported(PublicKeyCredentialSource $source): bool
-    {
-        return true;
-    }
+    public function validate(PublicKeyCredentialSource $publicKeyCredentialSource): void;
 }

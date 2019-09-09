@@ -29,35 +29,35 @@ export interface SerializedAuthenticatorAssertionResponse extends Omit<Authentic
   authenticatorData: string;
 }
 
-export type SerializedAuthenticatorResponse = SerializedAuthenticatorAttestationResponse | SerializedAuthenticatorAssertionResponse;
+export type SerializedAuthenticatorResponse =
+  SerializedAuthenticatorAttestationResponse
+  | SerializedAuthenticatorAssertionResponse;
 
 export interface SerializedPublicKeyCredential extends Omit<PublicKeyCredential, 'rawId' | 'response'> {
   rawId: string;
   response: SerializedAuthenticatorResponse;
 }
 
-export enum RegistrationState {
-  DESERIALIZE_ATTESTATION_RESPONSE_OPTIONS,
-  ATTESTATION_RESPONSE_OPTIONS_DE_SERIALIZED,
-  REQUEST_USER_FOR_ATTESTATION,
-  PUBLIC_KEY_CREDENTIALS,
+export enum ApplicationEvent {
+  // Generic
   SERIALIZE_PUBLIC_KEY_CREDENTIALS,
   PUBLIC_KEY_CREDENTIALS_SERIALIZED,
   SENDING_PUBLIC_KEY_CREDENTIALS,
   RECEIVED_SERVER_RESPONSE,
-  UNSUPPORTED_PUBLIC_KEY_CREDENTIALS,
-  ERROR,
-}
 
-export enum AuthenticationState {
+  // Registration
+  DESERIALIZE_ATTESTATION_RESPONSE_OPTIONS,
+  ATTESTATION_RESPONSE_OPTIONS_DE_SERIALIZED,
+  REQUEST_USER_FOR_ASSERTION,
+
+  // Authentication
   DESERIALIZE_ASSERTION_RESPONSE_OPTIONS,
   ASSERTION_RESPONSE_OPTIONS_DE_SERIALIZED,
-  REQUEST_USER_FOR_ASSERTION,
+  REQUEST_USER_FOR_ATTESTATION,
   PUBLIC_KEY_CREDENTIALS,
-  SERIALIZE_PUBLIC_KEY_CREDENTIALS,
-  PUBLIC_KEY_CREDENTIALS_SERIALIZED,
-  SENDING_PUBLIC_KEY_CREDENTIALS,
-  RECEIVED_SERVER_AUTHENTICATION_RESPONSE,
+
+  // Error
   UNSUPPORTED_PUBLIC_KEY_CREDENTIALS,
   ERROR,
+  UNSUPPORTED_CREDENTIAL_TYPE,
 }

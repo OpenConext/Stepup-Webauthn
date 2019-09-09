@@ -17,11 +17,12 @@
  */
 
 declare(strict_types=1);
-namespace App\Service;
 
-use App\Entity\PublicKeyCredentialSource;
+namespace App\Exception;
 
-interface AttestationCertificateAcceptanceService
+use RuntimeException;
+
+class AttestationStatementNotFoundException extends RuntimeException
 {
-    public function isSupported(PublicKeyCredentialSource $publicKeyCredentialSource): bool;
+
 }

@@ -2,6 +2,7 @@
 
 registration.sub_title: Registration
 status.registration_initial: Registrate with your security key.
+status.missing_attestation_statement: Try again and grant access to view your security key.
 
 # Authentication
 
