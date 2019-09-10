@@ -13,7 +13,6 @@
   "autoload-dev": {
     "psr-4": {
       "Dev\\": "dev",
-      "Test\\Features\\": "Features",
       "Test\\": "tests"
     }
   },
@@ -22,6 +21,7 @@
     "ext-libxml": "*",
     "ext-zlib": "*",
     "ext-gmp": "*",
+    "ext-json": "*",
     "symfony/flex": "^1.4",
     "sensio/framework-extra-bundle": "^5.4",
     "symfony/asset": "^4.3",
@@ -44,7 +44,8 @@
     "nyholm/psr7": "^1.1",
     "web-auth/cose-lib": "^2.0",
     "spomky-labs/cbor-php": "^1.0",
-    "surfnet/stepup-bundle": "^4.1.0-beta.3"
+    "surfnet/stepup-bundle": "^4.1.0-beta.3",
+    "web-token/jwt-signature-algorithm-rsa": "^2.0"
   },
   "require-dev": {
     "symfony/dotenv": "~4",
@@ -135,5 +136,14 @@
       "type": "vcs",
       "url": "https://github.com/OpenConext/Stepup-bundle"
     }
-  ]
+  ],
+  "archive": {
+    "exclude": [
+      "node_modules",
+      "coverage",
+      "homestead",
+      "build",
+      ".git"
+    ]
+  }
 }

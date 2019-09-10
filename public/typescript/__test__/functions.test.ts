@@ -1,14 +1,14 @@
 import { set } from 'ramda';
 import {
   Base64UrlSafeToUInt8,
-  Base64UrlSafeToUInt8Id,
-  Base64UrlSafeToUInt8Ids,
+  base64UrlSafeToUInt8Id,
+  base64UrlSafeToUInt8Ids,
   deSerializedPublicKeyCredentialCreationOptions, deSerializedPublicKeyCredentialRequestOptions,
   idLens,
   isAuthenticatorAttestationResponse,
   optionalBase64UrlSafeToUInt8Ids,
   removeEmptyAndUndefined,
-  serializePublicKeyCredential,
+  serializePublicKeyCredential, createErrorCode,
 } from '../functions';
 import { SerializedPublicKeyCredentialCreationOptions, SerializedPublicKeyCredentialRequestOptions } from '../models';
 
@@ -24,14 +24,14 @@ it('idLens', () => {
 });
 
 it('base64ToUInt8Id', () => {
-  expect(Base64UrlSafeToUInt8Id({ id: 'z4Ag4oiIIOKEnQ==', foo: 'bar' })).toEqual({
+  expect(base64UrlSafeToUInt8Id({ id: 'z4Ag4oiIIOKEnQ==', foo: 'bar' })).toEqual({
     id: (new Uint8Array([207, 128, 32, 226, 136, 136, 32, 226, 132, 157])).buffer,
     foo: 'bar',
   });
 });
 
 it('base64ToUInt8Ids', () => {
-  expect(Base64UrlSafeToUInt8Ids([{ id: 'z4Ag4oiIIOKEnQ==', foo: 'bar' }, {
+  expect(base64UrlSafeToUInt8Ids([{ id: 'z4Ag4oiIIOKEnQ==', foo: 'bar' }, {
     id: 'NDM1MzQ1MzQ=',
     bar: 'foo',
   }])).toEqual([
@@ -212,4 +212,15 @@ it('deSerializedPublicKeyCredentialRequestOptions', () => {
     }],
     timeout: 30000,
   });
+});
+
+it('createErrorCode', () => {
+  expect(createErrorCode('Test exception')).toEqual('F121094');
+  expect(createErrorCode('Test "1234"')).toEqual('F806987');
+  expect(createErrorCode('Test "456"')).toEqual('F806987');
+  expect(createErrorCode('Test \'456\'')).toEqual('F806987');
+  expect(createErrorCode('Test \'1234\'')).toEqual('F806987');
+
+  expect(createErrorCode('Foo \'1234\' Bar \'5678\'')).toEqual('F111311');
+  expect(createErrorCode('Foo \'8765\' Bar \'4321\'')).toEqual('F111311');
 });

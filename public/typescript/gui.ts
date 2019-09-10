@@ -1,31 +1,40 @@
+import { AxiosResponse } from 'axios';
+import { bind, empty } from 'ramda';
 import { fromEvent, Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { decode } from 'urlsafe-base64';
-import { ApplicationEvent as S, SerializedPublicKeyCredential } from './models';
+import { assertElement, extractedTableValues, getStringAttribute } from './domFunctions';
+import { createErrorCode } from './functions';
+import { ApplicationEvent, SerializedPublicKeyCredential } from './models';
 import { FireApplicationEvent } from './operators';
 
-export const handleApplicationEvent: FireApplicationEvent = (type: S) => tap((value: any) => {
-  // tslint:disable-next-line:no-console
-  console.log(S[type], value);
+export const handleApplicationEvent: FireApplicationEvent = (type: ApplicationEvent) => tap((value: any) => {
+  log(ApplicationEvent[type], value);
 
   switch (type) {
-    case S.REQUEST_USER_FOR_ATTESTATION:
+    case ApplicationEvent.NOT_SUPPORTED:
+      showWebAuthnNotSupportedStatus();
+      setErrorCode(createErrorCode(ApplicationEvent[type]));
+      break;
+
+    case ApplicationEvent.REQUEST_USER_FOR_ATTESTATION:
       showInitialStatus();
       break;
-    case S.PUBLIC_KEY_CREDENTIALS_SERIALIZED:
+    case ApplicationEvent.PUBLIC_KEY_CREDENTIALS_SERIALIZED:
       const credentials: SerializedPublicKeyCredential = value;
-      // tslint:disable-next-line:no-console
-      console.log('clientDataJSON', decode(credentials.response.clientDataJSON).toString());
+      log('clientDataJSON', decode(credentials.response.clientDataJSON).toString());
       break;
-    case S.REQUEST_USER_FOR_ASSERTION:
+    case ApplicationEvent.REQUEST_USER_FOR_ASSERTION:
       showInitialStatus();
       break;
-    case S.ERROR:
+    case ApplicationEvent.ERROR:
       if (value.response) {
-        handleServerResponse(value.response.data.status);
+        handleServerResponse(value.response);
         break;
       }
       showGeneralErrorStatus();
+      setErrorCode(createErrorCode(value.toString()));
+      setErrorMailtoLink(value);
       break;
   }
 }) as any;
@@ -33,7 +42,17 @@ export const handleApplicationEvent: FireApplicationEvent = (type: S) => tap((va
 /**
  * {@see \App\ValidationJsonResponse} for all server response types
  */
-export const handleServerResponse = (status: string) => {
+export const handleServerResponse = (response: AxiosResponse) => {
+  let status: string | undefined = response.data.status;
+  if (!status) {
+    // Last resort, something when't completely wrong, show server response page.
+    const contentType: string = response.headers['content-type'];
+    if (contentType.indexOf('text/html;') >= 0) {
+      document.body.innerHTML = response.data;
+      return;
+    }
+    status = 'error';
+  }
   switch (status) {
     case 'deviceNotSupported':
       showAuthenticatorNotSupportedStatus();
@@ -54,7 +73,13 @@ export const handleServerResponse = (status: string) => {
       showGeneralErrorStatus();
       break;
   }
+  if (response.data.error_code) {
+    setErrorCode(response.data.error_code);
+  }
 };
+
+// tslint:disable-next-line:no-console
+const log: (...args: any[]) => void = typeof console !== 'undefined' ? bind(console.info, console) : empty;
 
 export const retryClicked = () => new Observable((subscriber) => {
   const retryButton = document.getElementById('retry_button');
@@ -69,7 +94,7 @@ export const retryClicked = () => new Observable((subscriber) => {
 });
 
 /**
- * Class name can be found in authentication, registration and general status templates.
+ * Class name can be found in authentication, registration and general status templateApplicationEvent.
  */
 function showStatus(name: string) {
   const elements: HTMLCollectionOf<HTMLDivElement> = document.getElementsByClassName('status') as any;
@@ -81,6 +106,64 @@ function showStatus(name: string) {
     }
   }
 }
+
+/**
+ * Show the error table
+ *  - Set the error code.
+ *  - Set timestamp.
+ */
+function setErrorCode(errorCode: string) {
+  getErrorTableElement().classList.remove('hidden');
+  getErrorCodeElement().innerText = `${errorCode} `;
+  getErrorTimestampElement().innerText = (new Date()).toISOString();
+}
+
+/**
+ * Add to error code an mail to link
+ * @param error
+ */
+function setErrorMailtoLink(error: unknown) {
+  const information = getErrorInformation(getErrorTableElement());
+  getErrorCodeElement().appendChild(createMailTo(error, information));
+}
+
+/**
+ * Create mail to link from error information.
+ */
+export const createMailTo = (error: unknown, { url, values, closure, intro, linkText, errorCode, subjectIntro }: ReturnType<typeof getErrorInformation>) => {
+  let body = `${intro}\n\n`;
+  for (const [name, value] of Array.from(values.entries())) {
+    body += `${name}: ${value}\n`;
+  }
+  body += `\n${error}\n\n${closure}\n`;
+  const a = document.createElement('a');
+  const subject = `${subjectIntro} ${errorCode}`;
+  a.href = `mailto:${url}?subject=${encodeURI(subject)}&body=${encodeURI(body)}`;
+  a.innerText = linkText;
+  a.target = '_black';
+  return a;
+};
+
+/**
+ * Extract error information of the error table defined in 'general_statuApplicationEvent.twig'.
+ */
+export const getErrorInformation = (table: HTMLTableElement) => {
+  const errorCode = assertElement(table.getElementsByClassName('error_code')[0]);
+  const attribute = getStringAttribute(errorCode);
+  return {
+    url: attribute('data-email'),
+    linkText: attribute('data-email-link-text'),
+    subjectIntro: attribute('data-email-subject'),
+    intro: attribute('data-email-intro'),
+    closure: attribute('data-email-closure'),
+    values: extractedTableValues(table),
+    errorCode: errorCode.innerHTML,
+  };
+};
+
+export const getErrorTableElement = (): HTMLTableElement => assertElement(document.getElementById('error_table')) as any;
+export const getErrorCodeElement = () => assertElement(document.getElementById('error_code'));
+export const getErrorTimestampElement = () => assertElement(document.getElementById('error_timestamp'));
 
 export const showInitialStatus = () => showStatus('initial');
 export const showGeneralErrorStatus = () => showStatus('general_error');

@@ -19,8 +19,8 @@ from that machine.
 
 Requirements
 -------------------
-- vagrant 2.2.x
-    - vagrant-hostsupdater (1.1.1.160, global)
+- Vagrant 2.2.x
+    - vagrant-hostsupdater (1.1.1.160, global, optional)
     - vagrant-vbguest (0.19.0, global)
 - Virtualbox
 
@@ -29,7 +29,11 @@ Install
 
 ### 1. Create virtual machine
 
-``` cd homestead && composer install ```
+``` cd homestead ``` 
+ 
+``` composer install ```
+
+Go to root of the project (```cd ..```) 
 
 ``` vagrant up ```
 
@@ -40,18 +44,47 @@ If everything goes as planned you can develop inside the virtual machine
 ### 2. Build frontend assets:
 
 ``` yarn install ```
-``` yarn encore dev ``` or ``` yarn encore prod ``` for production 
+
+``` yarn encore dev ```
+
+``` ./bin/console assets:install ```
 
 ### 3. Create configuration files
 
 Copy and configure:
  
-```.env.dist``` to  ```.env```
-```config/packages/parameters.yml.dist``` to ```config/packages/parameters.yml```
+```cp .env.vm .env```
+
+```cp config/packages/parameters.yml.dist config/packages/parameters.yml```
+
+### 4. Create database
+``` 
+ bin/console doctrine:migration:migrate
+``` 
 
 If everything goes as planned you can go to:
 
 [https://webauthn.test](https://webauthn.test)
+
+### Development
+
+All frond-end logic is written in sass and typescript. You can run a watcher to update these automatically
+
+Configuration
+-------------------
+
+### WebAuthn Creation/request profiles
+
+For this application default creation/request profiles are created. The application
+now only support 'default' profile. [config/packages/webauthn.yaml](config/packages/webauthn.yaml)
+
+You can override the default one, see all configuration option on
+[webauthn-framework](https://github.com/web-auth/webauthn-framework/blob/master/doc/symfony/index.md) 
+
+### Trust store [src/Service/InMemoryAttestationCertificateTrustStore.php](src/Service/InMemoryAttestationCertificateTrustStore.php)
+
+All WebAuthn request Attestation Statement with a certificate trust path. All trusted certificates should be stored on disk.
+The directory can be configured inside the parameters.yml file [config/packages/parameters.yml](config/packages/parameters.yml)
 
 Debugging
 -------------------
@@ -69,7 +102,7 @@ To run all required test you can run the following commands from the dev env:
 
 Every part can be run separately. Check "scripts" section of the composer.json file for the different options.
 
-Quick application deployment guide
+Quick application production deployment guide
 =====================
 
 ### 1. Install dependencies
@@ -84,13 +117,16 @@ Quick application deployment guide
 Copy and configure:
  
 ```.env.dist``` to  ```.env```
+
 ```config/packages/parameters.yml.dist``` to ```config/packages/parameters.yml```
+
+```composer dump-env prod```
 
 ### 3. Build public assets
 
 ```
- composer dump-env prod
- yarn encore prod 
+ yarn encore prod
+ ./bin/console assets:install
 ```
 
 ### 4. Create database and schema 

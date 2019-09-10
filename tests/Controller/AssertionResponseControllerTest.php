@@ -21,11 +21,13 @@ declare(strict_types=1);
 namespace Test\Controller;
 
 use App\Controller\AssertionResponseController;
+use App\Exception\NoActiveAuthenrequestException;
 use App\PublicKeyCredentialRequestOptionsStore;
 use App\ValidationJsonResponse;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
+use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
 use Symfony\Component\Debug\BufferingLogger;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,7 +59,7 @@ class AssertionResponseControllerTest extends TestCase
     {
         $this->authenticationService->shouldReceive(['authenticationRequired' => false]);
         $this->assertEquals(
-            ValidationJsonResponse::noAuthenticationRequired(),
+            ValidationJsonResponse::noAuthenticationRequired(new NoActiveAuthenrequestException()),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -71,7 +73,7 @@ class AssertionResponseControllerTest extends TestCase
         ]);
         $this->setAuthenticatorResponse(Mockery::mock(AuthenticatorAttestationResponse::class));
         $this->assertEquals(
-            ValidationJsonResponse::invalidPublicKeyCredentialResponse(),
+            ValidationJsonResponse::invalidPublicKeyCredentialResponse(new UnrecoverableErrorException('Invalid response type')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -84,9 +86,9 @@ class AssertionResponseControllerTest extends TestCase
             'getNameId' => 'JaneDoe123',
         ]);
         $this->setAuthenticatorResponse(Mockery::mock(AuthenticatorAssertionResponse::class));
-        $this->store->shouldReceive('get')->andReturn(null);
+        $this->store->shouldReceive('get')->andThrow(UnrecoverableErrorException::class, 'Some Error');
         $this->assertEquals(
-            ValidationJsonResponse::noPendingCredentialAssertOptions(),
+            ValidationJsonResponse::noPendingCredentialAssertOptions(new UnrecoverableErrorException('Some Error')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -114,7 +116,7 @@ class AssertionResponseControllerTest extends TestCase
             )->andThrow(\Exception::class, 'Invalid');
 
         $this->assertEquals(
-            ValidationJsonResponse::invalid(),
+            ValidationJsonResponse::invalid(new \Exception('Invalid')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
