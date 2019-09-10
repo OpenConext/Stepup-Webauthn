@@ -215,12 +215,12 @@ it('deSerializedPublicKeyCredentialRequestOptions', () => {
 });
 
 it('createArtCode', () => {
-  expect(createArtCode('Test exception')).toEqual('F1210941671');
-  expect(createArtCode('Test "1234"')).toEqual('F80698798');
-  expect(createArtCode('Test "456"')).toEqual('F80698798');
-  expect(createArtCode('Test \'456\'')).toEqual('F80698798');
-  expect(createArtCode('Test \'1234\'')).toEqual('F80698798');
+  expect(createArtCode('Test exception')).toEqual('F121094');
+  expect(createArtCode('Test "1234"')).toEqual('F806987');
+  expect(createArtCode('Test "456"')).toEqual('F806987');
+  expect(createArtCode('Test \'456\'')).toEqual('F806987');
+  expect(createArtCode('Test \'1234\'')).toEqual('F806987');
 
-  expect(createArtCode('Foo \'1234\' Bar \'5678\'')).toEqual('F1113119119');
-  expect(createArtCode('Foo \'8765\' Bar \'4321\'')).toEqual('F1113119119');
+  expect(createArtCode('Foo \'1234\' Bar \'5678\'')).toEqual('F111311');
+  expect(createArtCode('Foo \'8765\' Bar \'4321\'')).toEqual('F111311');
 });

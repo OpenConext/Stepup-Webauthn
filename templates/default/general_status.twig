@@ -34,8 +34,17 @@
         </tr>
         <tr>
             <th>{{ 'stepup.error.error_code'|trans }}</th>
-            <td id="error_code"></td>
+
+            <td id="error_code"
+                class="error_code"
+                data-email="{{ global_view_parameters.supportEmail }}"
+                data-email-link-text={{ 'stepup.error.support_page.mail_to'| trans  | json_encode | raw }}
+                data-email-subject={{ 'stepup.error.support_page.mail_subject'| trans  | json_encode | raw }}
+                data-email-intro={{ 'stepup.error.support_page.mail_intro'| trans  | json_encode | raw }}
+                data-email-closure={{ 'stepup.error.support_page.mail_closure'| trans | json_encode | raw }}
+            ></td>
         </tr>
+
         {% if user_agent %}
             <tr>
                 <th>{{ 'stepup.error.user_agent'|trans }}</th>

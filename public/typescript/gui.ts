@@ -2,6 +2,7 @@ import { bind, empty } from 'ramda';
 import { fromEvent, Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { decode } from 'urlsafe-base64';
+import { assertElement, extractedTableValues, getStringAttribute } from './domFunctions';
 import { createArtCode } from './functions';
 import { ApplicationEvent as S, SerializedPublicKeyCredential } from './models';
 import { FireApplicationEvent } from './operators';
@@ -32,6 +33,7 @@ export const handleApplicationEvent: FireApplicationEvent = (type: S) => tap((va
       }
       showGeneralErrorStatus();
       setErrorCode(createArtCode(value.toString()));
+      setErrorMailtoLink(value);
       break;
   }
 }) as any;
@@ -100,13 +102,56 @@ function showStatus(name: string) {
  *  - Set timestamp.
  */
 function setErrorCode(errorCode: string) {
-  const errorTable = document.getElementById('error_table') as any;
-  errorTable.classList.remove('hidden');
-  const errorCodeDiv: HTMLDivElement = document.getElementById('error_code') as any;
-  errorCodeDiv.innerText = errorCode;
-  const timestamp: HTMLDivElement = document.getElementById('error_timestamp') as any;
-  timestamp.innerText = (new Date()).toISOString();
+  getErrorTableElement().classList.remove('hidden');
+  getErrorCodeElement().innerText = `${errorCode} `;
+  getErrorTimestampElement().innerText = (new Date()).toISOString();
 }
+
+/**
+ * Add to error code an mail to link
+ * @param error
+ */
+function setErrorMailtoLink(error: unknown) {
+  const information = getErrorInformation(getErrorTableElement());
+  getErrorCodeElement().appendChild(createMailTo(error, information));
+}
+
+/**
+ * Create mail to link from error information.
+ */
+export const createMailTo = (error: unknown, { url, values, closure, intro, linkText, errorCode, subjectIntro }: ReturnType<typeof getErrorInformation>) => {
+  let body = `${intro}\n\n`;
+  for (const [name, value] of Array.from(values.entries())) {
+    body += `${name}: ${value}\n`;
+  }
+  body += `\n${error}\n\n${closure}\n`;
+  const a = document.createElement('a');
+  const subject = `${subjectIntro} ${errorCode}`;
+  a.href = `mailto:${url}?subject=${encodeURI(subject)}&body=${encodeURI(body)}`;
+  a.innerText = linkText;
+  return a;
+};
+
+/**
+ * Extract error information of the error table defined in 'general_status.twig'.
+ */
+export const getErrorInformation = (table: HTMLTableElement) => {
+  const errorCode = assertElement(table.getElementsByClassName('error_code')[0]);
+  const attribute = getStringAttribute(errorCode);
+  return {
+    url: attribute('data-email'),
+    linkText: attribute('data-email-link-text'),
+    subjectIntro: attribute('data-email-subject'),
+    intro: attribute('data-email-intro'),
+    closure: attribute('data-email-closure'),
+    values: extractedTableValues(table),
+    errorCode: errorCode.innerHTML,
+  };
+};
+
+export const getErrorTableElement = (): HTMLTableElement => assertElement(document.getElementById('error_table')) as any;
+export const getErrorCodeElement = () => assertElement(document.getElementById('error_code'));
+export const getErrorTimestampElement = () => assertElement(document.getElementById('error_timestamp'));
 
 export const showInitialStatus = () => showStatus('initial');
 export const showGeneralErrorStatus = () => showStatus('general_error');

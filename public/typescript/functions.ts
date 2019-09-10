@@ -9,11 +9,14 @@ import {
   map,
   over,
   pickBy,
+  pipe,
   propSatisfies,
   reduce,
   replace,
+  slice,
   splitEvery,
   T as TRUE,
+  toString,
   unless,
 } from 'ramda';
 import { decode, encode } from 'urlsafe-base64';
@@ -100,12 +103,21 @@ export const isWebAuthnSupported = () => typeof navigator.credentials !== 'undef
 /**
  * Simple hashing function for message to error codes.
  */
-export const createArtCode = (input: string): string => `F${reduce(
-  // tslint:disable-next-line:no-bitwise
-  (hash, char) => Math.abs(((hash << 5) - hash) + char.charCodeAt(0)),
-  0,
-  splitToChars(removeVariables(input)),
-)}`;
+// tslint:disable-next-line:no-bitwise
+const hashChars = reduce<string, number>((hash, char) => Math.abs(((hash << 5) - hash) + char.charCodeAt(0)), 0);
+const splitStringToChars = splitEvery(1);
+const removeQuotedVariables: (val: string) => string = replace(/".*?"|'.*?'/g, '');
+const take6Chars = slice(0, 6);
+const prefixWithF = (val: string) => `F${val}`;
 
-const splitToChars = splitEvery(1);
-const removeVariables = replace(/".*?"|'.*?'/g, '');
+/**
+ * This is the javascript version of the Art class in php.
+ */
+export const createArtCode = pipe<string, string, string[], number, string, string, string>(
+  removeQuotedVariables,
+  splitStringToChars,
+  hashChars,
+  toString,
+  take6Chars,
+  prefixWithF,
+);

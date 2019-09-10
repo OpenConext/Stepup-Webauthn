@@ -38,17 +38,20 @@ final class GlobalViewParameters
      * @var string[]
      */
     private $supportUrl;
+    private $supportEmail;
 
     /**
      * @param TranslatorInterface $translator
      * @param array $locales
      * @param array $supportUrl
+     * @param string|null $supportEmail
      */
-    public function __construct(TranslatorInterface $translator, array $locales, array $supportUrl)
+    public function __construct(TranslatorInterface $translator, array $locales, array $supportUrl, string $supportEmail = null)
     {
         $this->translator = $translator;
         $this->locales = $locales;
         $this->supportUrl = $supportUrl;
+        $this->supportEmail = $supportEmail;
     }
 
     /**
@@ -57,5 +60,13 @@ final class GlobalViewParameters
     public function getSupportUrl()
     {
         return $this->supportUrl[$this->translator->getLocale()];
+    }
+
+    /**
+     * @return string
+     */
+    public function getSupportEmail()
+    {
+        return $this->supportEmail;
     }
 }

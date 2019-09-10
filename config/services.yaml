@@ -15,6 +15,7 @@ services:
             $logger: '@surfnet_gssp.logger'
             $stateHandler: '@surfnet_gssp.state_handler.service'
             $supportUrl: '%support_url%'
+            $supportEmail: '%support_email%'
             $locales: '%locales%'
             $userDisplayName: '%user_display_name%'
             $trustedCertificatesDirectory: '%trusted_certificates_directory%'
