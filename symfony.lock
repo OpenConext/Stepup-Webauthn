@@ -707,6 +707,9 @@
     "web-token/jwt-signature": {
         "version": "v2.0.9"
     },
+    "web-token/jwt-signature-algorithm-rsa": {
+        "version": "v2.0.12"
+    },
     "webmozart/assert": {
         "version": "1.4.0"
     },

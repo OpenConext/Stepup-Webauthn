@@ -11,9 +11,9 @@
 </div>
 
 <div class="status hidden webauthn_not_supported">
-    {{ 'status.webauthn_not_supported'|trans }}
-    <br />
-    <br />
+    <p>
+        {{ 'status.webauthn_not_supported'|trans }}
+    </p>
     <a href="{{ path('app_abort') }}">{{ 'abort'|trans }}</a>
 </div>
 

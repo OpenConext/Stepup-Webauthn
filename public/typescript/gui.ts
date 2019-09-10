@@ -1,38 +1,39 @@
+import { AxiosResponse } from 'axios';
 import { bind, empty } from 'ramda';
 import { fromEvent, Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { decode } from 'urlsafe-base64';
 import { assertElement, extractedTableValues, getStringAttribute } from './domFunctions';
-import { createArtCode } from './functions';
-import { ApplicationEvent as S, SerializedPublicKeyCredential } from './models';
+import { createErrorCode } from './functions';
+import { ApplicationEvent, SerializedPublicKeyCredential } from './models';
 import { FireApplicationEvent } from './operators';
 
-export const handleApplicationEvent: FireApplicationEvent = (type: S) => tap((value: any) => {
-  log(S[type], value);
+export const handleApplicationEvent: FireApplicationEvent = (type: ApplicationEvent) => tap((value: any) => {
+  log(ApplicationEvent[type], value);
 
   switch (type) {
-    case S.NOT_SUPPORTED:
+    case ApplicationEvent.NOT_SUPPORTED:
       showWebAuthnNotSupportedStatus();
-      setErrorCode(createArtCode(S[type]));
+      setErrorCode(createErrorCode(ApplicationEvent[type]));
       break;
 
-    case S.REQUEST_USER_FOR_ATTESTATION:
+    case ApplicationEvent.REQUEST_USER_FOR_ATTESTATION:
       showInitialStatus();
       break;
-    case S.PUBLIC_KEY_CREDENTIALS_SERIALIZED:
+    case ApplicationEvent.PUBLIC_KEY_CREDENTIALS_SERIALIZED:
       const credentials: SerializedPublicKeyCredential = value;
       log('clientDataJSON', decode(credentials.response.clientDataJSON).toString());
       break;
-    case S.REQUEST_USER_FOR_ASSERTION:
+    case ApplicationEvent.REQUEST_USER_FOR_ASSERTION:
       showInitialStatus();
       break;
-    case S.ERROR:
+    case ApplicationEvent.ERROR:
       if (value.response) {
-        handleServerResponse(value.response.data.status, value.response.data.error_code);
+        handleServerResponse(value.response);
         break;
       }
       showGeneralErrorStatus();
-      setErrorCode(createArtCode(value.toString()));
+      setErrorCode(createErrorCode(value.toString()));
       setErrorMailtoLink(value);
       break;
   }
@@ -41,7 +42,17 @@ export const handleApplicationEvent: FireApplicationEvent = (type: S) => tap((va
 /**
  * {@see \App\ValidationJsonResponse} for all server response types
  */
-export const handleServerResponse = (status: string, error_code?: string) => {
+export const handleServerResponse = (response: AxiosResponse) => {
+  let status: string | undefined = response.data.status;
+  if (!status) {
+    // Last resort, something when't completely wrong, show server response page.
+    const contentType: string = response.headers['content-type'];
+    if (contentType.indexOf('text/html;') >= 0) {
+      document.body.innerHTML = response.data;
+      return;
+    }
+    status = 'error';
+  }
   switch (status) {
     case 'deviceNotSupported':
       showAuthenticatorNotSupportedStatus();
@@ -62,8 +73,8 @@ export const handleServerResponse = (status: string, error_code?: string) => {
       showGeneralErrorStatus();
       break;
   }
-  if (error_code) {
-    setErrorCode(error_code);
+  if (response.data.error_code) {
+    setErrorCode(response.data.error_code);
   }
 };
 
@@ -83,7 +94,7 @@ export const retryClicked = () => new Observable((subscriber) => {
 });
 
 /**
- * Class name can be found in authentication, registration and general status templates.
+ * Class name can be found in authentication, registration and general status templateApplicationEvent.
  */
 function showStatus(name: string) {
   const elements: HTMLCollectionOf<HTMLDivElement> = document.getElementsByClassName('status') as any;
@@ -129,11 +140,12 @@ export const createMailTo = (error: unknown, { url, values, closure, intro, link
   const subject = `${subjectIntro} ${errorCode}`;
   a.href = `mailto:${url}?subject=${encodeURI(subject)}&body=${encodeURI(body)}`;
   a.innerText = linkText;
+  a.target = '_black';
   return a;
 };
 
 /**
- * Extract error information of the error table defined in 'general_status.twig'.
+ * Extract error information of the error table defined in 'general_statuApplicationEvent.twig'.
  */
 export const getErrorInformation = (table: HTMLTableElement) => {
   const errorCode = assertElement(table.getElementsByClassName('error_code')[0]);

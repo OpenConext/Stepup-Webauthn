@@ -44,7 +44,8 @@
     "nyholm/psr7": "^1.1",
     "web-auth/cose-lib": "^2.0",
     "spomky-labs/cbor-php": "^1.0",
-    "surfnet/stepup-bundle": "^4.1.0-beta.3"
+    "surfnet/stepup-bundle": "^4.1.0-beta.3",
+    "web-token/jwt-signature-algorithm-rsa": "^2.0"
   },
   "require-dev": {
     "symfony/dotenv": "~4",
