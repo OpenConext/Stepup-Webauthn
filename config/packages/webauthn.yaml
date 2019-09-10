@@ -22,3 +22,13 @@ webauthn:
             challenge_length: 64
             timeout: 30000
             user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_PREFERRED
+    metadata_service:
+        enabled: true
+        http_client: 'psr18.http_client' #PSR-18 Client Service
+        request_factory: 'nyholm.psr7.psr17_factory' #PSR-17 Factory
+        services:
+            service1: # The service 'webauthn.metadata_service.service.service1' will be created
+                is_public: true # If true, the service will be public
+                uri: 'https://mds2.fidoalliance.org'
+                additional_query_string_values:
+                    token: '5a503fdcbcba162627eb977fb7b030f37077aa7bf1f34a5a'

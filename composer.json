@@ -46,6 +46,10 @@
     "spomky-labs/cbor-php": "^1.0",
     "surfnet/stepup-bundle": "^4.1.0-beta.3",
     "web-token/jwt-signature-algorithm-rsa": "^2.0",
+    "symfony/process": "^4.3",
+    "league/uri-parser": "^1.4",
+    "league/uri-components": "^1.8",
+    "web-token/jwt-framework": "^2.0",
     "symfony/dotenv": "^4.3",
     "symfony/http-client": "^4.3"
   },
