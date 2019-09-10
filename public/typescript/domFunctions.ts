@@ -1,4 +1,4 @@
-import { curryN } from 'ramda';
+import { curry } from 'ramda';
 
 /**
  *
@@ -32,7 +32,7 @@ export let extractedTableValues = (errorTable: HTMLTableElement) => {
 /**
  * Get string attribute and assert if the type is actually a string.
  */
-export const getStringAttribute = curryN(2, (element: HTMLElement, name: string): string => {
+export const getStringAttribute = curry((element: HTMLElement, name: string): string => {
   const value = element.getAttribute(name);
   if (typeof value !== 'string') {
     throw new Error(`"${name}" should be a string`);

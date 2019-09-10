@@ -16,6 +16,7 @@ stepup.error.no_active_authentrequest:
 stepup.error.timestamp: Tijd
 stepup.error.hostname: Applicatie
 stepup.error.request_id: Request ID
+stepup.error.sari: Sari
 stepup.error.error_code: Foutcode
 stepup.error.user_agent: User agent
 stepup.error.ip_address: IP-adres

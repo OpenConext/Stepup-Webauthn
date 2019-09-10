@@ -21,16 +21,22 @@ declare(strict_types=1);
 namespace App\Service;
 
 use DateTime;
+use Surfnet\GsspBundle\Service\StateHandlerInterface;
 use Surfnet\StepupBundle\Request\RequestId;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ClientMetadataService
 {
     private $requestId;
+    /**
+     * @var StateHandlerInterface
+     */
+    private $stateHandler;
 
-    public function __construct(RequestId $requestId)
+    public function __construct(RequestId $requestId, StateHandlerInterface $stateHandler)
     {
         $this->requestId = $requestId;
+        $this->stateHandler = $stateHandler;
     }
 
     public function generateMetadata(Request $request): array
@@ -45,6 +51,7 @@ final class ClientMetadataService
             'request_id' => $this->requestId->get(),
             'user_agent' => $userAgent,
             'ip_address' => $ipAddress,
+            'sari' => $this->stateHandler->hasRequestId() ? $this->stateHandler->getRequestId() : null
         ];
     }
 }
