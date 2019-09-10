@@ -31,7 +31,7 @@ use Surfnet\GsspBundle\Service\AuthenticationService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
+use Exception;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAssertionResponseValidator;
 use Webauthn\PublicKeyCredentialLoader;
@@ -90,7 +90,7 @@ final class AssertionResponseController
             if (!$response instanceof AuthenticatorAssertionResponse) {
                 throw new UnrecoverableErrorException('Invalid response type');
             }
-        } catch (Throwable $exception) {
+        } catch (Exception $exception) {
             $logger->warning(sprintf('Invalid public key credential response "%s"', $exception->getMessage()));
             return ValidationJsonResponse::invalidPublicKeyCredentialResponse($exception);
         }
@@ -98,7 +98,7 @@ final class AssertionResponseController
         $logger->info('Verify if there is an existing public key credential assertion options in session');
         try {
             $publicKeyCredentialRequestOptions = $this->store->get();
-        } catch (Throwable $exception) {
+        } catch (Exception $exception) {
             $logger->warning(sprintf('Invalid attestation response "%s"', $exception->getMessage()));
             return ValidationJsonResponse::noPendingCredentialAssertOptions($exception);
         }
@@ -113,7 +113,7 @@ final class AssertionResponseController
                 $psr7Request,
                 $nameId
             );
-        } catch (Throwable $throwable) {
+        } catch (Exception $throwable) {
             $logger->warning(sprintf('Invalid attestation "%s"', $throwable->getMessage()));
             return ValidationJsonResponse::invalid($throwable);
         }

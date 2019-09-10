@@ -34,7 +34,7 @@ use Surfnet\GsspBundle\Service\RegistrationService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
+use Exception;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\AuthenticatorAttestationResponseValidator;
 use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepository;
@@ -100,7 +100,7 @@ final class AttestationResponseController
             if (!$response instanceof AuthenticatorAttestationResponse) {
                 throw new UnrecoverableErrorException('Invalid response type');
             }
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             $this->logger->warning(sprintf('Invalid public key credential response "%s"', $e->getMessage()));
             return ValidationJsonResponse::invalidPublicKeyCredentialResponse($e);
         }
@@ -109,7 +109,7 @@ final class AttestationResponseController
 
         try {
             $publicKeyCredentialCreationOptions = $this->store->get();
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             $this->logger->warning('No pending public key credential creation options in session');
             return ValidationJsonResponse::noPendingCredentialCreationOptions($e);
         }
@@ -121,7 +121,7 @@ final class AttestationResponseController
 
         try {
             $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             $logger->warning(sprintf('Invalid attestation "%s"', $e->getMessage()));
             return ValidationJsonResponse::invalid($e);
         }
@@ -135,7 +135,7 @@ final class AttestationResponseController
 
         try {
             $this->trustStore->validate($credentialSource);
-        } catch (Throwable $e) {
+        } catch (Exception $e) {
             if ($e instanceof AttestationStatementNotFoundException) {
                 $logger->warning('Missing attestation statement');
                 return ValidationJsonResponse::missingAttestationStatement($e);
