@@ -3,13 +3,9 @@
 {% block body %}
     <h2>{{ 'authentication.sub_title'|trans }}</h2>
 
-    <div>
-        <div class="status initial">
-            {{ 'status.authentication_initial'|trans }}
-        </div>
-        {% include 'default/general_status.twig' %}
-    </div>
+    <div id="root"> </div>
 
+    {% include 'default/variables.twig' %}
     {% block javascripts %}
         <script>
             var publicKeyOptions = {{ publicKeyOptions | json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE')) | raw }};

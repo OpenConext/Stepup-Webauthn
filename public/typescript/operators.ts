@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { complement } from 'ramda';
 import { from, merge, Observable, of, throwError } from 'rxjs';
-import { concatMap, filter, map, mergeMap, retryWhen, shareReplay, takeWhile } from 'rxjs/operators';
+import { concatMap, filter, map, mergeMap, retryWhen, shareReplay, takeWhile, tap } from 'rxjs/operators';
 import {
   deSerializedPublicKeyCredentialCreationOptions,
   deSerializedPublicKeyCredentialRequestOptions,
@@ -9,28 +9,28 @@ import {
   isWebAuthnSupported,
   serializePublicKeyCredential,
 } from './functions';
-import { retryClicked } from './gui';
 import { verifyPublicKeyCredentials } from './http';
 import {
-  ApplicationEvent as S,
+  ApplicationEvent,
+  SerializedPublicKeyCredential,
   SerializedPublicKeyCredentialCreationOptions,
   SerializedPublicKeyCredentialRequestOptions,
 } from './models';
 
-export type FireApplicationEvent = (event: S) => <T>(source: T) => T;
+export type FireApplicationEvent = (event: ApplicationEvent) => (value: unknown) => void;
 
 export const requestUserAttestation = (fe: FireApplicationEvent) => concatMap((publicKey: PublicKeyCredentialCreationOptions) =>
   of(publicKey).pipe(
-    fe(S.REQUEST_USER_FOR_ATTESTATION),
+    tap<PublicKeyCredentialCreationOptions>(fe(ApplicationEvent.REQUEST_USER_FOR_ATTESTATION)),
     concatMap(() => from(navigator.credentials.create({ publicKey }))),
-    fe(S.PUBLIC_KEY_CREDENTIALS),
+    tap<CredentialType | null>(fe(ApplicationEvent.PUBLIC_KEY_CREDENTIALS)),
   ));
 
 export const requestUserAssertion = (fe: FireApplicationEvent) => concatMap((publicKey: PublicKeyCredentialCreationOptions) =>
   of(publicKey).pipe(
-    fe(S.REQUEST_USER_FOR_ASSERTION),
+    tap(fe(ApplicationEvent.REQUEST_USER_FOR_ASSERTION)),
     concatMap(() => from(navigator.credentials.get({ publicKey }))),
-    fe(S.PUBLIC_KEY_CREDENTIALS),
+    tap<CredentialType | null>(fe(ApplicationEvent.PUBLIC_KEY_CREDENTIALS)),
   ));
 
 export const filterPublicKeyCredentialType = filter(isPublicKeyCredentialType);
@@ -39,17 +39,17 @@ export const excludePublicKeyCredentialType = filter(complement(isPublicKeyCrede
 
 export const fromSerializedPublicKeyCredentialRequestOptions = (fe: FireApplicationEvent, options: SerializedPublicKeyCredentialRequestOptions) =>
   of(options).pipe(
-    fe(S.DESERIALIZE_ASSERTION_RESPONSE_OPTIONS),
+    tap<SerializedPublicKeyCredentialRequestOptions>(fe(ApplicationEvent.DESERIALIZE_ASSERTION_RESPONSE_OPTIONS)),
     map(deSerializedPublicKeyCredentialRequestOptions),
-    fe(S.ASSERTION_RESPONSE_OPTIONS_DE_SERIALIZED),
+    tap(fe(ApplicationEvent.ASSERTION_RESPONSE_OPTIONS_DE_SERIALIZED)),
     shareReplay(),
   );
 
 export const fromSerializedPublicKeyCredentialCreationOptions = (fe: FireApplicationEvent, options: SerializedPublicKeyCredentialCreationOptions) =>
   of(options).pipe(
-    fe(S.DESERIALIZE_ATTESTATION_RESPONSE_OPTIONS),
+    tap<SerializedPublicKeyCredentialCreationOptions>(fe(ApplicationEvent.DESERIALIZE_ATTESTATION_RESPONSE_OPTIONS)),
     map(deSerializedPublicKeyCredentialCreationOptions),
-    fe(S.ATTESTATION_RESPONSE_OPTIONS_DE_SERIALIZED),
+    tap(fe(ApplicationEvent.ATTESTATION_RESPONSE_OPTIONS_DE_SERIALIZED)),
     shareReplay(),
   );
 
@@ -61,29 +61,33 @@ export const concatIfElse = <T, R1, R2>(
 
 export const sendPublicKeyCredentialsToServer = (fe: FireApplicationEvent) => (s: Observable<CredentialType | null>): Observable<unknown> => s.pipe(
   filter(isPublicKeyCredentialType),
-  fe(S.SERIALIZE_PUBLIC_KEY_CREDENTIALS),
+  tap<PublicKeyCredential>(fe(ApplicationEvent.SERIALIZE_PUBLIC_KEY_CREDENTIALS)),
   map(serializePublicKeyCredential),
-  fe(S.PUBLIC_KEY_CREDENTIALS_SERIALIZED),
-  fe(S.SENDING_PUBLIC_KEY_CREDENTIALS),
+  tap<SerializedPublicKeyCredential>(fe(ApplicationEvent.PUBLIC_KEY_CREDENTIALS_SERIALIZED)),
+  tap<SerializedPublicKeyCredential>(fe(ApplicationEvent.SENDING_PUBLIC_KEY_CREDENTIALS)),
   concatMap(verifyPublicKeyCredentials(axios)),
-  fe(S.RECEIVED_SERVER_RESPONSE),
+  tap(fe(ApplicationEvent.RECEIVED_SERVER_RESPONSE)),
 );
 
 export let handleUnsupportedCredentialTypes = (fe: FireApplicationEvent) => (s: Observable<CredentialType | null>): Observable<never> => s.pipe(
-  fe(S.UNSUPPORTED_PUBLIC_KEY_CREDENTIALS),
-  () => throwError(S.UNSUPPORTED_PUBLIC_KEY_CREDENTIALS),
+  tap(fe(ApplicationEvent.UNSUPPORTED_PUBLIC_KEY_CREDENTIALS)),
+  () => throwError(ApplicationEvent.UNSUPPORTED_PUBLIC_KEY_CREDENTIALS),
 );
 
-export const retryWhenClicked = (fe: FireApplicationEvent) =>
+export const retryWhenClicked = (fe: FireApplicationEvent, clicked: Observable<unknown>) =>
   retryWhen((errors) => merge(errors.pipe(
-    fe(S.ERROR),
-    mergeMap(retryClicked),
+    tap(fe(ApplicationEvent.ERROR)),
+    mergeMap(() => clicked),
   )));
 
 export const whenWebAuthnSupported = (fe: FireApplicationEvent) => takeWhile<any>(() => {
   if (!isWebAuthnSupported()) {
-    of(1).pipe(fe(S.NOT_SUPPORTED)).subscribe();
+    fe(ApplicationEvent.NOT_SUPPORTED)(null);
     return false;
   }
   return true;
+});
+
+export const reload = () => tap(() => {
+  window.location.reload();
 });

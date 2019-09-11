@@ -62,3 +62,36 @@ export enum ApplicationEvent {
   ERROR,
   UNSUPPORTED_CREDENTIAL_TYPE,
 }
+
+export type TranslationString = string;
+
+export interface RequestInformation {
+  sari: string;
+  hostname: string;
+  requestId: string;
+  userAgent: string;
+  ipAddress: string;
+  supportEmail: string;
+}
+
+export interface ErrorInformation {
+  code: string;
+  timestamp: string;
+  showMailTo: boolean;
+  showRetry: boolean;
+}
+
+export interface ApplicationState {
+  requestInformation: RequestInformation;
+  errorInfo: ErrorInformation | null;
+  message: TranslationString;
+
+  // Debug values, not used in application.
+  clientDataJSON?: string;
+}
+
+export interface Action {
+  type: ApplicationEvent;
+  value: unknown;
+  timestamp: string;
+}

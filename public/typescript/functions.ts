@@ -1,8 +1,10 @@
 import {
   always,
   anyPass,
+  bind,
   complement,
   cond,
+  empty,
   isEmpty,
   isNil,
   lensPath,
@@ -20,7 +22,9 @@ import {
   unless,
 } from 'ramda';
 import { decode, encode } from 'urlsafe-base64';
+import { AppReducer } from './appReducer';
 import {
+  ApplicationEvent,
   SerializedAuthenticatorAssertionResponse,
   SerializedAuthenticatorAttestationResponse,
   SerializedAuthenticatorResponse,
@@ -120,3 +124,14 @@ export const createErrorCode = pipe<string, string, string[], number, string, st
   take6Chars,
   prefixWithF,
 );
+
+// tslint:disable-next-line:no-console
+const log: (...args: any[]) => void = typeof console !== 'undefined' ? bind(console.info, console) : empty;
+
+export const loggingAppReducerDecorator = (reducer: AppReducer): AppReducer => {
+  return (oldState, event) => {
+    const newState = reducer(oldState, event);
+    log(ApplicationEvent[event.type], event.timestamp, event.value, { oldState, newState });
+    return newState;
+  };
+};

@@ -1,6 +1,6 @@
-import { of } from 'rxjs';
 import { empty } from 'ramda';
-import { tap, toArray } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { toArray } from 'rxjs/operators';
 import { excludePublicKeyCredentialType, filterPublicKeyCredentialType, requestUserAttestation } from '../operators';
 
 it('requestUserAttestation', async () => {
@@ -10,7 +10,7 @@ it('requestUserAttestation', async () => {
   (navigator as any).credentials = {} as any;
   navigator.credentials.create = jest.fn().mockResolvedValue('success');
 
-  await expect(requestUserAttestation((): any => tap<any>(empty))(of(publicKeyOption)).toPromise()).resolves.toEqual('success');
+  await expect(requestUserAttestation(empty as any)(of(publicKeyOption)).toPromise()).resolves.toEqual('success');
 
   expect(navigator.credentials.create).toBeCalledWith({ publicKey: publicKeyOption });
 });
