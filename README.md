@@ -22,15 +22,10 @@ You can override the default one, see all configuration option on
 
 ### Trust store [src/Service/InMemoryAttestationCertificateTrustStore.php](src/Service/InMemoryAttestationCertificateTrustStore.php)
 
-- Only allows WebAuthn Attestation Statements with a certificate trust path. 
+- Off all the different type of WebAuthn Attestation Statements [https://www.w3.org/TR/webauthn/#sctn-attestation-types]() the trust store only accepts Attestation Statements with a certificate trust path.
 - Should match trusted certificates should be stored on disk.
 
 The directory can be configured inside the parameters.yml file [config/packages/parameters.yml](config/packages/parameters.yml)
-
-Debugging
--------------------
-Xdebug is configured when provisioning your development Vagrant box. 
-It's configured with auto connect IDE_KEY=phpstorm and ```xon``` on cli env. 
 
 Installation
 ======================

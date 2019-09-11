@@ -7,6 +7,7 @@ Requirements
 - php >=7.2
 - node >=8 (Only for creation front-end assets)
 - yarn (Only for creation front-end assets)
+- Composer
 
 Install (with build archive)
 -------------------
@@ -34,7 +35,7 @@ Configure web directory to /public.
 ### 5. Update or create schema 
 
 ```
- bin/console doctrine:migration:migrate
+ bin/console doctrine:migrations:migrate
 ```
 
 Install (without build archive)
@@ -55,7 +56,7 @@ Install (without build archive)
  ./bin/console assets:install
 ```
 
-### 3. Create database (optional)
+### 3. Create database (If not exists)
 
 ```
  bin/console doctrine:database:create
@@ -64,7 +65,7 @@ Install (without build archive)
 ### 4. Update schema 
 
 ```
- bin/console doctrine:migration:migrate
+ bin/console doctrine:migrations:migrate
 ```
 
 ### 5. Warm-up cache

@@ -3,7 +3,7 @@ Development environment
 
 The purpose of the development environment is only for running the different test and metric tools.
 
-To get started, first setup the development environment. The dev. env. is a virtual machine. Every task described is run
+To get started, first setup the development environment. The development 'env' is a virtual machine. Every task described is run
 from that machine.  
 
 Requirements
@@ -12,6 +12,7 @@ Requirements
     - vagrant-hostsupdater (1.1.1.160, global, optional)
     - vagrant-vbguest (0.19.0, global)
 - Virtualbox
+- Composer
 
 Install
 -------------------
@@ -22,7 +23,7 @@ Install
  
 ``` composer install ```
 
-Go to root of the project (```cd ..```) 
+Go back to root of the project (```cd ..```) 
 
 ``` vagrant up ```
 
@@ -48,7 +49,7 @@ Copy and configure:
 
 ### 4. Create database
 ``` 
- bin/console doctrine:migration:migrate
+ bin/console doctrine:migrations:migrate
 ``` 
 
 If everything goes as planned you can go to:
@@ -58,3 +59,8 @@ If everything goes as planned you can go to:
 ### Development
 
 All frond-end logic is written in sass and typescript. You can run a watcher to update these automatically
+
+Debugging
+-------------------
+Xdebug is configured when provisioning your development Vagrant box. 
+It's configured with auto connect IDE_KEY=phpstorm and ```xon``` on cli env. 
