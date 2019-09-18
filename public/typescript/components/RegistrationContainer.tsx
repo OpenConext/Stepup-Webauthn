@@ -12,7 +12,8 @@ declare const requestInformation: RequestInformation;
 
 export const RegistrationContainer: FC<{ t: (key: string) => string }> = ({ t }) => {
   const [state, dispatch] = useAppReducer(requestInformation, 'status.registration_initial');
+  const { message, errorInfo } = state;
   const [click, clicked] = useClickable();
   useRegistrationEffect(dispatch, publicKeyOptions, clicked);
-  return <App state={state} t={t} onClick={click} />;
+  return <App message={message} errorInfo={errorInfo} requestInformation={requestInformation} t={t} onClick={click} />;
 };

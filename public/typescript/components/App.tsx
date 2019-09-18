@@ -1,9 +1,15 @@
 import React, { FC } from 'react';
-import { ApplicationState } from '../models';
+import { ErrorInformation, RequestInformation, TranslationString } from '../models';
 import { ErrorTable } from './ErrorTable';
 
-export const App: FC<{ t: (key: string) => string, state: ApplicationState, onClick: () => void }> = ({ t, state, onClick }) => {
-  const { message, requestInformation, errorInfo } = state;
+export interface AppProps {
+  t: (key: string) => string; requestInformation: RequestInformation;
+  errorInfo: ErrorInformation | null;
+  message: TranslationString;
+  onClick: () => void;
+}
+
+export const App: FC<AppProps> = ({ t, message, requestInformation, errorInfo, onClick }) => {
   return (
     <div>
       <p>
