@@ -1,18 +1,17 @@
-import { of } from 'rxjs';
 import { empty } from 'ramda';
-import { tap, toArray } from 'rxjs/operators';
-import { excludePublicKeyCredentialType, filterPublicKeyCredentialType, requestUserAttestation } from '../operators';
+import { of } from 'rxjs';
+import { toArray } from 'rxjs/operators';
+import { excludePublicKeyCredentialType, filterPublicKeyCredentialType, requestUserAttestation } from '../webauthn';
 
 it('requestUserAttestation', async () => {
 
   const publicKeyOption: PublicKeyCredentialCreationOptions = { foo: 'my key option stub' } as any;
 
-  (navigator as any).credentials = {} as any;
-  navigator.credentials.create = jest.fn().mockResolvedValue('success');
+  const create = jest.fn().mockResolvedValue('success');
 
-  await expect(requestUserAttestation((): any => tap<any>(empty))(of(publicKeyOption)).toPromise()).resolves.toEqual('success');
+  await expect(requestUserAttestation(empty as any, create)(of(publicKeyOption)).toPromise()).resolves.toEqual('success');
 
-  expect(navigator.credentials.create).toBeCalledWith({ publicKey: publicKeyOption });
+  expect(create).toBeCalledWith({ publicKey: publicKeyOption });
 });
 
 it('filterPublicKeyCredentialType', async () => {
