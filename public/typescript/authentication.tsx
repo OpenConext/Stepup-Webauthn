@@ -1,7 +1,24 @@
 import 'core-js';
 import * as React from 'react';
 import ReactDom from 'react-dom';
-import { AuthenticationContainer } from './components/AuthenticationContainer';
-import { translate } from './translations';
+import { translate } from './function';
+import { RequestInformation, SerializedPublicKeyCredentialRequestOptions } from './model';
+import { AuthenticationContainer } from './ui/component/AuthenticationContainer';
 
-ReactDom.render(<AuthenticationContainer t={translate} />, document.getElementById('root'));
+/**
+ * Variable from template, @see templates\default\registration.html.twig and
+ * templates\default\variables.html.twig
+ */
+declare const publicKeyOptions: SerializedPublicKeyCredentialRequestOptions;
+declare const requestInformation: RequestInformation;
+declare const responseUrl: string;
+
+ReactDom.render(
+  <AuthenticationContainer
+    requestInformation={requestInformation}
+    publicKeyOptions={publicKeyOptions}
+    responseUrl={responseUrl}
+    t={translate}
+  />,
+  document.getElementById('root'),
+);

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "public/build",
     /* Basic Options */
     // "incremental": true,                   /* Enable incremental compilation */
     "target": "es5",
