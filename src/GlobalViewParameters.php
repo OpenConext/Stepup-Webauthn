@@ -20,6 +20,8 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Service\ClientMetadataService;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class GlobalViewParameters
@@ -39,19 +41,37 @@ final class GlobalViewParameters
      */
     private $supportUrl;
     private $supportEmail;
+    /**
+     * @var ClientMetadataService
+     */
+    private $clientMetadataService;
+    /**
+     * @var RequestStack
+     */
+    private $request;
 
     /**
      * @param TranslatorInterface $translator
      * @param array $locales
+     * @param ClientMetadataService $clientMetadataService
+     * @param RequestStack $request
      * @param array $supportUrl
      * @param string|null $supportEmail
      */
-    public function __construct(TranslatorInterface $translator, array $locales, array $supportUrl, string $supportEmail = null)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        array $locales,
+        ClientMetadataService $clientMetadataService,
+        RequestStack $request,
+        array $supportUrl,
+        string $supportEmail = null
+    ) {
         $this->translator = $translator;
         $this->locales = $locales;
         $this->supportUrl = $supportUrl;
         $this->supportEmail = $supportEmail;
+        $this->clientMetadataService = $clientMetadataService;
+        $this->request = $request;
     }
 
     /**
@@ -63,10 +83,20 @@ final class GlobalViewParameters
     }
 
     /**
-     * @return string
+     * Matches RequestInformation type interface.
+     *
+     * @return array
      */
-    public function getSupportEmail()
+    public function getRequestInformation(): array
     {
-        return $this->supportEmail;
+        $metadata = $this->clientMetadataService->generateMetadata($this->request->getCurrentRequest());
+        return [
+            'supportEmail' => $this->supportEmail,
+            'hostname' => $metadata['hostname'],
+            'ipAddress' => $metadata['ip_address'],
+            'requestId' => $metadata['request_id'],
+            'sari' => $metadata['sari'],
+            'userAgent' => $metadata['user_agent'],
+        ];
     }
 }

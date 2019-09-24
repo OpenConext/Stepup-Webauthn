@@ -5,8 +5,8 @@ Encore
     .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
     .addStyleEntry('global', './public/scss/application.scss')
-    .addEntry('registration', './public/typescript/registration.ts')
-    .addEntry('authentication', './public/typescript/authentication.ts')
+    .addEntry('registration', './public/typescript/registration.tsx')
+    .addEntry('authentication', './public/typescript/authentication.tsx')
     .enableSassLoader(function (options) {
         // https://github.com/sass/node-sass#options.
         options.includePaths = [

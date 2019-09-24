@@ -3,16 +3,9 @@
 {% block body %}
     <h2>{{ 'registration.sub_title'|trans }}</h2>
 
-    <div>
-        <div class="status initial">
-            {{ 'status.registration_initial'|trans }}
-        </div>
-        <div class="status missing_attestation_statement hidden">
-            {{ 'status.missing_attestation_statement'|trans }}
-        </div>
-        {% include 'default/general_status.twig' %}
-    </div>
+    <div id="root"> </div>
 
+    {% include 'default/variables.twig' %}
     {% block javascripts %}
         <script>
             var publicKeyOptions = {{ publicKeyOptions | json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE')) | raw }};
