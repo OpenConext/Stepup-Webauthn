@@ -126,6 +126,15 @@
     "justinrainbow/json-schema": {
         "version": "5.2.8"
     },
+    "league/uri-components": {
+        "version": "1.8.2"
+    },
+    "league/uri-hostname-parser": {
+        "version": "1.1.1"
+    },
+    "league/uri-parser": {
+        "version": "1.4.1"
+    },
     "malukenho/docheader": {
         "version": "0.1.7"
     },
@@ -242,6 +251,9 @@
     },
     "psr/log": {
         "version": "1.1.0"
+    },
+    "psr/simple-cache": {
+        "version": "1.0.1"
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
@@ -538,6 +550,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.11.0"
+    },
+    "symfony/process": {
+        "version": "v4.3.6"
     },
     "symfony/profiler-pack": {
         "version": "v1.0.4"
