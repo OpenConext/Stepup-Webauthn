@@ -119,17 +119,18 @@
     "frontend-install": [
       "yarn install"
     ],
+    "encore": [
+      "./node_modules/.bin/encore"
+    ],
     "auto-scripts": {
       "cache:clear": "symfony-cmd",
       "assets:install %PUBLIC_DIR%": "symfony-cmd"
     },
-    "pre-archive-cmd": [
-      "composer install --no-ansi --no-dev --no-interaction --no-progress --optimize-autoloader",
-      "yarn install",
-      "yarn encore prod",
-      "composer dump-env prod",
-      "./bin/console assets:install",
-      "APP_ENV=prod APP_DEBUG=0 ./bin/console cache:clear"
+    "post-install-cmd": [
+      "@auto-scripts"
+    ],
+    "post-update-cmd": [
+      "@auto-scripts"
     ]
   },
   "repositories": [
