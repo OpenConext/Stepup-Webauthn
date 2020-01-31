@@ -147,6 +147,9 @@
       "url": "https://github.com/OpenConext/Stepup-bundle"
     }
   ],
+  "config": {
+    "sort-packages": true
+  },
   "archive": {
     "exclude": [
       "!/.env",
