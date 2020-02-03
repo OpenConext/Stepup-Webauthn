@@ -38,6 +38,7 @@
   },
   "resolutions": {
     "js-yaml": ">=3.13.1",
-    "handlebars": ">=4.4.5"
+    "handlebars": ">=4.5.2",
+    "serialize-javascript": ">=2.1.1"
   }
 }
