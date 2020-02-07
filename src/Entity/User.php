@@ -35,7 +35,7 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=36)
      */
     protected $id;
 
