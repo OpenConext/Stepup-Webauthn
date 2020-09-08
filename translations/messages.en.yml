@@ -1,7 +1,7 @@
 # Registration
 
 registration.sub_title: Registration
-status.registration_initial: Registrate with your security key.
+status.registration_initial: Register your security key.
 status.missing_attestation_statement: Try again and grant access to view your security key.
 
 # Authentication
@@ -31,4 +31,3 @@ error_title: Oops!
 
 user_not_found.title: User not found
 user_not_found.description: Something went wrong, please try again.
-
