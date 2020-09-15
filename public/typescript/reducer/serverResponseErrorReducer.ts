@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { complement, isNil, pathSatisfies } from 'ramda';
 import { ApplicationState } from '../model';
-import {ServerResponse, ServiceResponseStatus} from '../model/response';
+import { ServerResponse, ServiceResponseStatus } from '../model/response';
 
 export const isServerResponseError: (value: unknown) => value is { response: ServerResponse | AxiosResponse } = pathSatisfies(complement(isNil), ['response']) as any;
 

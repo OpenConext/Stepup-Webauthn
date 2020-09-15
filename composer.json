@@ -80,8 +80,7 @@
       "@lint-php",
       "@lint-yml",
       "@lint-composer",
-      "@tslint",
-      "@tsc"
+      "@tslint"
     ],
     "lint-php": "vendor/bin/parallel-lint dev src",
     "lint-yml": "bin/console lint:yaml config",
