@@ -1,7 +1,8 @@
 @charset "utf-8";
 
-@import "bootstrap-sprockets";
-@import "bootstrap";
+@icon-font-path: "node_modules/bootstrap-sass/assets/fonts/bootstrap"
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap-sprockets";
 @import "vars";
 
 .main-content {
@@ -131,7 +132,7 @@ div.middle {
 
 .qr {
   img {
-    @extend .center-block;
+    @extend .center-block !optional;
     cursor: none;
     float: none;
   }

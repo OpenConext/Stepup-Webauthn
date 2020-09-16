@@ -1,6 +1,10 @@
 import { serializePublicKeyCredential } from '../SerializedPublicKeyCredential';
+import 'jest';
+
+const getClientExtensionResultsMock = jest.fn();
 
 it('serializePublicKeyCredential', () => {
+
   const credentials: PublicKeyCredential = {
     response: {
       clientDataJSON: Uint8Array.from([1, 2, 3]),
@@ -8,12 +12,14 @@ it('serializePublicKeyCredential', () => {
     rawId: Uint8Array.from([7, 8, 9]),
     type: 'public-key',
     id: '1234',
+    getClientExtensionResults: getClientExtensionResultsMock,
   };
   expect(serializePublicKeyCredential(credentials)).toStrictEqual({
     id: '1234',
     rawId: 'BwgJ',
     response: null,
     type: 'public-key',
+    getClientExtensionResults: getClientExtensionResultsMock,
   });
 });
 
@@ -26,6 +32,7 @@ it('serializePublicKeyCredential with AuthenticatorAttestationResponse', () => {
     rawId: Uint8Array.from([7, 8, 9]),
     type: 'public-key',
     id: '1234',
+    getClientExtensionResults: getClientExtensionResultsMock,
   };
 
   expect(serializePublicKeyCredential(credentials)).toStrictEqual({
@@ -36,6 +43,7 @@ it('serializePublicKeyCredential with AuthenticatorAttestationResponse', () => {
       clientDataJSON: 'AQID',
     },
     type: 'public-key',
+    getClientExtensionResults: getClientExtensionResultsMock,
   });
 });
 
@@ -49,6 +57,7 @@ it('serializePublicKeyCredential with AuthenticatorAssertionResponse', () => {
     },
     rawId: Uint8Array.from([7, 8, 9]),
     type: 'public-key',
+    getClientExtensionResults: getClientExtensionResultsMock,
     id: '1234',
   };
 
@@ -62,5 +71,6 @@ it('serializePublicKeyCredential with AuthenticatorAssertionResponse', () => {
       userHandle: 'CwwN',
     },
     type: 'public-key',
+    getClientExtensionResults: getClientExtensionResultsMock,
   });
 });
