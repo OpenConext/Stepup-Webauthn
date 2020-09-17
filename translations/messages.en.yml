@@ -1,20 +1,20 @@
 # Registration
 
 registration.sub_title: Registration
-status.registration_initial: Register your security key.
-status.missing_attestation_statement: Try again and grant access to view your security key.
+status.registration_initial: Register your FIDO2 token.
+status.missing_attestation_statement: Try again and grant access to view your FIDO2 token.
 
 # Authentication
 
 authentication.sub_title: Authentication
-status.authentication_initial: Authenticate with your security key.
+status.authentication_initial: Authenticate with your FIDO2 token.
 
 # General status messages
 
 status.general_error: Oops! something wrong happend, please try again.
-status.webauthn_not_supported: WebAuthn is not supported by your browser.
+status.webauthn_not_supported: FIDO2 is not supported by your browser.
 status.no_active_request: No active request, return to your service provider.
-status.authenticator_not_supported: Security device is not supported, try with a different one.
+status.authenticator_not_supported: This token is not supported, try with a different one.
 
 # General
 
@@ -26,7 +26,7 @@ abort: Abort
 
 ## Site general
 
-site_title: Security key authentication
+site_title: Authenticate using your FIDO2 token
 error_title: Oops!
 
 user_not_found.title: User not found
