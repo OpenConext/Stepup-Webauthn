@@ -1,20 +1,20 @@
 # Registration
 
 registration.sub_title: Registratie
-status.registration_initial: Registreer jouw security key.
-status.missing_attestation_statement: Probeer het opnieuw en verleen toegang om je sleutel te bekijken.
+status.registration_initial: Registreer jouw FIDO2 token.
+status.missing_attestation_statement: Probeer het opnieuw en verleen toegang om je FIDO2 token te bekijken.
 
 # Authentication
 
 authentication.sub_title: Authenticeren
-status.authentication_initial: Authenticeer met jouw security key.
+status.authentication_initial: Authenticeer met jouw FIDO2 token.
 
 # General status messages
 
 status.general_error: Oeps! Er is iets fout gegaan, probeer het opnieuw.
-status.webauthn_not_supported: WebAuthn wordt niet ondersteund door jouw browser.
+status.webauthn_not_supported: FIDO2 wordt niet ondersteund door jouw browser.
 status.no_active_request: Geen active aanvraag, keer terug naar jouw service provider.
-status.authenticator_not_supported: Security device wordt niet ondersteund, probeer een andere.
+status.authenticator_not_supported: Dit token wordt niet ondersteund, probeer een andere.
 
 # General
 
@@ -26,7 +26,7 @@ abort: Afbreken
 
 ## Site general
 
-site_title: Authenticeren met jouw security key
+site_title: Authenticeren met jouw FIDO2 token
 error_title: Oeps!
 
 user_not_found.title: Gebruiker onbekend
