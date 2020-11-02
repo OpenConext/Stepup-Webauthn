@@ -47,7 +47,7 @@ class InMemoryAttestationCertificateTrustStore implements AttestationCertificate
         }
         $certificates = $trustPath->getCertificates();
         if (!in_array(implode(PHP_EOL, $certificates), $this->trustedCertificates)) {
-            throw new AttestationCertificateNotSupportedException();
+            throw new AttestationCertificateNotSupportedException(sprintf('This attestationcertificate is not in our truststore: "%s"', implode(PHP_EOL, $certificates)));
         }
     }
 }
