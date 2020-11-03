@@ -1,3 +1,7 @@
+# 1.0.5
+ * Log unknown attestation certificates
+ * Update dependencies
+ 
 # 1.0.4
  * Restore layout
 
