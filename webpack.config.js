@@ -8,11 +8,10 @@ Encore
     .addEntry('registration', './public/typescript/registration.tsx')
     .addEntry('authentication', './public/typescript/authentication.tsx')
     .enableSassLoader(function (options) {
-        // https://github.com/sass/node-sass#options.
-        options.includePaths = [
-            'node_modules/bootstrap-sass/assets/stylesheets'
-        ];
-        options.outputStyle = 'expanded';
+        options.sassOptions = {
+            outputStyle: 'expanded',
+            includePaths: ['public'],
+        };
     })
     .enableTypeScriptLoader()
     .cleanupOutputBeforeBuild()
