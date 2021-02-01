@@ -1,3 +1,7 @@
+# Unreleased
+ - Add monitoring endpoints /health and /info
+ - Update dependencies
+ 
 # 1.0.5
  * Log unknown attestation certificates
  * Update dependencies
