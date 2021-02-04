@@ -108,6 +108,9 @@
     "fgrosse/phpasn1": {
         "version": "v2.1.1"
     },
+    "friends-of-behat/mink-extension": {
+        "version": "v2.5.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.4.1"
     },
@@ -402,6 +405,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v4.3.3"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v4.3.3"
