@@ -1,6 +1,7 @@
 # Unreleased
  - Add monitoring endpoints /health and /info
  - Update dependencies
+ - Move from security-checker to local-php-security-checker
  
 # 1.0.5
  * Log unknown attestation certificates
