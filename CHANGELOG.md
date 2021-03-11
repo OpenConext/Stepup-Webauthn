@@ -2,6 +2,7 @@
  - Add monitoring endpoints /health and /info
  - Update dependencies
  - Move from security-checker to local-php-security-checker
+ - Disable unused fragments
  
 # 1.0.5
  * Log unknown attestation certificates
