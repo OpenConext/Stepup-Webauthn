@@ -1,8 +1,9 @@
-# Unreleased
+# 1.0.6
  - Add monitoring endpoints /health and /info
  - Update dependencies
  - Move from security-checker to local-php-security-checker
  - Disable unused fragments
+ - Add X-UA-Compatible header to fix issues with embedded browsers
  
 # 1.0.5
  * Log unknown attestation certificates
