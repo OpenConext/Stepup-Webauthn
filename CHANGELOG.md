@@ -1,3 +1,7 @@
+# 1.0.8
+- Add favicon
+- Update dependencies
+
 # 1.0.7
 - Add X-UA-Compatible header to fix issues with embedded browsers
 
