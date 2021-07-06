@@ -9,6 +9,7 @@
 /config/packages/parameters.yml
 /build/
 /var/*
+/app/files/*
 !/var/cache
 /var/cache/*
 !var/cache/.gitkeep
