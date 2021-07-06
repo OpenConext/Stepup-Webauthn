@@ -16,7 +16,7 @@ export const App: FC<AppProps> = ({ t, message, requestInformation, errorInfo, o
         {t(message)}
       </p>
       {errorInfo && <ErrorTable t={t} errorInfo={errorInfo} clientInfo={requestInformation} />}
-      {errorInfo && errorInfo.showRetry && <button onClick={onClick}>{t('retry')}</button>}
+      {errorInfo && errorInfo.showRetry && <button className="btn btn-primary" onClick={onClick}>{t('retry')}</button>}
     </div>
   );
 };

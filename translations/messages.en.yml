@@ -1,12 +1,14 @@
 # Registration
 
 registration.sub_title: Registration
+registration.start_button: Use your security key
 status.registration_initial: Register your FIDO2 token.
 status.missing_attestation_statement: Try again and grant access to view your FIDO2 token.
 
 # Authentication
 
 authentication.sub_title: Authentication
+authentication.start_button: Use your security key
 status.authentication_initial: Authenticate with your FIDO2 token.
 
 # General status messages
@@ -20,7 +22,7 @@ status.authenticator_not_supported: This token is not supported, try with a diff
 
 ## Buttons
 
-retry: Retry again
+retry: Try again
 cancel: Cancel
 abort: Abort
 

@@ -1,12 +1,14 @@
 # Registration
 
 registration.sub_title: Registratie
+registration.start_button: Gebruik je beveiligingssleutel
 status.registration_initial: Registreer jouw FIDO2 token.
 status.missing_attestation_statement: Probeer het opnieuw en verleen toegang om je FIDO2 token te bekijken.
 
 # Authentication
 
 authentication.sub_title: Authenticeren
+authentication.start_button: Gebruik je beveiligingssleutel
 status.authentication_initial: Authenticeer met jouw FIDO2 token.
 
 # General status messages

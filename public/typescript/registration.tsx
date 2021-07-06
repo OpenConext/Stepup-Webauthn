@@ -13,12 +13,15 @@ declare const publicKeyOptions: SerializedPublicKeyCredentialCreationOptions;
 declare const requestInformation: RequestInformation;
 declare const responseUrl: string;
 
-ReactDom.render(
-  <RegistrationContainer
-    t={translate}
-    responseUrl={responseUrl}
-    publicKeyOptions={publicKeyOptions}
-    requestInformation={requestInformation}
-  />,
-  document.getElementById('root'),
-);
+const startButtonElement = document.getElementById('startbutton');
+startButtonElement?.addEventListener('click', () => {
+  ReactDom.render(
+    <RegistrationContainer
+      t={translate}
+      responseUrl={responseUrl}
+      publicKeyOptions={publicKeyOptions}
+      requestInformation={requestInformation}
+    />,
+    document.getElementById('root'),
+  );
+});
