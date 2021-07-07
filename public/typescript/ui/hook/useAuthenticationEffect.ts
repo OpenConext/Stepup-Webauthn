@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 import { Observable } from 'rxjs';
 import { reloadPage } from '../../function';
 import { PublicKeyResponseValidator } from '../../function/http';
@@ -7,7 +7,7 @@ import { authenticationObservable } from '../../observable';
 import { retryWith } from '../../operator';
 
 export const useAuthenticationEffect = (dispatch: (action: ApplicationAction) => void, publicKeyOptions: SerializedPublicKeyCredentialRequestOptions, send: PublicKeyResponseValidator, whenClicked: Observable<unknown>) =>
-  useEffect(
+  useCallback(
     () => {
       const time = () => (new Date()).toISOString();
       const subscription = authenticationObservable(

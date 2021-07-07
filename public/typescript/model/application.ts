@@ -57,6 +57,7 @@ export function errorWithMailTo(error: ErrorInformation): error is ErrorWithMail
 export type ErrorInformation = ErrorWithMail | ErrorWithoutMail;
 
 export interface ApplicationState {
+  started: boolean;
   requestInformation: RequestInformation;
   errorInfo: ErrorInformation | null;
   message: TranslationString;

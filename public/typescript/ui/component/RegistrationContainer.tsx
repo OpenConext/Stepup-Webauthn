@@ -13,9 +13,9 @@ export interface RegistrationContainerProps {
 
 export const RegistrationContainer: FC<RegistrationContainerProps> = ({ t, responseUrl, publicKeyOptions, requestInformation }) => {
   const [state, dispatch] = useAppReducer(requestInformation, 'status.registration_initial');
-  const { message, errorInfo } = state;
+  const { message, errorInfo, started } = state;
   const [click, clicked] = useClickable();
   const verify = useVerifyPublicKeyCredentials(responseUrl);
-  useRegistrationEffect(dispatch, publicKeyOptions, verify, clicked);
-  return <App message={message} errorInfo={errorInfo} requestInformation={requestInformation} t={t} onClick={click} />;
+  const onStart = useRegistrationEffect(dispatch, publicKeyOptions, verify, clicked);
+  return <App started={started} startMessage="registration.start_button" message={message} errorInfo={errorInfo} requestInformation={requestInformation} t={t} onClick={click} onStart={onStart} />;
 };

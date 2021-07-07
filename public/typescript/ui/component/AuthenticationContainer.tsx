@@ -13,9 +13,9 @@ export interface AuthenticationContainerProps {
 
 export const AuthenticationContainer: FC<AuthenticationContainerProps> = ({ t, requestInformation, publicKeyOptions, responseUrl }) => {
   const [state, dispatch] = useAppReducer(requestInformation, 'status.authentication_initial');
-  const { message, errorInfo } = state;
+  const { message, errorInfo, started } = state;
   const [click, clicked] = useClickable();
   const verify = useVerifyPublicKeyCredentials(responseUrl);
-  useAuthenticationEffect(dispatch, publicKeyOptions, verify, clicked);
-  return <App message={message} errorInfo={errorInfo} requestInformation={requestInformation} t={t} onClick={click} />;
+  const onStart = useAuthenticationEffect(dispatch, publicKeyOptions, verify, clicked);
+  return <App started={started} startMessage="authentication.start_button" message={message} errorInfo={errorInfo} requestInformation={requestInformation} t={t} onClick={click} onStart={onStart} />;
 };

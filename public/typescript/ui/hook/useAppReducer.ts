@@ -6,6 +6,7 @@ import { loggingAppReducerDecorator } from '../../reducer/loggingAppReducerDecor
 export const useAppReducer = (requestInformation: RequestInformation, initialMessage: string) => useReducer(
   loggingAppReducerDecorator(appReducer),
   useState({
+    started: false,
     message: initialMessage,
     errorInfo: null,
     requestInformation,

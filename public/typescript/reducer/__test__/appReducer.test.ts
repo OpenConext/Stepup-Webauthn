@@ -15,6 +15,7 @@ describe('appReducer', () => {
   };
   beforeEach(() => {
     initialState = {
+      started: false,
       errorInfo: null,
       message: 'initial',
       requestInformation,
@@ -30,6 +31,7 @@ describe('appReducer', () => {
     shouldNotAlterState(state, action);
     shouldNothaveAnError(state, action);
     shouldSetMessageTo(state, action, 'status.authentication_initial');
+    shouldBeStarted(state, action);
   });
 
   describe('ApplicationEvent.REQUEST_USER_FOR_ATTESTATION', () => {
@@ -37,6 +39,7 @@ describe('appReducer', () => {
     shouldNotAlterState(state, action);
     shouldNothaveAnError(state, action);
     shouldSetMessageTo(state, action, 'status.registration_initial');
+    shouldBeStarted(state, action);
   });
 
   describe('ApplicationEvent.PUBLIC_KEY_CREDENTIALS_SERIALIZED', () => {
@@ -48,6 +51,7 @@ describe('appReducer', () => {
     const action = { value, timestamp: 'now', type: ApplicationEvent.PUBLIC_KEY_CREDENTIALS_SERIALIZED };
     shouldNotAlterState(state, action);
     shouldNothaveAnError(state, action);
+    shouldBeStarted(state, action);
     it('Should decode clientDataJSON', () => {
       const result = appReducer(initialState!, action);
       expect(result.clientDataJSON).toEqual('123');
@@ -59,6 +63,7 @@ describe('appReducer', () => {
     shouldNotAlterState(state, action);
     shouldNotDisplayRetryAndMailToButton(state, action);
     shouldSetMessageTo(state, action, 'status.webauthn_not_supported');
+    shouldBeStarted(state, action);
   });
 
   describe('ApplicationEvent.ERROR', () => {
@@ -66,6 +71,7 @@ describe('appReducer', () => {
     shouldNotAlterState(state, action);
     shouldDisplayMailAndRetryButton(state, action);
     shouldSetMessageTo(state, action, 'status.general_error');
+    shouldBeStarted(state, action);
   });
 });
 
@@ -103,5 +109,12 @@ function shouldSetMessageTo(initialState: () => ApplicationState, action: Applic
   it(`Should display ${message}`, () => {
     const result = appReducer(initialState(), action);
     expect(result.message).toEqual(message);
+  });
+}
+
+function shouldBeStarted(initialState: () => ApplicationState, action: ApplicationAction) {
+  it('Should be started', () => {
+    const result = appReducer(initialState(), action);
+    expect(result.started).toBeTruthy();
   });
 }
