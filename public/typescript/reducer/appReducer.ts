@@ -11,6 +11,7 @@ export const appReducer: AppReducer = (state, { value, type, timestamp }) => {
   switch (type) {
     case ApplicationEvent.NOT_SUPPORTED:
       return {
+        started: true,
         requestInformation,
         message: 'status.webauthn_not_supported',
         errorInfo: {
@@ -23,6 +24,7 @@ export const appReducer: AppReducer = (state, { value, type, timestamp }) => {
 
     case ApplicationEvent.REQUEST_USER_FOR_ATTESTATION:
       return {
+        started: true,
         requestInformation,
         message: 'status.registration_initial',
         errorInfo: null,
@@ -32,11 +34,13 @@ export const appReducer: AppReducer = (state, { value, type, timestamp }) => {
       const credentials: SerializedPublicKeyCredential = value as any;
       return {
         ...state,
+        started: true,
         clientDataJSON: decode(credentials.response.clientDataJSON).toString(),
       };
 
     case ApplicationEvent.REQUEST_USER_FOR_ASSERTION:
       return {
+        started: true,
         requestInformation,
         message: 'status.authentication_initial',
         errorInfo: null,
@@ -47,6 +51,7 @@ export const appReducer: AppReducer = (state, { value, type, timestamp }) => {
         return serverResponseErrorReducer(state, timestamp, value.response);
       }
       return {
+        started: true,
         requestInformation,
         message: 'status.general_error',
         errorInfo: {

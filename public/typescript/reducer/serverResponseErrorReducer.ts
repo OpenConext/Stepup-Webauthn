@@ -31,6 +31,7 @@ export const serverResponseErrorReducer = (state: ApplicationState, timestamp: s
   switch (status) {
     case 'deviceNotSupported':
       return {
+        started: true,
         requestInformation,
         message: 'status.authenticator_not_supported',
         errorInfo: {
@@ -43,6 +44,7 @@ export const serverResponseErrorReducer = (state: ApplicationState, timestamp: s
     case 'noRegistrationRequired':
     case 'noAuthenticationRequired':
       return {
+        started: true,
         requestInformation,
         message: 'status.no_active_request',
         errorInfo: {
@@ -54,6 +56,7 @@ export const serverResponseErrorReducer = (state: ApplicationState, timestamp: s
       };
     case 'missingAttestationStatement':
       return {
+        started: true,
         requestInformation,
         message: 'missing_attestation_statement',
         errorInfo: {
@@ -66,6 +69,7 @@ export const serverResponseErrorReducer = (state: ApplicationState, timestamp: s
     case 'invalid':
     case 'error':
       return {
+        started: true,
         requestInformation,
         message: 'status.general_error',
         errorInfo: {
