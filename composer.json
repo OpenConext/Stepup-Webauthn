@@ -49,7 +49,7 @@
     "web-token/jwt-signature-algorithm-rsa": "^2.0",
     "symfony/dotenv": "^4.3",
     "symfony/http-client": "^4.3",
-    "openconext/monitor-bundle": "^2.0"
+    "openconext/monitor-bundle": "^2.1"
   },
   "require-dev": {
     "symfony/maker-bundle": "^1.12",
