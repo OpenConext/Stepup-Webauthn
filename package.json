@@ -1,20 +1,20 @@
 {
   "devDependencies": {
-    "@symfony/webpack-encore": "^0",
+    "@symfony/webpack-encore": "^1",
     "@types/query-string": "^6.3.0",
     "compass-mixins": "^0",
     "import-glob-loader": "^1",
     "node-sass": "^4",
     "query-string": "^6.8.3",
     "sass-loader": "^9.0.1",
-    "ts-loader": "^5.3.0",
+    "ts-loader": "^8.0.1",
     "tslint": "^5",
     "tslint-config-airbnb": "^5",
     "tslint-loader": "^3",
     "typescript": "^3"
   },
   "dependencies": {
-    "@types/jest": "^24.0.16",
+    "@types/jest": "^27",
     "@types/ramda": "^0.26.18",
     "@types/react": "^16.9.2",
     "@types/react-dom": "^16.9.0",
@@ -26,7 +26,7 @@
     "core-js": "^3.2.1",
     "css-loader": "^0",
     "handlebars": ">=4.5.2",
-    "jest": "^24.8.0",
+    "jest": "^27",
     "jquery": "^3",
     "js-yaml": ">=3.13.1",
     "ramda": "^0.26.1",
@@ -36,14 +36,17 @@
     "rxjs": "^6.5.2",
     "select2": "^4",
     "serialize-javascript": ">=2.1.1",
-    "ts-jest": "^24.0.2",
+    "ts-jest": "^27",
     "urlsafe-base64": "^1.0.0",
     "yargs-parser": ">=18.1.2"
   },
   "resolutions": {
+    "glob-parent": ">=5.1.2",
     "js-yaml": ">=3.13.1",
     "handlebars": ">=4.5.2",
     "serialize-javascript": ">=2.1.1",
+    "tar": ">3.2.3",
+    "trim-newlines": ">=3.0.1",
     "yargs-parser": ">=18.1.2"
   },
   "license": "Apache-2.0"
