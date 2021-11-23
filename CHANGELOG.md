@@ -1,3 +1,6 @@
+# 1.0.10
+- Update dependencies
+
 # 1.0.9
 - Add button for iOS devices requireing a gesture before FIDO can be used
 
