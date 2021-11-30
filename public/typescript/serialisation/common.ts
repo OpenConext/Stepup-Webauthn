@@ -1,6 +1,11 @@
 import { anyPass, complement, isEmpty, isNil, lensPath, map, over, pickBy, unless } from 'ramda';
 import { decode, encode } from 'urlsafe-base64';
 
+// @ts-ignore
+import { Buffer as NodeBuffer } from 'buffer';
+
+window.Buffer = window.Buffer || NodeBuffer;
+
 export const base64UrlSafeToUInt8 = (base64: string): BufferSource => Uint8Array.from(decode(base64)).buffer;
 export const uInt8ToBase64UrlSafe = (buffer: BufferSource): string => encode(Buffer.from(buffer as any));
 

@@ -15,7 +15,7 @@ it('requestUserAttestation', async () => {
 });
 
 it('filterPublicKeyCredentialType', async () => {
-  // tslint:disable-next-line:prefer-array-literal
+  // tslint:disable-next-line
   const types: Array<CredentialType | null> = [
     null,
     {
@@ -34,7 +34,7 @@ it('filterPublicKeyCredentialType', async () => {
 });
 
 it('excludePublicKeyCredentialType', async () => {
-  // tslint:disable-next-line:prefer-array-literal
+  // tslint:disable-next-line
   const types: Array<CredentialType | null> = [
     null,
     {
