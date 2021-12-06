@@ -1,3 +1,6 @@
+# 1.0.11
+- Added browserlist entry in package.json to ensure IE 11 support
+
 # 1.0.10
 - Update dependencies
 
