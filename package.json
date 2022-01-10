@@ -32,6 +32,8 @@
     "jest": "^27",
     "jquery": "^3",
     "js-yaml": ">=3.13.1",
+    "node-forge": "^1.0",
+    "postcss": ">=8.2.13",
     "ramda": "^0.26.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -44,7 +46,8 @@
     "yargs-parser": ">=18.1.2"
   },
   "resolutions": {
-    "postcss": ">=8.2.13"
+    "postcss": ">=8.2.13",
+    "node-forge": "^1.0"
   },
   "license": "Apache-2.0"
 }
