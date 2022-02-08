@@ -1,3 +1,6 @@
+# 1.0.12
+- Added Github Action for tag release automation
+
 # 1.0.11
 - Added browserlist entry in package.json to ensure IE 11 support
 
