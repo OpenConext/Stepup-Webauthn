@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77984492eecc5f22efc0cf61199be695",
+    "content-hash": "faf994e5267ee1b61e12e9fa64b7cd56",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -8652,6 +8652,7 @@
                 "Context",
                 "Symfony2"
             ],
+            "abandoned": true,
             "time": "2020-02-27T08:40:50+00:00"
         },
         {
