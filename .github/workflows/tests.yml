@@ -1,0 +1,53 @@
+name: Test
+on:
+  push:
+    branches:    
+      - '**'        # matches every branch
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-node@v2
+          with:
+            node-version: '14'
+        - name: Copy config
+          run: |
+            cp .env.ci .env
+            cp config/packages/parameters.yml.dist config/packages/parameters.yml
+        - uses: actions/cache@v2
+          id: cache-db
+          with:
+            path: ~/.symfony/cache
+            key: db
+        - uses: symfonycorp/security-checker-action@v2
+        - name: Yarn Audit
+          uses: pragatheeswarans/yarn-audit-action@v1.0.0
+          with:
+              token: ${{ secrets.GITHUB_TOKEN }}
+              label: 'yarn-issue'
+        - name: Install PHP
+          uses: "shivammathur/setup-php@v2"
+          with:
+            php-version: "7.2"
+        - name: Install composer dependencies
+          uses: "ramsey/composer-install@v2"
+        - name: Yarn install and tests
+          run: |
+            yarn install
+            yarn jest
+            yarn tslint --project tsconfig.json
+            yarn tsc --noEmit
+        - name: PHP Code Style (phpcs)
+          uses: chindit/actions-phpcs@master
+          with:
+            dir: src/
+        - name: Local tests
+          run: |
+            ./vendor/bin/parallel-lint dev src
+            ./bin/console lint:yaml config
+            ./vendor/bin/docheader check src/ dev/ Features/ tests/
+            ./vendor/bin/phpcs --standard=phpcs.xml --report=full --warning-severity=0 ./src
+            ./vendor/bin/phpcbf --standard=phpcs.xml ./src
+            ./vendor/bin/phpunit tests --coverage-php coverage/reports/unit.cov
