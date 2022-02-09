@@ -1,3 +1,6 @@
+# 1.0.13
+- Add .env.dist required for deploy
+
 # 1.0.12
 - Added Github Action for tag release automation
 
