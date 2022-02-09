@@ -158,7 +158,6 @@
       "!/public/build",
       ".github",
       ".gitignore",
-      ".env.dist",
       ".travis.yml",
       ".travis.php.ini",
       "/symfony.lock",
