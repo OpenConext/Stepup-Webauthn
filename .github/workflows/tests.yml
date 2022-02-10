@@ -48,6 +48,5 @@ jobs:
             ./vendor/bin/parallel-lint dev src
             ./bin/console lint:yaml config
             ./vendor/bin/docheader check src/ dev/ Features/ tests/
-            ./vendor/bin/phpcs --standard=phpcs.xml --report=full --warning-severity=0 ./src
             ./vendor/bin/phpcbf --standard=phpcs.xml ./src
             ./vendor/bin/phpunit tests --coverage-php coverage/reports/unit.cov
