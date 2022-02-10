@@ -1,3 +1,6 @@
+# 1.0.14
+-  Import buffer to prevent missing reference error #64
+
 # 1.0.13
 - Add .env.dist required for deploy
 
