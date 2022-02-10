@@ -31,8 +31,23 @@ jobs:
           uses: "shivammathur/setup-php@v2"
           with:
             php-version: "7.2"
-        - name: Install composer dependencies
-          uses: "ramsey/composer-install@v2"
+        - name: Composer install
+          uses: php-actions/composer@v6
+          with:
+            php_version: "7.2"
+            php_extensions: gmp
+            version: 1
+            command: install
+        - name: Yarn install
+          run: |
+            yarn install
+        - name: Composer test
+          uses: php-actions/composer@v6
+          with:
+            php_version: "7.2"
+            php_extensions: gmp
+            version: 1
+            command: test
         - name: Yarn install and tests
           run: |
             yarn install
@@ -43,10 +58,9 @@ jobs:
           uses: chindit/actions-phpcs@master
           with:
             dir: src/
-        - name: Local tests
-          run: |
-            ./vendor/bin/parallel-lint dev src
-            ./bin/console lint:yaml config
-            ./vendor/bin/docheader check src/ dev/ Features/ tests/
-            ./vendor/bin/phpcbf --standard=phpcs.xml ./src
-            ./vendor/bin/phpunit tests --coverage-php coverage/reports/unit.cov
+        - name: Composer test
+          uses: php-actions/composer@v6
+          with:
+            php_version: "7.2"
+            version: 1
+            command: test
