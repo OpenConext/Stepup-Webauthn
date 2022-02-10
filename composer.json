@@ -19,37 +19,38 @@
   "require": {
     "php": "7.2.*",
     "ext-dom": "*",
-    "ext-libxml": "*",
-    "ext-zlib": "*",
     "ext-gmp": "*",
     "ext-json": "*",
-    "symfony/flex": "^1.4",
-    "sensio/framework-extra-bundle": "^5.4",
-    "symfony/asset": "^4.3",
-    "symfony/twig-bundle": "^4.3",
-    "symfony/monolog-bundle": "^3.4",
-    "symfony/security-bundle": "^4.3",
-    "symfony/translation": "^4.3",
-    "symfony/validator": "^4.3",
-    "surfnet/stepup-saml-bundle": "^4.1.7",
-    "surfnet/stepup-gssp-bundle": "^3.0.2",
-    "symfony/yaml": "^4.3",
-    "symfony/form": "^4.3",
-    "symfony/templating": "^4.3",
-    "symfony/webpack-encore-bundle": "^1.6",
-    "web-auth/webauthn-lib": "^2.0",
-    "web-auth/webauthn-symfony-bundle": "^2.0",
-    "symfony/orm-pack": "^1.0",
-    "ramsey/uuid": "^3.8",
-    "symfony/psr-http-message-bridge": "^1.2",
+    "ext-libxml": "*",
+    "ext-zlib": "*",
+    "incenteev/composer-parameter-handler": "^2.1",
     "nyholm/psr7": "^1.1",
-    "web-auth/cose-lib": "^2.0",
+    "openconext/monitor-bundle": "^2.1",
+    "ramsey/uuid": "^3.8",
+    "sensio/framework-extra-bundle": "^5.4",
     "spomky-labs/cbor-php": "^1.0",
     "surfnet/stepup-bundle": "^4.1",
-    "web-token/jwt-signature-algorithm-rsa": "^2.0",
+    "surfnet/stepup-gssp-bundle": "^3.0.2",
+    "surfnet/stepup-saml-bundle": "^4.1.7",
+    "symfony/asset": "^4.3",
     "symfony/dotenv": "^4.3",
+    "symfony/flex": "^1.4",
+    "symfony/form": "^4.3",
     "symfony/http-client": "^4.3",
-    "openconext/monitor-bundle": "^2.1"
+    "symfony/monolog-bundle": "^3.4",
+    "symfony/orm-pack": "^1.0",
+    "symfony/psr-http-message-bridge": "^1.2",
+    "symfony/security-bundle": "^4.3",
+    "symfony/templating": "^4.3",
+    "symfony/translation": "^4.3",
+    "symfony/twig-bundle": "^4.3",
+    "symfony/validator": "^4.3",
+    "symfony/webpack-encore-bundle": "^1.6",
+    "symfony/yaml": "^4.3",
+    "web-auth/cose-lib": "^2.0",
+    "web-auth/webauthn-lib": "^2.0",
+    "web-auth/webauthn-symfony-bundle": "^2.0",
+    "web-token/jwt-signature-algorithm-rsa": "^2.0"
   },
   "require-dev": {
     "symfony/maker-bundle": "^1.12",
@@ -127,9 +128,11 @@
       "assets:install %PUBLIC_DIR%": "symfony-cmd"
     },
     "post-install-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
       "@auto-scripts"
     ],
     "post-update-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
       "@auto-scripts"
     ]
   },
@@ -153,6 +156,11 @@
       "!/.env.local.php",
       "!/var/cache/prod",
       "!/public/build",
+      ".github",
+      ".gitignore",
+      ".travis.yml",
+      ".travis.php.ini",
+      "/symfony.lock",
       "/node_modules",
       "/dev",
       "/translations/sp",
@@ -189,6 +197,11 @@
     "symfony": {
       "allow-contrib": false,
       "require": "4.4.*"
-    }
+    },
+    "incenteev-parameters": [
+      {
+        "file": "config/packages/parameters.yml"
+      }
+    ]
   }
 }
