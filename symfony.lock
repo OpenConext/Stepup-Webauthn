@@ -126,6 +126,15 @@
     "hamcrest/hamcrest-php": {
         "version": "v2.0.0"
     },
+    "incenteev/composer-parameter-handler": {
+        "version": "0.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "0.0",
+            "ref": ""
+        }
+    },
     "jakub-onderka/php-parallel-lint": {
         "version": "v1.0.0"
     },

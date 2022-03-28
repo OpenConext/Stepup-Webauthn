@@ -45,9 +45,6 @@
     "urlsafe-base64": "^1.0",
     "yargs-parser": ">=18.1.2"
   },
-  "resolutions": {
-    "postcss": ">=8.2.13",
-    "node-forge": "^1.0"
-  },
+  "resolutions": {},
   "license": "Apache-2.0"
 }
