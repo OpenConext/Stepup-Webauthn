@@ -1,5 +1,6 @@
 # Next
 - Fix favicon location
+- Update yarn packages
 
 # 1.0.14
 -  Import buffer to prevent missing reference error #64
