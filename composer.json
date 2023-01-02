@@ -86,7 +86,7 @@
       "@lint-php",
       "@lint-yml",
       "@lint-composer",
-      "@tslint"
+      "@eslint"
     ],
     "lint-php": "vendor/bin/parallel-lint dev src",
     "lint-yml": "bin/console lint:yaml config",
@@ -109,7 +109,7 @@
       "vendor/bin/phpcpd  ./src"
     ],
     "jest": "yarn jest",
-    "tslint": "yarn tslint --project tsconfig.json",
+    "eslint": "yarn eslint --ext tsconfig.json",
     "tsc": "yarn tsc --noEmit",
     "phpunit": "vendor/bin/phpunit",
     "security-tests": [
@@ -161,6 +161,7 @@
       "!/.env.local.php",
       "!/var/cache/prod",
       "!/public/build",
+      ".eslintrc.js",
       ".github",
       ".gitignore",
       ".travis.yml",
@@ -175,7 +176,6 @@
       "/build",
       "/travis-ci-apache.conf",
       "/tsconfig.json",
-      "/tslint.json",
       "/Vagrantfile",
       "/webpack.config.js",
       "/jest.config.js",
