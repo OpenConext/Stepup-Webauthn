@@ -11,17 +11,16 @@ parameters:
         - en_GB
 
     # WebAuthn user display name
-    user_display_name: SURFsecureID
-    webauthn_name: SURFsecureID
+    user_display_name: SURFsecureID Dev Environment
+    webauthn_name: SURFsecureID Dev Environment
     webauthn_logo: 'https://webauthn.test/images/surfconext-logo.png'
-    trusted_certificates_directory: '%kernel.root_dir%/../dev/trusted_certificates'
+    trusted_certificates_directory: '%kernel.root_dir%/app/files/trusted_certificates'
 
-    saml_idp_publickey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer'
-    saml_idp_privatekey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem'
-    saml_metadata_publickey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_publickey.cer'
-    saml_metadata_privatekey: '%kernel.root_dir%/../vendor/surfnet/stepup-saml-bundle/src/Resources/keys/development_privatekey.pem'
+    saml_idp_publickey: '/config/stepup/webauthn/webauthn_idp.crt'
+    saml_idp_privatekey: '/config/stepup/webauthn/webauthn_idp.key'
+    saml_metadata_publickey: '/config/stepup/webauthn/webauthn_idp.crt'
+    saml_metadata_privatekey: '/config/stepup/webauthn/webauthn_idp.key'
     saml_remote_sp_entity_id: 'https://pieter.aai.surfnet.nl/simplesamlphp/module.php/saml/sp/metadata.php/default-sp'
     saml_remote_sp_sso_url: '"https://pieter.aai.surfnet.nl/simplesamlphp/module.php/saml/sp/saml2-acs.php/default-sp"'
     saml_remote_sp_certificate: '%kernel.root_dir%/../vendor/surfnet/stepup-gssp-bundle/src/Resources/keys/pieter.aai.surfnet.nl.pem'
     saml_remote_sp_acs: 'https://pieter.aai.surfnet.nl/simplesamlphp/module.php/saml/sp/saml2-acs.php/default-sp'
-
