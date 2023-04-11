@@ -1,0 +1,43 @@
+# Build the frontend static assets
+FROM node:14 AS js-build
+COPY . /var/www/html/
+WORKDIR /var/www/html/
+RUN yarn install && yarn encore prod
+
+# Install the PHP modules and generate an application archive
+FROM ghcr.io/openconext/openconext-basecontainers/php72-fpm-apache2:latest AS php-build
+RUN rm -rf /var/www/html/*
+COPY . /var/www/html/
+WORKDIR /var/www/html/
+
+# Install packages required for the build process
+RUN apt-get update && apt-get install -y git \
+    curl \
+    unzip
+
+# Install the PHP packages via Composer
+ENV SYMFONY_ENV=prod
+RUN composer install --prefer-dist --ignore-platform-reqs --no-dev --no-interaction --optimize-autoloader
+
+# Copy the static assets from the JS build stage
+RUN mkdir -p /var/www/html/public/build
+COPY --from=js-build /var/www/html/public/build /var/www/html/public/build
+
+# Create the application archive
+RUN composer archive --file=archive
+
+# Generate the production ready image using all the assets previously built
+FROM ghcr.io/openconext/openconext-basecontainers/php72-fpm-apache2:latest
+ENV SYMFONY_ENV=prod
+RUN rm -rf /var/www/html/*
+COPY --from=php-build /var/www/html/archive.tar /var/www/html
+RUN tar -xvf archive.tar && rm -rf archive.tar
+
+# Configure the application
+RUN cp .env.dist .env
+RUN cp config/packages/parameters.yml.dist config/packages/parameters.yml
+
+# Add the config files for Apache2 and PHP-Fpm
+RUN rm -rf /etc/apache2/sites-enabled/* && rm -rf /etc/php/7.2/fpm/pool.d/*
+COPY ./docker/conf/webauthn-apache2.conf /etc/apache2/sites-enabled/webauthn.conf
+COPY ./docker/conf/webauthn-fpm-pool.conf /etc/php/7.2/fpm/pool.d/webauthn-pool.conf
