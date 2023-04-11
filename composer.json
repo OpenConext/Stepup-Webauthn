@@ -191,7 +191,8 @@
       "/node_modules",
       "/coverage",
       "/homestead",
-      "/build"
+      "/build",
+      "/docker"
     ]
   },
   "config": {
