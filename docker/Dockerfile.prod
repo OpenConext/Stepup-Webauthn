@@ -38,10 +38,9 @@ RUN cp .env.dist .env
 RUN cp config/packages/parameters.yml.dist config/packages/parameters.yml
 
 # Add the config files for Apache2 and PHP-Fpm
-RUN rm -rf /etc/apache2/sites-enabled/* && rm -rf /etc/php/7.2/fpm/pool.d/*
+RUN rm -rf /etc/apache2/sites-enabled/* && rm -rf /usr/local/etc/php-fpm.d/*
 COPY ./docker/conf/webauthn-apache2.conf /etc/apache2/sites-enabled/webauthn.conf
-COPY ./docker/conf/webauthn-fpm-pool.conf /etc/php/7.2/fpm/pool.d/webauthn-pool.conf
-
+COPY ./docker/conf/webauthn-fpm-pool.conf /usr/local/etc/php-fpm.d/www.conf
 EXPOSE 80
 
 CMD ["/usr/local/bin/start.sh"]
