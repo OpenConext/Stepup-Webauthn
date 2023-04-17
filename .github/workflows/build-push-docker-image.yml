@@ -38,3 +38,13 @@ jobs:
           tags: |
             ghcr.io/openconext/stepup-webauthn/stepup-webauthn:prod
             ghcr.io/openconext/stepup-webauthn/stepup-webauthn:${{ github.sha }}
+
+      - name: Build and push the Development image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: docker/Dockerfile.dev
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/openconext/stepup-webauthn/stepup-webauthn:dev
