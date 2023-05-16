@@ -72,4 +72,4 @@ jobs:
       - name: Trigger Docker container build
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: build-docker-image
+          workflow: build-push-docker-image
