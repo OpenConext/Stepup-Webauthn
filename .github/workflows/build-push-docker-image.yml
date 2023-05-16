@@ -11,11 +11,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Output the semver tag to the tag variable
-        id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-
       - name: Get the latest release
+        id: release
         uses: robinraju/release-downloader@v1.7
         with:
           latest: true
@@ -44,7 +41,7 @@ jobs:
           tags: |
             ghcr.io/openconext/stepup-webauthn/stepup-webauthn:prod
             ghcr.io/openconext/stepup-webauthn/stepup-webauthn:${{ github.sha }}
-            ghcr.io/openconext/stepup-webauthn/stepup-webauthn:${{ steps.vars.outputs.tag }}
+            ghcr.io/openconext/stepup-webauthn/stepup-webauthn:${{ steps.release.outputs.tag_name }}
 
       - name: Build and push the Development image
         uses: docker/build-push-action@v4
