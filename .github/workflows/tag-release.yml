@@ -70,6 +70,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Docker container build
-        uses: peter-evans/workflow-dispatch@v1
+        uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: build-docker-image
