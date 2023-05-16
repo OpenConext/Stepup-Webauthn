@@ -40,6 +40,7 @@ jobs:
           tags: |
             ghcr.io/openconext/stepup-webauthn/stepup-webauthn:prod
             ghcr.io/openconext/stepup-webauthn/stepup-webauthn:${{ github.sha }}
+            ghcr.io/openconext/stepup-webauthn/stepup-webauthn:${GITHUB_REF#refs/*/}
 
       - name: Build and push the Development image
         uses: docker/build-push-action@v4
