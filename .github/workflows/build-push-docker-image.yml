@@ -1,10 +1,10 @@
-name: Build the Docker container images for Stepup Webauthn
+name: build-docker-image
 
 on:
-  push:
-    branches:
-      - main
-      - prod-docker-containers
+  workflow_run:
+    workflows: ["tag-release"]
+    types:
+      - completed
 
 jobs:
   build-push-docker-image:
@@ -20,7 +20,7 @@ jobs:
         with:
           latest: true
           fileName: "*.tar.bz2"
-        
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
