@@ -2,8 +2,9 @@ name: build-push-docker-image
 
 #on: workflow_dispatch
 on:
-  branches:
-    - prod-docker-containers
+  push:
+    branches:
+      - prod-docker-containers
 
 jobs:
   build-push-docker-image:
