@@ -1,4 +1,3 @@
-#FROM ghcr.io/openconext/openconext-basecontainers/php72-fpm-apache2:latest AS php-build
 FROM ghcr.io/openconext/openconext-basecontainers/php72-apache2:latest AS php-build
 COPY *.tar.bz2 /tmp/
 RUN tar -xvjf /tmp/*.tar.bz2 -C /var/www/html/ && \
@@ -9,14 +8,11 @@ RUN cp .env.dist .env
 RUN cp config/packages/parameters.yml.dist config/packages/parameters.yml
 
 # Add the config files for Apache2
-#RUN rm -rf /etc/apache2/sites-enabled/* && rm -rf /usr/local/etc/php-fpm.d/*
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./docker/conf/webauthn-apache2.conf /etc/apache2/sites-enabled/webauthn.conf
-#COPY ./docker/conf/webauthn-fpm-pool.conf /usr/local/etc/php-fpm.d/www.conf
 EXPOSE 80
 
 # Set the default workdir
 WORKDIR /var/www/html
 
 CMD ["apache2-foreground"]
-#CMD ["/usr/local/bin/start.sh"]
