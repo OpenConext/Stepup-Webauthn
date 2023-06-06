@@ -1,9 +1,8 @@
 Stepup WebAuthn GSSP
 ===================
 
-<a href="#">
-    <img src="https://travis-ci.org/OpenConext/Stepup-Webauthn.svg?branch=master" alt="build:">
-</a></br>
+[![test-integration](https://github.com/OpenConext/Stepup-Webauthn/actions/workflows/test-integration.yml/badge.svg)](https://github.com/OpenConext/Stepup-Webauthn/actions/workflows/test-integration.yml)
+</br>
 
 GSSP WebAuthn implementation.
 
