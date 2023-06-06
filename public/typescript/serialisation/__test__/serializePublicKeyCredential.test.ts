@@ -5,6 +5,7 @@ const getClientExtensionResultsMock = jest.fn();
 
 it('serializePublicKeyCredential', () => {
 
+  // @ts-ignore
   const credentials: PublicKeyCredential = {
     response: {
       clientDataJSON: Uint8Array.from([1, 2, 3]),
@@ -25,6 +26,7 @@ it('serializePublicKeyCredential', () => {
 
 it('serializePublicKeyCredential with AuthenticatorAttestationResponse', () => {
   const credentials: Omit<PublicKeyCredential, 'response'> & { response: AuthenticatorAttestationResponse } = {
+    // @ts-ignore
     response: {
       clientDataJSON: Uint8Array.from([1, 2, 3]),
       attestationObject: Uint8Array.from([4, 5, 6]),
@@ -48,6 +50,7 @@ it('serializePublicKeyCredential with AuthenticatorAttestationResponse', () => {
 });
 
 it('serializePublicKeyCredential with AuthenticatorAssertionResponse', () => {
+  // @ts-ignore
   const credentials: Omit<PublicKeyCredential, 'response'> & { response: AuthenticatorAssertionResponse } = {
     response: {
       clientDataJSON: Uint8Array.from([1, 2, 3]),
