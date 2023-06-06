@@ -12,7 +12,7 @@ composer test
 
 ## Continuous integration
 
-Using Travis CI, the full test suite will be run against every pull request and has to pass before it can be merged.
+Using Github Actions, the full test suite will be run against every pull request and has to pass before it can be merged.
 Every commit on the master branch will be tested as well.
 
 ## Static analysis
