@@ -1,0 +1,12 @@
+---
+
+version: '3.7'
+
+services:
+  stepup-webauthn:
+    stdin_open: true
+    image: ghcr.io/openconext/stepup-webauthn/stepup-webauthn:dev
+    volumes:
+      - ../../:/var/www/html
+    environment:
+      APP_ENV: test
