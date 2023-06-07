@@ -12,7 +12,7 @@ services:
       openconextdev:
         aliases:
           - "webauthn.dev.openconext.local"
-  stepup-webauthn:
+  webauthn:
     stdin_open: true
     image: ghcr.io/openconext/stepup-webauthn/stepup-webauthn:dev
     volumes:
