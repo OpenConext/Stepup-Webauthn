@@ -1,3 +1,15 @@
-FROM ghcr.io/openconext/stepup-webauthn/stepup-webauthn:prod
-
+FROM ghcr.io/openconext/openconext-basecontainers/php72-apache2:latest AS php-build
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+SHELL ["/bin/bash", "--login", "-c"]
+RUN apt update && apt -y install git 
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+RUN nvm install 14
 RUN pecl install xdebug-2.9.0 && docker-php-ext-enable xdebug
+RUN rm -rf /etc/apache2/sites-enabled/*
+COPY ./docker/conf/webauthn-apache2.conf /etc/apache2/sites-enabled/webauthn.conf
+EXPOSE 80
+
+# Set the default workdir
+WORKDIR /var/www/html
+
+CMD ["apache2-foreground"]
