@@ -6,10 +6,12 @@ services:
   haproxy:
     image: ghcr.io/openconext/openconext-basecontainers/haproxy26:latest
     ports:
-      - 80:8080
-      - 443:8443
+      - 80:80
+      - 443:443
     networks:
       openconextdev:
+        aliases:
+          - "webauthn.dev.openconext.local"
   stepup-webauthn:
     stdin_open: true
     image: ghcr.io/openconext/stepup-webauthn/stepup-webauthn:dev
