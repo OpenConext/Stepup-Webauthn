@@ -1,26 +1,13 @@
 import { useCallback } from 'react';
-import { Observable } from 'rxjs';
-import { reloadPage } from '../../function';
+import { Observable, Subscription } from 'rxjs';
 import { PublicKeyResponseValidator } from '../../function/http';
 import { ApplicationAction, SerializedPublicKeyCredentialCreationOptions } from '../../model';
-import { registrationObservable } from '../../observable';
-import { retryWith } from '../../operator';
+import { startRegistration } from '../../observable/startRegistration';
 
 export const useRegistrationEffect = (dispatch: (action: ApplicationAction) => void, publicKeyOptions: SerializedPublicKeyCredentialCreationOptions, send: PublicKeyResponseValidator, whenClicked: Observable<unknown>) =>
   useCallback(
     () => {
-      const time = () => (new Date()).toISOString();
-      const subscription = registrationObservable(
-        send,
-        publicKeyOptions,
-        (options) => navigator.credentials.create(options),
-        time,
-      )
-        .pipe(retryWith((type) => (value) => dispatch({ type, value, timestamp: time() }), whenClicked))
-        .subscribe({
-          next: dispatch,
-          complete: reloadPage,
-        });
+      const subscription: Subscription = startRegistration(dispatch, publicKeyOptions, send, whenClicked);
       return () => subscription.unsubscribe();
     },
     [dispatch, publicKeyOptions, send, whenClicked],
