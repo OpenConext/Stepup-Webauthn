@@ -4,7 +4,7 @@ name: build-push-docker-image
 on:
   push:
     branches:
-      - main
+      - prod-docker-containers
 
 jobs:
   build-push-docker-image:
