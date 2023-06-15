@@ -1,4 +1,4 @@
-FROM ghcr.io/openconext/openconext-basecontainers/php72-apache2-node14-composer2:latest AS php-build
+FROM ghcr.io/openconext/openconext-basecontainers/php72-apache2-node14-composer2:latest
 
 RUN rm -rf /etc/apache2/sites-enabled/*
 COPY ./docker/conf/webauthn-apache2.conf /etc/apache2/sites-enabled/webauthn.conf
