@@ -22,6 +22,6 @@ export const useAuthenticationEffect = (dispatch: (action: ApplicationAction) =>
           complete: reloadPage,
         });
       return () => subscription.unsubscribe();
-    },
-    [dispatch, publicKeyOptions, send, whenClicked],
+      // tslint:disable-next-line:align
+    }, [dispatch, publicKeyOptions, send, whenClicked],
   );
