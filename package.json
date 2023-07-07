@@ -9,7 +9,7 @@
     "query-string": "^6.8.3",
     "sass": "^1.43",
     "sass-loader": "^13.0",
-    "stylelint": "^14.11",
+    "stylelint": "^15.10",
     "ts-loader": "^9.4",
     "tslint": "^6",
     "tslint-config-airbnb": "^5",
@@ -51,6 +51,8 @@
     "urlsafe-base64": "^1.0",
     "yargs-parser": ">=18.1.2"
   },
-  "resolutions": {},
+  "resolutions": {
+    "semver": ">7.5.2"
+  },
   "license": "Apache-2.0"
 }
