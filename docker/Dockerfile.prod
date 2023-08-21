@@ -6,6 +6,7 @@ RUN tar -xvjf /tmp/*.tar.bz2 -C /var/www/html/ && \
 # Add the application configuration files
 RUN cp .env.dist .env
 RUN cp config/packages/parameters.yml.dist config/packages/parameters.yml
+COPY config/packages/prod/monolog.yaml.docker config/packages/prod/monolog.yaml
 
 # Add the config files for Apache2
 RUN rm -rf /etc/apache2/sites-enabled/*
