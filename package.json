@@ -39,7 +39,7 @@
     "jquery": "^3",
     "js-yaml": ">=3.13.1",
     "node-forge": "^1.0",
-    "postcss": ">=8.2.13",
+    "postcss": ">=8.4.31",
     "ramda": "^0.26.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
