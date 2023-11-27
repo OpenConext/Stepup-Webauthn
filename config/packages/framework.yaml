@@ -1,4 +1,9 @@
+imports:
+    - { resource: ../openconext/*.yaml }
+
 framework:
+    assets:
+        json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
     secret: '%env(APP_SECRET)%'
     csrf_protection: true
     error_controller: Surfnet\Webauthn\Controller\ExceptionController::show
@@ -10,8 +15,27 @@ framework:
         handler_id: null
         cookie_secure: auto
         cookie_samesite: lax
-    assets: ~
     esi: false
     fragments: false
     php_errors:
         log: "%kernel.debug%"
+    router:
+        strict_requirements: null
+        utf8: true
+when@dev:
+    framework:
+        router:
+            strict_requirements: true
+        profiler: { only_exceptions: false }
+
+when@test:
+    framework:
+        test: ~
+        session:
+            storage_id: session.storage.mock_file
+        profiler:
+            collect: false
+        router:
+            strict_requirements: true
+        validation:
+            not_compromised_password: false
