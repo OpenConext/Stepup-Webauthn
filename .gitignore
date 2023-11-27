@@ -73,5 +73,3 @@ yarn-error.log
 ###< symfony/phpunit-bridge ###
 
 *~
-
-local-php-security-checker
