@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace Surfnet\Webauthn\Entity;
 
 use Base64Url\Base64Url;
 use Doctrine\ORM\Mapping as ORM;

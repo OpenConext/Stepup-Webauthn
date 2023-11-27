@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace Surfnet\Webauthn;
 
 use Exception;
 use Surfnet\StepupBundle\Exception\Art;

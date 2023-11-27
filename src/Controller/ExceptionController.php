@@ -18,12 +18,12 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\AttestationCertificateNotSupportedException;
-use App\Exception\NoAuthnrequestException;
-use App\Exception\UserNotFoundException;
-use App\Service\ClientMetadataService;
+use Surfnet\Webauthn\Exception\AttestationCertificateNotSupportedException;
+use Surfnet\Webauthn\Exception\NoAuthnrequestException;
+use Surfnet\Webauthn\Exception\UserNotFoundException;
+use Surfnet\Webauthn\Service\ClientMetadataService;
 use Exception;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\StepupBundle\Controller\ExceptionController as BaseExceptionController;
@@ -40,7 +40,7 @@ final class ExceptionController extends BaseExceptionController
         $this->clientMetadataService = $exceptionMetadataService;
     }
 
-    public function showAction(Request $request, Exception $exception)
+    public function show(Request $request, Exception $exception): Response
     {
         $statusCode = $this->getStatusCode($exception);
 
@@ -62,11 +62,7 @@ final class ExceptionController extends BaseExceptionController
         );
     }
 
-    /**
-     * @param Exception $exception
-     * @return array View parameters 'title' and 'description'
-     */
-    protected function getPageTitleAndDescription(Exception $exception)
+    protected function getPageTitleAndDescription(Exception $exception): array
     {
         $translator = $this->getTranslator();
 
@@ -97,9 +93,8 @@ final class ExceptionController extends BaseExceptionController
      * @param Exception $exception
      * @return int HTTP status code
      */
-    protected function getStatusCode(
-        Exception $exception
-    ) {
+    protected function getStatusCode(Exception $exception): int
+    {
         if ($exception instanceof NoAuthnrequestException) {
             return Response::HTTP_BAD_REQUEST;
         }

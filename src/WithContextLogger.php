@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace Surfnet\Webauthn;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
@@ -47,7 +47,7 @@ final class WithContextLogger extends AbstractLogger
      *
      * @return void
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = array()): void
     {
         $this->logger->log($level, $message, array_merge($this->context, $context));
     }

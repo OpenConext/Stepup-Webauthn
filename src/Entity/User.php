@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace Surfnet\Webauthn\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -37,17 +37,17 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
      * @ORM\Id
      * @ORM\Column(type="string", length=36)
      */
-    protected $id;
+    public readonly string $id;
 
     /**
      * @Assert\Length(max = 100)
      */
-    protected $name;
+    public readonly string $name;
 
     /**
      * @Assert\Length(max = 100)
      */
-    protected $displayName;
+    public readonly string $displayName;
 
     /**
      * @var PublicKeyCredentialSource[]
@@ -98,5 +98,10 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
     public function getPublicKeyCredentialSources(): array
     {
         return $this->publicKeyCredentialSources->getValues();
+    }
+
+    public function getUserIdentifier(): string
+    {
+        // TODO: Implement getUserIdentifier() method.
     }
 }

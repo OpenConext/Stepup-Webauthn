@@ -18,15 +18,15 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\AttestationStatementNotFoundException;
-use App\Exception\NoActiveAuthenrequestException;
-use App\PublicKeyCredentialCreationOptionsStore;
-use App\Repository\PublicKeyCredentialSourceRepository;
-use App\Service\AttestationCertificateTrustStore;
-use App\ValidationJsonResponse;
-use App\WithContextLogger;
+use Surfnet\Webauthn\Exception\AttestationStatementNotFoundException;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialCreationOptionsStore;
+use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
+use Surfnet\Webauthn\Service\AttestationCertificateTrustStore;
+use Surfnet\Webauthn\ValidationJsonResponse;
+use Surfnet\Webauthn\WithContextLogger;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
@@ -76,13 +76,8 @@ final class AttestationResponseController
 
     /**
      * Handles the attestation public key response.
-     *
-     * @Route("/verify-attestation", methods={"POST"}, name="verify-attestation", )
-     *
-     * @param ServerRequestInterface $psr7Request
-     * @param Request $request
-     * @return Response
      */
+    #[Route(path: '/verify-attestation', name: 'verify-attestation', methods: ['POST'])]
     public function action(ServerRequestInterface $psr7Request, Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending registration from SP');

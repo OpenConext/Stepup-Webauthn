@@ -18,12 +18,12 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\NoActiveAuthenrequestException;
-use App\PublicKeyCredentialRequestOptionsStore;
-use App\ValidationJsonResponse;
-use App\WithContextLogger;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
+use Surfnet\Webauthn\ValidationJsonResponse;
+use Surfnet\Webauthn\WithContextLogger;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
@@ -63,13 +63,8 @@ final class AssertionResponseController
 
     /**
      * Handles the assertion public key response.
-     *
-     * @Route("/verify-assertion", methods={"POST"}, name="verify-assertion", )
-     *
-     * @param ServerRequestInterface $psr7Request
-     * @param Request $request
-     * @return Response
      */
+    #[Route(path: '/verify-assertion', name: 'verify-assertion', methods: ['POST'])]
     public function action(ServerRequestInterface $psr7Request, Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending authentication from SP');

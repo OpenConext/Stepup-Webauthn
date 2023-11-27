@@ -18,10 +18,10 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Surfnet\Webauthn\Repository;
 
-use App\Entity\PublicKeyCredentialSource;
-use App\Entity\User;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
+use Surfnet\Webauthn\Entity\User;
 use Assert\Assertion;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Webauthn\AttestationStatement\AttestationObject;

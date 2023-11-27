@@ -18,12 +18,12 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\NoAuthnrequestException;
-use App\PublicKeyCredentialCreationOptionsStore;
-use App\Repository\UserRepository;
-use App\Service\ClientMetadataService;
+use Surfnet\Webauthn\Exception\NoAuthnrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialCreationOptionsStore;
+use Surfnet\Webauthn\Repository\UserRepository;
+use Surfnet\Webauthn\Service\ClientMetadataService;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Service\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -59,13 +59,7 @@ final class RegistrationController extends AbstractController
         $this->clientMetadataService = $clientMetadataService;
     }
 
-    /**
-     * Replace this example code with whatever you need.
-     *
-     * See @see RegistrationService for a more clean example.
-     *
-     * @Route("/registration", name="app_identity_registration")
-     */
+    #[Route(path: '/registration', name: 'app_identity_registration', methods: ['GET'])]
     public function __invoke(Request $request)
     {
         $this->logger->info('Verifying if there is a pending registration from SP');

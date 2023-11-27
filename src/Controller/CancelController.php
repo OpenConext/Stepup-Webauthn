@@ -18,9 +18,9 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\NoAuthnrequestException;
+use Surfnet\Webauthn\Exception\NoAuthnrequestException;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,10 +44,7 @@ class CancelController extends AbstractController
         $this->logger = $logger;
     }
 
-    /**
-     * @Route("/cancel", name="app_cancel", methods={"GET"})
-     * @throws InvalidArgumentException
-     */
+    #[Route(path: '/cancel', name: 'app_cancel', methods: ['GET'])]
     public function cancel()
     {
         $this->logger->notice('User cancelled the request');
@@ -69,10 +66,7 @@ class CancelController extends AbstractController
         throw new NoAuthnrequestException();
     }
 
-    /**
-     * @Route("/abort", name="app_abort", methods={"GET"})
-     * @throws InvalidArgumentException
-     */
+    #[Route(path: '/abort', name: 'app_abort', methods: ['GET'])]
     public function abort()
     {
         $this->logger->notice('User abort the request');

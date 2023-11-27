@@ -18,9 +18,9 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace Surfnet\Webauthn;
 
-use App\Service\ClientMetadataService;
+use Surfnet\Webauthn\Service\ClientMetadataService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

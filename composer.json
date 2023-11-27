@@ -7,7 +7,7 @@
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
-      "App\\": "src"
+      "Surfnet\\Webauthn\\": "src"
     }
   },
   "autoload-dev": {
@@ -24,6 +24,7 @@
     "ext-libxml": "*",
     "ext-zlib": "*",
     "composer/package-versions-deprecated": "1.11.99.5",
+    "doctrine/annotations": "^2.0",
     "doctrine/common": "^3.4",
     "doctrine/doctrine-bundle": "^2.11",
     "doctrine/doctrine-migrations-bundle": "^3.3",

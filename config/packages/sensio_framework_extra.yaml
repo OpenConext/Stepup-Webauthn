@@ -1,6 +1,0 @@
-sensio_framework_extra:
-    router:      { annotations: false } # Deprecated; use routing annotations of Symfony core instead
-    request:     { converters: true, auto_convert: true }
-    view:        { annotations: true }
-    cache:       { annotations: true }
-    psr_message: { enabled: true } # Defaults to true if the PSR-7 bridge is installed

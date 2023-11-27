@@ -17,9 +17,9 @@
  */
 
 declare(strict_types=1);
-namespace App\Service;
+namespace Surfnet\Webauthn\Service;
 
-use App\Entity\PublicKeyCredentialSource;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
 
 interface AttestationCertificateTrustStore
 {

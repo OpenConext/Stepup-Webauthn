@@ -18,17 +18,17 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\AttestationCertificateNotSupportedException;
-use App\Exception\NoActiveAuthenrequestException;
-use App\Exception\UserNotFoundException;
-use App\PublicKeyCredentialRequestOptionsStore;
-use App\Repository\PublicKeyCredentialSourceRepository;
-use App\Repository\UserRepository;
-use App\Service\AttestationCertificateTrustStore;
-use App\Service\ClientMetadataService;
-use App\WithContextLogger;
+use Surfnet\Webauthn\Exception\AttestationCertificateNotSupportedException;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\Exception\UserNotFoundException;
+use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
+use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
+use Surfnet\Webauthn\Repository\UserRepository;
+use Surfnet\Webauthn\Service\AttestationCertificateTrustStore;
+use Surfnet\Webauthn\Service\ClientMetadataService;
+use Surfnet\Webauthn\WithContextLogger;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
@@ -72,13 +72,7 @@ class AuthenticationController extends AbstractController
         $this->clientMetadataService = $clientMetadataService;
     }
 
-    /**
-     * Replace this example code with whatever you need.
-     *
-     * See @see AuthenticationService for a more clean example.
-     *
-     * @Route("/authentication", name="app_identity_authentication")
-     */
+    #[Route(path: '/authentication', name: 'app_identity_authentication', methods: ['GET', 'POST'])]
     public function __invoke(Request $request)
     {
         $this->logger->info('Verifying if there is a pending authentication request from SP');

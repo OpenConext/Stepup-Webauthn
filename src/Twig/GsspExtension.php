@@ -18,7 +18,7 @@
 
 declare(strict_types=1);
 
-namespace App\Twig;
+namespace Surfnet\Webauthn\Twig;
 
 use Surfnet\SamlBundle\Entity\HostedEntities;
 use Twig\Extension\AbstractExtension;

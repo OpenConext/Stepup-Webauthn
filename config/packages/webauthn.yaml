@@ -1,6 +1,6 @@
 webauthn:
-    credential_repository: App\Repository\PublicKeyCredentialSourceRepository
-    user_repository: App\Repository\UserRepository
+    credential_repository: Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository
+    user_repository: Surfnet\Webauthn\Repository\UserRepository
     token_binding_support_handler: Webauthn\TokenBinding\IgnoreTokenBindingHandler
     creation_profiles:
         default:

@@ -18,10 +18,10 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Surfnet\Webauthn\Repository;
 
 use Ramsey\Uuid\Uuid;
-use App\Entity\User;
+use Surfnet\Webauthn\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
@@ -105,5 +105,10 @@ final class UserRepository implements ServiceEntityRepositoryInterface, BasePubl
     {
         $this->manager->persist($userEntity);
         $this->manager->flush();
+    }
+
+    public function generateNextUserEntityId(): string
+    {
+        // TODO: Implement generateNextUserEntityId() method.
     }
 }

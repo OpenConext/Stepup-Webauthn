@@ -14,7 +14,7 @@ parameters:
     user_display_name: OpenConext DEV Environment
     webauthn_name: OpenConext DEV Environment
     webauthn_logo: 'https://openconext.org/wp-content/uploads/2016/11/openconext_logo-med.png'
-    trusted_certificates_directory: '%kernel.root_dir%/app/files/trusted_certificates'
+    trusted_certificates_directory: '%kernel.project_dir%/app/files/trusted_certificates'
 
     saml_idp_publickey: '/config/webauthn/webauthn_idp.crt'
     saml_idp_privatekey: '/config/webauthn/webauthn_idp.key'

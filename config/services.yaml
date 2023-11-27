@@ -14,22 +14,22 @@ services:
             $userDisplayName: '%user_display_name%'
             $trustedCertificatesDirectory: '%trusted_certificates_directory%'
 
-    App\:
+    Surfnet\Webauthn\:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-    App\Repository\:
+    Surfnet\Webauthn\Repository\:
         resource: '../src/Repository/*'
 
-    App\Controller\:
+    Surfnet\Webauthn\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
     Surfnet\GsspBundle\Service\ValueStore\SessionValueStore:
         alias: surfnet_gssp.value_store.service
 
-    App\Service\InMemoryAttestationCertificateTrustStore:
+    Surfnet\Webauthn\Service\InMemoryAttestationCertificateTrustStore:
         arguments:
             - '$trustedCertificates': []
 
-    App\Service\AttestationCertificateTrustStore:
-        factory: '@App\Service\AttestationCertificateTrustStoreFactory'
+    Surfnet\Webauthn\Service\AttestationCertificateTrustStore:
+        factory: '@Surfnet\Webauthn\Service\AttestationCertificateTrustStoreFactory'
