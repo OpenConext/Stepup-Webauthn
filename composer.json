@@ -90,14 +90,9 @@
       "@unit-tests",
       "@jest"
     ],
+    "composer-validate": "./ci/qa/validate",
     "lint": "./ci/qa/lint",
 
-    "static-analysis": [
-      "@license-headers",
-      "@phpmd",
-      "@phpcs",
-      "@phpcpd"
-    ],
     "license-headers": "vendor/bin/docheader check src/ dev/ Features/ tests/",
     "phpmd": "vendor/bin/phpmd ./src text phpmd.xml  --suffixes php",
     "phpcs": [
