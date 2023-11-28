@@ -23,7 +23,7 @@
     "ext-json": "*",
     "ext-libxml": "*",
     "ext-zlib": "*",
-    "composer/package-versions-deprecated": "1.11.99.5",
+    "composer/package-versions-deprecated": "^1.11.99",
     "doctrine/annotations": "^2.0",
     "doctrine/common": "^3.4",
     "doctrine/doctrine-bundle": "^2.11",
@@ -61,7 +61,6 @@
     "web-token/jwt-signature-algorithm-rsa": "^3.2"
   },
   "require-dev": {
-    "jakub-onderka/php-parallel-lint": "~1",
     "malukenho/docheader": "^1",
     "mockery/mockery": "^1.6",
     "overtrue/phplint": "*",
@@ -80,21 +79,19 @@
     "symfony/web-profiler-bundle": "^6.3"
   },
   "scripts": {
-    "test": [
+    "check": [
+      "@composer-validate",
+      "@docheader",
       "@lint",
-      "@static-analysis",
-      "@phpunit",
+      "@phpcpd",
+      "@phpcs",
+      "@phpmd",
+      "@phpstan",
+      "@unit-tests",
       "@jest"
     ],
-    "lint": [
-      "@lint-php",
-      "@lint-yml",
-      "@lint-composer",
-      "@tslint"
-    ],
-    "lint-php": "vendor/bin/parallel-lint dev src",
-    "lint-yml": "bin/console lint:yaml config",
-    "lint-composer": "composer validate",
+    "lint": "./ci/qa/lint",
+
     "static-analysis": [
       "@license-headers",
       "@phpmd",
@@ -113,7 +110,6 @@
       "vendor/bin/phpcpd  ./src"
     ],
     "jest": "yarn jest",
-    "tslint": "yarn tslint --project tsconfig.json",
     "tsc": "yarn tsc --noEmit",
     "phpunit": "vendor/bin/phpunit",
     "coverage": [

@@ -138,9 +138,6 @@
             "ref": ""
         }
     },
-    "jakub-onderka/php-parallel-lint": {
-        "version": "v1.0.0"
-    },
     "justinrainbow/json-schema": {
         "version": "5.2.8"
     },
