@@ -1,12 +1,11 @@
-FROM ghcr.io/openconext/openconext-basecontainers/php72-apache2:latest AS php-build
+FROM ghcr.io/openconext/openconext-basecontainers/php82-apache2:latest AS php-build
 COPY *.tar.bz2 /tmp/
 RUN tar -xvjf /tmp/*.tar.bz2 -C /var/www/html/ && \
   rm -rf /tmp/*.tar.bz2
 
 # Add the application configuration files
 RUN cp .env.dist .env
-RUN cp config/packages/parameters.yml.dist config/packages/parameters.yml
-COPY config/packages/prod/monolog.yaml.docker config/packages/prod/monolog.yaml
+RUN cp config/openconext/parameters.yaml.dist config/openconext/parameters.yaml
 
 # Add the config files for Apache2
 RUN rm -rf /etc/apache2/sites-enabled/*
