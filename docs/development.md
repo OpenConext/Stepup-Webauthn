@@ -8,32 +8,26 @@ from that machine.
 
 Requirements
 -------------------
-- Vagrant 2.2.x
-    - vagrant-hostsupdater (1.1.1.160, global, optional)
-    - vagrant-vbguest (0.19.0, global)
-- Virtualbox
-- Composer
+- Docker with Docker Compose
+- OpenConext DevConf StepUp setup
 
 Install
 -------------------
 
-### 1. Create virtual machine
+### 1. Start OpenConext DevConf with WebAuthn in development mode 
 
-``` cd homestead ``` 
+``` cd /path/to/your/OpenConext-devconf/stepup ``` 
  
-``` composer install ```
-
-Go back to root of the project (```cd ..```) 
-
-``` vagrant up ```
+``` ./start-dev-env.sh webauthn:/path/to/your/Stepup-Webauthn ```
 
 If everything goes as planned you can develop inside the virtual machine
 
-``` vagrant ssh ```
+``` docker exec -it stepup-webauthn-1 bash ```
+
 
 ### 2. Build frontend assets:
 
-``` yarn install ```
+``` yarn ```
 
 ``` yarn encore dev ```
 
@@ -43,9 +37,9 @@ If everything goes as planned you can develop inside the virtual machine
 
 Copy and configure:
  
-```cp .env.vm .env```
+```cp .env.dist .env```
 
-```cp config/packages/parameters.yml.dist config/packages/parameters.yml```
+```cp config/openconext/parameters.yaml.dist config/openconext/parameters.yaml```
 
 ### 4. Create database
 ``` 
@@ -54,13 +48,8 @@ Copy and configure:
 
 If everything goes as planned you can go to:
 
-[https://webauthn.test](https://webauthn.test)
+[https://webauthn.dev.openconext.local](https://webauthn.dev.openconext.local)
 
 ### Development
 
 All frond-end logic is written in sass and typescript. You can run a watcher to update these automatically
-
-Debugging
--------------------
-Xdebug is configured when provisioning your development Vagrant box. 
-It's configured with auto connect IDE_KEY=phpstorm and ```xon``` on cli env. 
