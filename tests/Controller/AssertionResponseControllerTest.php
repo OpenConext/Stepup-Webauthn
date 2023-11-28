@@ -20,16 +20,16 @@ declare(strict_types=1);
 
 namespace Test\Controller;
 
-use App\Controller\AssertionResponseController;
-use App\Exception\NoActiveAuthenrequestException;
-use App\PublicKeyCredentialRequestOptionsStore;
-use App\ValidationJsonResponse;
+use Surfnet\Webauthn\Controller\AssertionResponseController;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
+use Surfnet\Webauthn\ValidationJsonResponse;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
-use Symfony\Component\Debug\BufferingLogger;
+use Symfony\Component\ErrorHandler\BufferingLogger;
 use Symfony\Component\HttpFoundation\Request;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAssertionResponseValidator;

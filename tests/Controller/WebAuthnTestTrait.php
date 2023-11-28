@@ -59,10 +59,7 @@ trait WebAuthnTestTrait
         $this->assertMatchesSnapshot($this->logger->cleanLogs());
     }
 
-    /**
-     * @return MockInterface|PublicKeyCredential
-     */
-    private function setAuthenticatorResponse(AuthenticatorResponse $response): MockInterface
+    private function setAuthenticatorResponse(AuthenticatorResponse $response): MockInterface&PublicKeyCredential
     {
         $content = 'The http content with AuthenticatorAssertionResponse';
         $this->request->shouldReceive([

@@ -22,7 +22,7 @@ namespace Test\Controller;
 
 use Exception;
 use Mockery;
-use Mockery\MockInterface;
+use Mockery\LegacyMockInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
@@ -225,7 +225,7 @@ class AttestationResponseControllerTest extends TestCase
         $this->request = Mockery::mock(Request::class);
     }
 
-    private function preRoll(): MockInterface|PublicKeyCredentialSource
+    private function preRoll(): LegacyMockInterface|PublicKeyCredentialSource
     {
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
         $response = Mockery::mock(AuthenticatorAttestationResponse::class);

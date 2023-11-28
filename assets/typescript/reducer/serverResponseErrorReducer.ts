@@ -6,7 +6,7 @@ import { ServerResponse, ServiceResponseStatus } from '../model/response';
 export const isServerResponseError: (value: unknown) => value is { response: ServerResponse | AxiosResponse } = pathSatisfies(complement(isNil), ['response']) as any;
 
 /**
- * {@see \App\ValidationJsonResponse} for all server response types
+ * {@see \Surfnet\WebauthnValidationJsonResponse} for all server response types
  */
 export const serverResponseErrorReducer = (state: ApplicationState, timestamp: string, response: ServerResponse | AxiosResponse): ApplicationState => {
   let status: ServiceResponseStatus;

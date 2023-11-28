@@ -29,7 +29,7 @@ use Webauthn\PublicKeyCredentialUserEntity;
 
 /**
  * @ORM\Table(name="users")
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="Surfnet\Webauthn\Repository\UserRepository")
  */
 class User extends PublicKeyCredentialUserEntity implements UserInterface
 {
@@ -50,14 +50,14 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
     public readonly string $displayName;
 
     /**
-     * @var PublicKeyCredentialSource[]
-     * @ORM\ManyToMany(targetEntity="App\Entity\PublicKeyCredentialSource")
+     * @var ArrayCollection<PublicKeyCredentialSource>
+     * @ORM\ManyToMany(targetEntity="Surfnet\Webauthn\Entity\PublicKeyCredentialSource")
      * @ORM\JoinTable(name="users_user_handles",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_handle", referencedColumnName="id", unique=true)}
      *      )
      */
-    protected $publicKeyCredentialSources;
+    protected ArrayCollection $publicKeyCredentialSources;
 
     public function __construct(string $id, string $name, string $displayName)
     {
@@ -102,6 +102,6 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
 
     public function getUserIdentifier(): string
     {
-        // TODO: Implement getUserIdentifier() method.
+        return 'id';
     }
 }
