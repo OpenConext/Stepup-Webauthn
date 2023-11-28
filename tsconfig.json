@@ -89,6 +89,6 @@
     "vendor"
   ],
   "include": [
-    "public/typescript"
+    "assets/typescript"
   ]
 }

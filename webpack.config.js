@@ -2,11 +2,15 @@ var Encore = require('@symfony/webpack-encore');
 
 Encore
     .setOutputPath('public/build/')
+    .copyFiles({
+        from: './assets/openconext/images',
+        to: './images/[path][name].[ext]',
+    })
     .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
-    .addStyleEntry('global', './public/scss/application.scss')
-    .addEntry('registration', './public/typescript/registration.tsx')
-    .addEntry('authentication', './public/typescript/authentication.tsx')
+    .addStyleEntry('global', './assets/scss/application.scss')
+    // .addStyleEntry('global', './assets/scss/registration.scss')
+    // .addStyleEntry('global', './assets/scss/authentication.scss')
     .enableSassLoader(function (options) {
         options.sassOptions = {
             outputStyle: 'expanded',

@@ -30,7 +30,6 @@ use SAML2\Configuration\PrivateKey;
 use SAML2\DOMDocumentFactory;
 use SAML2\Message;
 use SAML2\Response;
-use Surfnet\GsspBundle\Service\RegistrationService;
 use Surfnet\SamlBundle\Entity\IdentityProvider;
 use Surfnet\SamlBundle\Entity\ServiceProvider;
 use Surfnet\SamlBundle\Http\Exception\AuthnFailedSamlResponseException;
@@ -59,14 +58,8 @@ final class SPController extends AbstractController
         $this->postBinding = $postBinding;
     }
 
-    /**
-     * @Route("/demo/sp", name="sp_demo")
-     * @Route("/", name="homepage")
-     *
-     * See @see RegistrationService for a more clean example.
-     *
-     * @throws \Exception
-     */
+    #[Route(path: '/demo/sp', name: 'sp_demo', methods: ['GET', 'POST'])]
+    #[Route(path: '/', name: 'homepage', methods: ['GET', 'POST'])]
     public function demoSpAction(Request $request)
     {
         if (!$request->isMethod(Request::METHOD_POST)) {
@@ -102,11 +95,7 @@ final class SPController extends AbstractController
         return $response;
     }
 
-    /**
-     * @Route("/demo/sp/acs", name="sp_demo_acs")
-     *
-     * See @see RegistrationService for a more clean example.
-     */
+    #[Route(path: '/demo/sp/acs', name: 'sp_demo_acs', methods: ['POST'])]
     public function assertionConsumerServiceAction(Request $request)
     {
         $xmlResponse = $request->request->get('SAMLResponse');
@@ -120,8 +109,8 @@ final class SPController extends AbstractController
             return $this->render('dev/acs.html.twig', [
                 'requestId' => $response->getId(),
                 'nameId' => $nameID ? [
-                    'value' => $nameID->value,
-                    'format' => $nameID->Format,
+                    'value' => $nameID->getValue(),
+                    'format' => $nameID->getFormat(),
                 ] : [],
                 'issuer' => $response->getIssuer(),
                 'relayState' => $request->get(AuthnRequest::PARAMETER_RELAY_STATE, ''),

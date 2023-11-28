@@ -21,7 +21,6 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\Controller;
 
 use Surfnet\Webauthn\Exception\NoAuthnrequestException;
-use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4913708282081c2a36ec8666b23f4424",
+    "content-hash": "ec025c085ee7b8e5466507d1d38b7e7d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3428,16 +3428,16 @@
         },
         {
             "name": "surfnet/stepup-gssp-bundle",
-            "version": "5.0.5",
+            "version": "5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/Stepup-gssp-bundle.git",
-                "reference": "03b27bcab886347c2222c405444f066a82a98dd8"
+                "reference": "9a4cf0c48c329ebb4fff74f70753850aeed4f9cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/Stepup-gssp-bundle/zipball/03b27bcab886347c2222c405444f066a82a98dd8",
-                "reference": "03b27bcab886347c2222c405444f066a82a98dd8",
+                "url": "https://api.github.com/repos/OpenConext/Stepup-gssp-bundle/zipball/9a4cf0c48c329ebb4fff74f70753850aeed4f9cd",
+                "reference": "9a4cf0c48c329ebb4fff74f70753850aeed4f9cd",
                 "shasum": ""
             },
             "require": {
@@ -3479,9 +3479,9 @@
             "description": "A Symfony 5|6 bundle to aid the creation of GSSP (Generic SAML Step-up Provider) device support.",
             "support": {
                 "issues": "https://github.com/OpenConext/Stepup-gssp-bundle/issues",
-                "source": "https://github.com/OpenConext/Stepup-gssp-bundle/tree/5.0.5"
+                "source": "https://github.com/OpenConext/Stepup-gssp-bundle/tree/5.0.8"
             },
-            "time": "2023-10-30T12:19:09+00:00"
+            "time": "2023-11-28T07:58:23+00:00"
         },
         {
             "name": "surfnet/stepup-saml-bundle",
@@ -10142,16 +10142,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.44",
+            "version": "1.10.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b"
+                "reference": "2f024fbb47432e2e62ad8a8032387aa2dd631c73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bf84367c53a23f759513985c54ffe0d0c249825b",
-                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2f024fbb47432e2e62ad8a8032387aa2dd631c73",
+                "reference": "2f024fbb47432e2e62ad8a8032387aa2dd631c73",
                 "shasum": ""
             },
             "require": {
@@ -10200,7 +10200,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-21T16:30:46+00:00"
+            "time": "2023-11-27T14:15:06+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",

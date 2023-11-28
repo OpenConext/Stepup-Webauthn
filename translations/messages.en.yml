@@ -1,3 +1,8 @@
+# Navigation
+page.navigation.route.homepage: Home
+page.navigation.route.gssp_saml_metadata: Metadata
+page.navigation.route.sp_demo: Demo SP
+
 # Registration
 
 registration.sub_title: Registration

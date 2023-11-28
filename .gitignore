@@ -6,7 +6,7 @@
 ###########################
 
 /.web-server-pid
-/config/openconext/parameters.yml
+/config/openconext/parameters.yaml
 /build/
 /var/*
 !/var/cache
