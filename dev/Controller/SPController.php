@@ -47,18 +47,11 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class SPController extends AbstractController
 {
-    private $identityProvider;
-    private $serviceProvider;
-    private $postBinding;
-
     public function __construct(
-        ServiceProvider $serviceProvider,
-        IdentityProvider $identityProvider,
-        PostBinding $postBinding
+        private readonly ServiceProvider $serviceProvider,
+        private readonly IdentityProvider $identityProvider,
+        private readonly PostBinding $postBinding
     ) {
-        $this->identityProvider = $identityProvider;
-        $this->serviceProvider = $serviceProvider;
-        $this->postBinding = $postBinding;
     }
 
     #[Route(path: '/demo/sp', name: 'sp_demo', methods: ['GET', 'POST'])]

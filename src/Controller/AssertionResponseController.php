@@ -41,24 +41,13 @@ use Webauthn\PublicKeyCredentialLoader;
  */
 final class AssertionResponseController
 {
-    private $publicKeyCredentialLoader;
-    private $assertionResponseValidator;
-    private $logger;
-    private $authenticationService;
-    private $store;
-
     public function __construct(
-        PublicKeyCredentialLoader $publicKeyCredentialLoader,
-        AuthenticatorAssertionResponseValidator $assertionResponseValidator,
-        AuthenticationService $authenticationService,
-        PublicKeyCredentialRequestOptionsStore $store,
-        LoggerInterface $logger
+        private readonly PublicKeyCredentialLoader $publicKeyCredentialLoader,
+        private readonly AuthenticatorAssertionResponseValidator $assertionResponseValidator,
+        private readonly AuthenticationService $authenticationService,
+        private readonly PublicKeyCredentialRequestOptionsStore $store,
+        private readonly LoggerInterface $logger
     ) {
-        $this->assertionResponseValidator = $assertionResponseValidator;
-        $this->publicKeyCredentialLoader = $publicKeyCredentialLoader;
-        $this->logger = $logger;
-        $this->authenticationService = $authenticationService;
-        $this->store = $store;
     }
 
     /**

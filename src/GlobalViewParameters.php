@@ -26,52 +26,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class GlobalViewParameters
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var string[]
-     */
-    private $locales;
-
-    /**
-     * @var string[]
-     */
-    private $supportUrl;
-    private $supportEmail;
-    /**
-     * @var ClientMetadataService
-     */
-    private $clientMetadataService;
-    /**
-     * @var RequestStack
-     */
-    private $request;
-
-    /**
-     * @param TranslatorInterface $translator
-     * @param array $locales
-     * @param ClientMetadataService $clientMetadataService
-     * @param RequestStack $request
-     * @param array $supportUrl
-     * @param string|null $supportEmail
-     */
     public function __construct(
-        TranslatorInterface $translator,
-        array $locales,
-        ClientMetadataService $clientMetadataService,
-        RequestStack $request,
-        array $supportUrl,
-        string $supportEmail = null
+        private readonly TranslatorInterface $translator,
+        private readonly ClientMetadataService $clientMetadataService,
+        private readonly RequestStack $request,
+        private readonly array $supportUrl,
+        private readonly string $supportEmail
     ) {
-        $this->translator = $translator;
-        $this->locales = $locales;
-        $this->supportUrl = $supportUrl;
-        $this->supportEmail = $supportEmail;
-        $this->clientMetadataService = $clientMetadataService;
-        $this->request = $request;
     }
 
     /**

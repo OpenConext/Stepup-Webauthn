@@ -33,30 +33,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class RegistrationController extends AbstractController
 {
-    private $registrationService;
-    private $userRepository;
-    private $publicKeyCredentialCreationOptionsFactory;
-    private $creationOptionsStore;
-    private $logger;
-    private $userDisplayName;
-    private $clientMetadataService;
-
     public function __construct(
-        RegistrationService $registrationService,
-        UserRepository $userRepository,
-        PublicKeyCredentialCreationOptionsFactory $publicKeyCredentialCreationOptionsFactory,
-        PublicKeyCredentialCreationOptionsStore $creationOptionsStore,
-        LoggerInterface $logger,
-        ClientMetadataService $clientMetadataService,
-        string $userDisplayName
+        private readonly RegistrationService $registrationService,
+        private readonly UserRepository $userRepository,
+        private readonly PublicKeyCredentialCreationOptionsFactory $publicKeyCredentialCreationOptionsFactory,
+        private readonly PublicKeyCredentialCreationOptionsStore $creationOptionsStore,
+        private readonly LoggerInterface $logger,
+        private readonly ClientMetadataService $clientMetadataService,
+        private readonly string $userDisplayName
     ) {
-        $this->registrationService = $registrationService;
-        $this->userRepository = $userRepository;
-        $this->publicKeyCredentialCreationOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
-        $this->creationOptionsStore = $creationOptionsStore;
-        $this->logger = $logger;
-        $this->userDisplayName = $userDisplayName;
-        $this->clientMetadataService = $clientMetadataService;
     }
 
     #[Route(path: '/registration', name: 'app_identity_registration', methods: ['GET'])]

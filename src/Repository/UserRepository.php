@@ -39,7 +39,7 @@ final class UserRepository implements ServiceEntityRepositoryInterface, BasePubl
         /** @var EntityManagerInterface $manager */
         $manager = $registry->getManagerForClass(User::class);
 
-        if (null === $manager) {
+        if (is_null($manager)) {
             throw new LogicException(sprintf(
                 'Could not find the entity manager for class "%s". Check your Doctrine configuration to make sure it is configured to load this entity’s metadata.',
                 User::class

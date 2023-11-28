@@ -32,14 +32,11 @@ final class LocaleResponseListener implements EventSubscriberInterface
 {
     const STEPUP_LOCALE_COOKIE = 'stepup_locale';
 
-    private $translator;
-
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
-        $this->translator = $translator;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => ['onKernelRequest'],
@@ -48,10 +45,8 @@ final class LocaleResponseListener implements EventSubscriberInterface
 
     /**
      * Sets the application local based on stepup cookie.
-     *
-     * @param RequestEvent $event
      */
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $local = $request->cookies->get(self::STEPUP_LOCALE_COOKIE, $request->getLocale());

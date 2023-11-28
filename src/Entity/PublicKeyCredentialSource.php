@@ -24,6 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\AbstractUid;
 use Webauthn\PublicKeyCredentialSource as BasePublicKeyCredentialSource;
 use Webauthn\TrustPath\TrustPath;
+use function is_bool;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
@@ -108,10 +109,6 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
     {
         // First of all you should encode $data to Base64 string
         $b64 = base64_encode($data);
-        // Make sure you get a valid result, otherwise, return FALSE, as the base64_encode() function do
-        if ($b64 === false) {
-            return false;
-        }
         // Convert Base64 to Base64URL by replacing “+” with “-” and “/” with “_”
         $url = strtr($b64, '+/', '-_');
         // Remove padding character from the end of line and return the Base64URL result

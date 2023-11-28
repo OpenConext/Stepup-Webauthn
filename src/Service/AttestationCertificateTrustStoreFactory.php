@@ -24,14 +24,8 @@ use Symfony\Component\Finder\Finder;
 
 final class AttestationCertificateTrustStoreFactory
 {
-    /**
-     * @var string
-     */
-    private $trustedCertificatesDirectory;
-
-    public function __construct(string $trustedCertificatesDirectory)
+    public function __construct(private readonly string $trustedCertificatesDirectory)
     {
-        $this->trustedCertificatesDirectory = $trustedCertificatesDirectory;
     }
 
     public function __invoke(): AttestationCertificateTrustStore

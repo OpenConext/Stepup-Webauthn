@@ -30,47 +30,47 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ValidationJsonResponse extends JsonResponse
 {
 
-    public static function invalidPublicKeyCredentialResponse(Exception $e)
+    public static function invalidPublicKeyCredentialResponse(Exception $e): self
     {
         return new self(['status' => 'error', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function noAuthenticationRequired(Exception $e)
+    public static function noAuthenticationRequired(Exception $e): self
     {
         return new self(['status' => 'noAuthenticationRequired', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function deviceNotSupported(Exception $e)
+    public static function deviceNotSupported(Exception $e): self
     {
         return new self(['status' => 'deviceNotSupported', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function noPendingCredentialAssertOptions(Exception $e)
+    public static function noPendingCredentialAssertOptions(Exception $e): self
     {
         return new self(['status' => 'error', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function valid()
+    public static function valid(): self
     {
         return new self(['status' => 'ok']);
     }
 
-    public static function invalid(Exception $e)
+    public static function invalid(Exception $e): self
     {
         return new self(['status' => 'invalid', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function noRegistrationRequired(Exception $e)
+    public static function noRegistrationRequired(Exception $e): self
     {
         return new self(['status' => 'noRegistrationRequired', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function noPendingCredentialCreationOptions(Exception $e)
+    public static function noPendingCredentialCreationOptions(Exception $e): self
     {
         return new self(['status' => 'error', 'error_code' => Art::forException($e)], 400);
     }
 
-    public static function missingAttestationStatement(Exception $e)
+    public static function missingAttestationStatement(Exception $e): self
     {
         return new self(['status' => 'missingAttestationStatement', 'error_code' => Art::forException($e)], 400);
     }

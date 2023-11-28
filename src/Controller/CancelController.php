@@ -29,18 +29,11 @@ use Surfnet\GsspBundle\Service\RegistrationService;
 
 class CancelController extends AbstractController
 {
-    private $authenticationService;
-    private $registrationService;
-    private $logger;
-
     public function __construct(
-        AuthenticationService $authenticationService,
-        RegistrationService $registrationService,
-        LoggerInterface $logger
+        private readonly AuthenticationService $authenticationService,
+        private readonly RegistrationService $registrationService,
+        private readonly LoggerInterface $logger
     ) {
-        $this->authenticationService = $authenticationService;
-        $this->registrationService = $registrationService;
-        $this->logger = $logger;
     }
 
     #[Route(path: '/cancel', name: 'app_cancel', methods: ['GET'])]

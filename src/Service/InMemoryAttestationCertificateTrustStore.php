@@ -29,11 +29,8 @@ use Webauthn\TrustPath\CertificateTrustPath;
 
 class InMemoryAttestationCertificateTrustStore implements AttestationCertificateTrustStore
 {
-    private $trustedCertificates;
-
-    public function __construct(array $trustedCertificates)
+    public function __construct(private readonly array $trustedCertificates)
     {
-        $this->trustedCertificates = $trustedCertificates;
     }
 
     public function validate(PublicKeyCredentialSource $source): void

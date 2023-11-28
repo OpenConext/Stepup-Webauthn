@@ -27,16 +27,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class ClientMetadataService
 {
-    private $requestId;
-    /**
-     * @var StateHandlerInterface
-     */
-    private $stateHandler;
-
-    public function __construct(RequestId $requestId, StateHandlerInterface $stateHandler)
-    {
-        $this->requestId = $requestId;
-        $this->stateHandler = $stateHandler;
+    public function __construct(
+        private readonly RequestId $requestId,
+        private readonly StateHandlerInterface $stateHandler
+    ) {
     }
 
     public function generateMetadata(Request $request): array

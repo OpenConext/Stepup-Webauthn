@@ -33,11 +33,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ExceptionController extends BaseExceptionController
 {
-    private $clientMetadataService;
-
-    public function __construct(ClientMetadataService $exceptionMetadataService)
+    public function __construct(private readonly ClientMetadataService $exceptionMetadataService)
     {
-        $this->clientMetadataService = $exceptionMetadataService;
     }
 
     public function show(Request $request, Exception $exception): Response

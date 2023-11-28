@@ -27,11 +27,9 @@ use Webauthn\PublicKeyCredentialRequestOptions;
 class PublicKeyCredentialRequestOptionsStore
 {
     const KEY = 'PUBLIC_KEY_CREDENTIAL_REQUEST_OPTIONS';
-    private $store;
 
-    public function __construct(SessionValueStore $sessionValueStore)
+    public function __construct(private readonly SessionValueStore $store)
     {
-        $this->store = $sessionValueStore;
     }
 
     public function get(): PublicKeyCredentialRequestOptions
@@ -47,7 +45,7 @@ class PublicKeyCredentialRequestOptionsStore
         $this->store->set(self::KEY, $options);
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->store->set(self::KEY, null);
     }

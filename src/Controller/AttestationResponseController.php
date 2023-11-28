@@ -45,33 +45,16 @@ use Webauthn\PublicKeyCredentialLoader;
  */
 final class AttestationResponseController
 {
-    private $userEntityRepository;
-    private $credentialSourceRepository;
-    private $publicKeyCredentialLoader;
-    private $attestationResponseValidator;
-    private $store;
-    private $registrationService;
-    private $logger;
-    private $trustStore;
-
     public function __construct(
-        PublicKeyCredentialLoader $publicKeyCredentialLoader,
-        AuthenticatorAttestationResponseValidator $attestationResponseValidator,
-        PublicKeyCredentialUserEntityRepository $userEntityRepository,
-        PublicKeyCredentialSourceRepository $credentialSourceRepository,
-        PublicKeyCredentialCreationOptionsStore $store,
-        AttestationCertificateTrustStore $trustStore,
-        RegistrationService $registrationService,
-        LoggerInterface $logger
+        private readonly PublicKeyCredentialLoader $publicKeyCredentialLoader,
+        private readonly AuthenticatorAttestationResponseValidator $attestationResponseValidator,
+        private readonly PublicKeyCredentialUserEntityRepository $userEntityRepository,
+        private readonly PublicKeyCredentialSourceRepository $credentialSourceRepository,
+        private readonly PublicKeyCredentialCreationOptionsStore $store,
+        private readonly AttestationCertificateTrustStore $trustStore,
+        private readonly RegistrationService $registrationService,
+        private readonly LoggerInterface $logger
     ) {
-        $this->attestationResponseValidator = $attestationResponseValidator;
-        $this->userEntityRepository = $userEntityRepository;
-        $this->credentialSourceRepository = $credentialSourceRepository;
-        $this->publicKeyCredentialLoader = $publicKeyCredentialLoader;
-        $this->store = $store;
-        $this->registrationService = $registrationService;
-        $this->logger = $logger;
-        $this->trustStore = $trustStore;
     }
 
     /**

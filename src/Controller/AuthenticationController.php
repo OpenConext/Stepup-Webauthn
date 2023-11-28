@@ -43,33 +43,16 @@ use Webauthn\Bundle\Service\PublicKeyCredentialRequestOptionsFactory;
  */
 class AuthenticationController extends AbstractController
 {
-    private $authenticationService;
-    private $userRepository;
-    private $publicKeyCredentialRequestOptionsFactory;
-    private $logger;
-    private $publicKeyCredentialSourceRepository;
-    private $store;
-    private $trustStore;
-    private $clientMetadataService;
-
     public function __construct(
-        AuthenticationService $authenticationService,
-        UserRepository $userRepository,
-        LoggerInterface $logger,
-        PublicKeyCredentialRequestOptionsFactory $publicKeyCredentialCreationOptionsFactory,
-        PublicKeyCredentialSourceRepository $publicKeyCredentialSourceRepository,
-        PublicKeyCredentialRequestOptionsStore $store,
-        AttestationCertificateTrustStore $trustStore,
-        ClientMetadataService $clientMetadataService
+        private readonly AuthenticationService $authenticationService,
+        private readonly UserRepository $userRepository,
+        private readonly LoggerInterface $logger,
+        private readonly PublicKeyCredentialRequestOptionsFactory $publicKeyCredentialRequestOptionsFactory,
+        private readonly PublicKeyCredentialSourceRepository $publicKeyCredentialSourceRepository,
+        private readonly PublicKeyCredentialRequestOptionsStore $store,
+        private readonly AttestationCertificateTrustStore $trustStore,
+        private readonly ClientMetadataService $clientMetadataService
     ) {
-        $this->authenticationService = $authenticationService;
-        $this->userRepository = $userRepository;
-        $this->publicKeyCredentialRequestOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
-        $this->logger = $logger;
-        $this->publicKeyCredentialSourceRepository = $publicKeyCredentialSourceRepository;
-        $this->store = $store;
-        $this->trustStore = $trustStore;
-        $this->clientMetadataService = $clientMetadataService;
     }
 
     #[Route(path: '/authentication', name: 'app_identity_authentication', methods: ['GET', 'POST'])]
