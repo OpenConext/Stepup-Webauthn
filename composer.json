@@ -91,6 +91,7 @@
       "@jest"
     ],
     "composer-validate": "./ci/qa/validate",
+    "docheader": "./ci/qa/docheader",
     "lint": "./ci/qa/lint",
 
     "license-headers": "vendor/bin/docheader check src/ dev/ Features/ tests/",
