@@ -83,8 +83,8 @@
       "@composer-validate",
       "@docheader",
       "@lint",
-      "@phpcpd",
       "@phpcs",
+      "@phpcpd",
       "@phpmd",
       "@phpstan",
       "@unit-tests",
@@ -93,15 +93,10 @@
     "composer-validate": "./ci/qa/validate",
     "docheader": "./ci/qa/docheader",
     "lint": "./ci/qa/lint",
-
+    "phpcs": "./ci/qa/phpcs",
+    "phpcbf": "./ci/qa/phpcbf",
     "license-headers": "vendor/bin/docheader check src/ dev/ Features/ tests/",
     "phpmd": "vendor/bin/phpmd ./src text phpmd.xml  --suffixes php",
-    "phpcs": [
-      "vendor/bin/phpcs --standard=phpcs.xml --report=full --warning-severity=0 ./src"
-    ],
-    "phpcbf": [
-      "vendor/bin/phpcbf --standard=phpcs.xml ./src"
-    ],
     "phpcpd": [
       "vendor/bin/phpcpd  ./src"
     ],
