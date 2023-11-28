@@ -99,9 +99,9 @@
     "phpmd": "./ci/qa/phpmd",
     "phpstan": "./ci/qa/phpstan",
     "phpstan-baseline": "./ci/qa/phpstan-update-baseline",
+    "unit-tests": "ci/qa/phpunit",
     "jest": "yarn jest",
     "tsc": "yarn tsc --noEmit",
-    "phpunit": "vendor/bin/phpunit",
     "coverage": [
       "@phpunit-coverage",
       "mkdir -p coverage/reports",
