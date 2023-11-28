@@ -94,12 +94,10 @@
     "docheader": "./ci/qa/docheader",
     "lint": "./ci/qa/lint",
     "phpcs": "./ci/qa/phpcs",
+    "phpcpd": "./ci/qa/phpcpd",
     "phpcbf": "./ci/qa/phpcbf",
     "license-headers": "vendor/bin/docheader check src/ dev/ Features/ tests/",
     "phpmd": "vendor/bin/phpmd ./src text phpmd.xml  --suffixes php",
-    "phpcpd": [
-      "vendor/bin/phpcpd  ./src"
-    ],
     "jest": "yarn jest",
     "tsc": "yarn tsc --noEmit",
     "phpunit": "vendor/bin/phpunit",

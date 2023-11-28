@@ -20,21 +20,23 @@ declare(strict_types=1);
 
 namespace Test\Controller;
 
-use App\Controller\AttestationResponseController;
-use App\Entity\PublicKeyCredentialSource;
-use App\Entity\User;
-use App\Exception\AttestationStatementNotFoundException;
-use App\Exception\NoActiveAuthenrequestException;
-use App\PublicKeyCredentialCreationOptionsStore;
-use App\Repository\PublicKeyCredentialSourceRepository;
-use App\Service\AttestationCertificateTrustStore;
-use App\ValidationJsonResponse;
+use Exception;
 use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\RegistrationService;
-use Symfony\Component\Debug\BufferingLogger;
+use Surfnet\Webauthn\Controller\AttestationResponseController;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
+use Surfnet\Webauthn\Entity\User;
+use Surfnet\Webauthn\Exception\AttestationStatementNotFoundException;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialCreationOptionsStore;
+use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
+use Surfnet\Webauthn\Service\AttestationCertificateTrustStore;
+use Surfnet\Webauthn\ValidationJsonResponse;
+use Symfony\Component\ErrorHandler\BufferingLogger;
 use Symfony\Component\HttpFoundation\Request;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
@@ -115,9 +117,9 @@ class AttestationResponseControllerTest extends TestCase
                 $options,
                 $this->psr7Request
             )
-            ->andThrow(\Exception::class, 'Invalid');
+            ->andThrow(Exception::class, 'Invalid');
         $this->assertEquals(
-            ValidationJsonResponse::invalid(new \Exception('Invalid')),
+            ValidationJsonResponse::invalid(new Exception('Invalid')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -125,35 +127,13 @@ class AttestationResponseControllerTest extends TestCase
 
     public function test__verify_if_attestation_certificate_is_not_supported()
     {
-        $this->registrationService->shouldReceive(['registrationRequired' => true]);
-        $response = Mockery::mock(AuthenticatorAttestationResponse::class);
-        $publicKeyCredential = $this->setAuthenticatorResponse($response);
-        $options = Mockery::mock(PublicKeyCredentialCreationOptions::class);
-        $options->shouldReceive([
-            'getUser->getId' => 'userId123'
-        ]);
-        $this->store->shouldReceive('get')->andReturn($options);
-        $this->attestationResponseValidator
-            ->shouldReceive('check')
-            ->with(
-                $response,
-                $options,
-                $this->psr7Request
-            );
-        $credentialSource = Mockery::mock(PublicKeyCredentialSource::class);
-        $this->credentialSourceRepository
-            ->shouldReceive('create')
-            ->with(
-                $publicKeyCredential,
-                'userId123'
-            )
-            ->andReturn($credentialSource);
+        $credentialSource = $this->preRoll();
         $this->attestationCertificateAcceptanceService
             ->shouldReceive('validate')
             ->with($credentialSource)
-            ->andThrow(\Exception::class, 'Not supported');
+            ->andThrow(Exception::class, 'Not supported');
         $this->assertEquals(
-            ValidationJsonResponse::deviceNotSupported(new \Exception('Not supported')),
+            ValidationJsonResponse::deviceNotSupported(new Exception('Not supported')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -161,33 +141,12 @@ class AttestationResponseControllerTest extends TestCase
 
     public function test__verify_if_attestation_certificate_is_not_found()
     {
-        $this->registrationService->shouldReceive(['registrationRequired' => true]);
-        $response = Mockery::mock(AuthenticatorAttestationResponse::class);
-        $publicKeyCredential = $this->setAuthenticatorResponse($response);
-        $options = Mockery::mock(PublicKeyCredentialCreationOptions::class);
-        $options->shouldReceive([
-            'getUser->getId' => 'userId123'
-        ]);
-        $this->store->shouldReceive('get')->andReturn($options);
-        $this->attestationResponseValidator
-            ->shouldReceive('check')
-            ->with(
-                $response,
-                $options,
-                $this->psr7Request
-            );
-        $credentialSource = Mockery::mock(PublicKeyCredentialSource::class);
-        $this->credentialSourceRepository
-            ->shouldReceive('create')
-            ->with(
-                $publicKeyCredential,
-                'userId123'
-            )
-            ->andReturn($credentialSource);
+        $credentialSource = $this->preRoll();
         $this->attestationCertificateAcceptanceService
             ->shouldReceive('validate')
             ->with($credentialSource)
             ->andThrow(AttestationStatementNotFoundException::class);
+
         $this->assertEquals(
             ValidationJsonResponse::missingAttestationStatement(new AttestationStatementNotFoundException()),
             $this->controller->action($this->psr7Request, $this->request)
@@ -264,5 +223,34 @@ class AttestationResponseControllerTest extends TestCase
         );
         $this->psr7Request = Mockery::mock(ServerRequestInterface::class);
         $this->request = Mockery::mock(Request::class);
+    }
+
+    private function preRoll(): MockInterface|PublicKeyCredentialSource
+    {
+        $this->registrationService->shouldReceive(['registrationRequired' => true]);
+        $response = Mockery::mock(AuthenticatorAttestationResponse::class);
+        $publicKeyCredential = $this->setAuthenticatorResponse($response);
+        $options = Mockery::mock(PublicKeyCredentialCreationOptions::class);
+        $options->shouldReceive([
+            'getUser->getId' => 'userId123'
+        ]);
+        $this->store->shouldReceive('get')->andReturn($options);
+        $this->attestationResponseValidator
+            ->shouldReceive('check')
+            ->with(
+                $response,
+                $options,
+                $this->psr7Request
+            );
+        $credentialSource = Mockery::mock(PublicKeyCredentialSource::class);
+        $this->credentialSourceRepository
+            ->shouldReceive('create')
+            ->with(
+                $publicKeyCredential,
+                'userId123'
+            )
+            ->andReturn($credentialSource);
+
+        return $credentialSource;
     }
 }
