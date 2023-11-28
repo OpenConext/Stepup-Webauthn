@@ -6,6 +6,41 @@ parameters:
 			path: ../../dev/Controller/SPController.php
 
 		-
+			message: "#^Parameter \\#1 \\$key of method SAML2\\\\Certificate\\\\PrivateKeyLoader\\:\\:loadPrivateKey\\(\\) expects SAML2\\\\Configuration\\\\PrivateKey, mixed given\\.$#"
+			count: 1
+			path: ../../dev/Controller/SPController.php
+
+		-
+			message: "#^Parameter \\#1 \\$nameId of method Surfnet\\\\SamlBundle\\\\SAML2\\\\AuthnRequest\\:\\:setSubject\\(\\) expects string, mixed given\\.$#"
+			count: 1
+			path: ../../dev/Controller/SPController.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function base64_decode expects string, bool\\|float\\|int\\|string\\|null given\\.$#"
+			count: 1
+			path: ../../dev/Controller/SPController.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function base64_encode expects string, mixed given\\.$#"
+			count: 1
+			path: ../../dev/Controller/SPController.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function base64_encode expects string, string\\|false given\\.$#"
+			count: 1
+			path: ../../dev/Controller/SPController.php
+
+		-
+			message: "#^Parameter \\#1 \\$xml of static method SAML2\\\\Message\\:\\:fromXML\\(\\) expects DOMElement, DOMElement\\|null given\\.$#"
+			count: 1
+			path: ../../dev/Controller/SPController.php
+
+		-
+			message: "#^Parameter \\#2 \\$values of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:set\\(\\) expects array\\<string\\>\\|string\\|null, mixed given\\.$#"
+			count: 1
+			path: ../../dev/Controller/SPController.php
+
+		-
 			message: "#^Method Surfnet\\\\Webauthn\\\\Controller\\\\AuthenticationController\\:\\:__invoke\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: ../../src/Controller/AuthenticationController.php
@@ -66,6 +101,11 @@ parameters:
 			path: ../../src/Entity/User.php
 
 		-
+			message: "#^Method Surfnet\\\\Webauthn\\\\Entity\\\\User\\:\\:getPublicKeyCredentialSources\\(\\) should return array\\<Webauthn\\\\PublicKeyCredentialSource\\> but returns array\\<int, mixed\\>\\.$#"
+			count: 1
+			path: ../../src/Entity/User.php
+
+		-
 			message: "#^Method Surfnet\\\\Webauthn\\\\Entity\\\\User\\:\\:getRoles\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../src/Entity/User.php
@@ -91,7 +131,52 @@ parameters:
 			path: ../../src/GlobalViewParameters.php
 
 		-
+			message: "#^Parameter \\#1 \\$request of method Surfnet\\\\Webauthn\\\\Service\\\\ClientMetadataService\\:\\:generateMetadata\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\Request, Symfony\\\\Component\\\\HttpFoundation\\\\Request\\|null given\\.$#"
+			count: 1
+			path: ../../src/GlobalViewParameters.php
+
+		-
+			message: "#^Generator expects value type Symfony\\\\Component\\\\HttpKernel\\\\Bundle\\\\BundleInterface, object given\\.$#"
+			count: 1
+			path: ../../src/Kernel.php
+
+		-
+			message: "#^Method Surfnet\\\\Webauthn\\\\PublicKeyCredentialCreationOptionsStore\\:\\:get\\(\\) should return Webauthn\\\\PublicKeyCredentialCreationOptions but returns mixed\\.$#"
+			count: 1
+			path: ../../src/PublicKeyCredentialCreationOptionsStore.php
+
+		-
+			message: "#^Method Surfnet\\\\Webauthn\\\\PublicKeyCredentialRequestOptionsStore\\:\\:get\\(\\) should return Webauthn\\\\PublicKeyCredentialRequestOptions but returns mixed\\.$#"
+			count: 1
+			path: ../../src/PublicKeyCredentialRequestOptionsStore.php
+
+		-
+			message: "#^Method Surfnet\\\\Webauthn\\\\Repository\\\\PublicKeyCredentialSourceRepository\\:\\:allForUser\\(\\) should return array\\<Surfnet\\\\Webauthn\\\\Entity\\\\PublicKeyCredentialSource\\> but returns mixed\\.$#"
+			count: 1
+			path: ../../src/Repository/PublicKeyCredentialSourceRepository.php
+
+		-
+			message: "#^Parameter \\#7 \\$credentialPublicKey of class Surfnet\\\\Webauthn\\\\Entity\\\\PublicKeyCredentialSource constructor expects string, string\\|null given\\.$#"
+			count: 1
+			path: ../../src/Repository/PublicKeyCredentialSourceRepository.php
+
+		-
 			message: "#^Call to function is_null\\(\\) with Doctrine\\\\ORM\\\\EntityManagerInterface will always evaluate to false\\.$#"
+			count: 1
+			path: ../../src/Repository/UserRepository.php
+
+		-
+			message: "#^Method Surfnet\\\\Webauthn\\\\Repository\\\\UserRepository\\:\\:findOneByUserHandle\\(\\) should return Webauthn\\\\PublicKeyCredentialUserEntity\\|null but returns mixed\\.$#"
+			count: 1
+			path: ../../src/Repository/UserRepository.php
+
+		-
+			message: "#^Method Surfnet\\\\Webauthn\\\\Repository\\\\UserRepository\\:\\:findOneByUsername\\(\\) should return Webauthn\\\\PublicKeyCredentialUserEntity\\|null but returns mixed\\.$#"
+			count: 1
+			path: ../../src/Repository/UserRepository.php
+
+		-
+			message: "#^Method Surfnet\\\\Webauthn\\\\Repository\\\\UserRepository\\:\\:getByUserId\\(\\) should return Surfnet\\\\Webauthn\\\\Entity\\\\User but returns Surfnet\\\\Webauthn\\\\Entity\\\\User\\|null\\.$#"
 			count: 1
 			path: ../../src/Repository/UserRepository.php
 
@@ -104,6 +189,16 @@ parameters:
 			message: "#^Method Surfnet\\\\Webauthn\\\\Service\\\\InMemoryAttestationCertificateTrustStore\\:\\:__construct\\(\\) has parameter \\$trustedCertificates with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../src/Service/InMemoryAttestationCertificateTrustStore.php
+
+		-
+			message: "#^Cannot call method getEntityId\\(\\) on Surfnet\\\\SamlBundle\\\\Entity\\\\IdentityProvider\\|null\\.$#"
+			count: 1
+			path: ../../src/Twig/GsspExtension.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function urlencode expects string, string\\|null given\\.$#"
+			count: 1
+			path: ../../src/Twig/GsspExtension.php
 
 		-
 			message: "#^Method Surfnet\\\\Webauthn\\\\WithContextLogger\\:\\:__construct\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"

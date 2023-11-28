@@ -130,7 +130,7 @@ final class SPController extends AbstractController
     /**
      * Formats xml.
      */
-    private function toFormattedXml(string $xml): string
+    private function toFormattedXml(string $xml): string|false
     {
         $domXml = new DOMDocument('1.0');
         $domXml->preserveWhiteSpace = false;
