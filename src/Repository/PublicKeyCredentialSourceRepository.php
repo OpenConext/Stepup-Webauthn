@@ -23,7 +23,7 @@ namespace Surfnet\Webauthn\Repository;
 use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
 use Surfnet\Webauthn\Entity\User;
 use Assert\Assertion;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Webauthn\AttestationStatement\AttestationObject;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepository as BasePublicKeyCredentialSourceRepository;

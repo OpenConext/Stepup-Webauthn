@@ -21,12 +21,11 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Uuid;
 use Surfnet\Webauthn\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use LogicException;
-use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Webauthn\PublicKeyCredentialUserEntity;
 use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepository as BasePublicKeyCredentialUserEntityRepository;
 
