@@ -44,6 +44,7 @@ use Webauthn\AuthenticatorAttestationResponseValidator;
 use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepository;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialLoader;
+use Webauthn\PublicKeyCredentialRpEntity;
 
 class AttestationResponseControllerTest extends TestCase
 {
@@ -105,10 +106,10 @@ class AttestationResponseControllerTest extends TestCase
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
         $response = Mockery::mock(AuthenticatorAttestationResponse::class);
         $this->setAuthenticatorResponse($response);
-        $options = Mockery::mock(PublicKeyCredentialCreationOptions::class);
-        $options->shouldReceive([
-            'getUser->getId' => 'userId123'
-        ]);
+        $user = Mockery::mock(User::class);
+        $user->shouldReceive('getId')->andReturn('userId123');
+        $rp = Mockery::mock(PublicKeyCredentialRpEntity::class);
+        $options = new PublicKeyCredentialCreationOptions($rp, $user, 'challenge');
         $this->store->shouldReceive('get')->andReturn($options);
         $this->attestationResponseValidator
             ->shouldReceive('check')
@@ -159,10 +160,10 @@ class AttestationResponseControllerTest extends TestCase
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
         $response = Mockery::mock(AuthenticatorAttestationResponse::class);
         $publicKeyCredential = $this->setAuthenticatorResponse($response);
-        $options = Mockery::mock(PublicKeyCredentialCreationOptions::class);
         $user = Mockery::mock(User::class);
+        $rp = Mockery::mock(PublicKeyCredentialRpEntity::class);
+        $options = new PublicKeyCredentialCreationOptions($rp, $user, 'challenge');
         $user->shouldReceive(['getId' => 'userId123']);
-        $options->shouldReceive(['getUser' => $user]);
         $this->store->shouldReceive('get')->andReturn($options);
         $this->attestationResponseValidator
             ->shouldReceive('check')
@@ -230,10 +231,12 @@ class AttestationResponseControllerTest extends TestCase
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
         $response = Mockery::mock(AuthenticatorAttestationResponse::class);
         $publicKeyCredential = $this->setAuthenticatorResponse($response);
-        $options = Mockery::mock(PublicKeyCredentialCreationOptions::class);
-        $options->shouldReceive([
-            'getUser->getId' => 'userId123'
-        ]);
+
+        $user = Mockery::mock(User::class);
+        $user->shouldReceive('getId')->andReturn('userId123');
+        $rp = Mockery::mock(PublicKeyCredentialRpEntity::class);
+        $options = new PublicKeyCredentialCreationOptions($rp, $user, 'challenge');
+
         $this->store->shouldReceive('get')->andReturn($options);
         $this->attestationResponseValidator
             ->shouldReceive('check')

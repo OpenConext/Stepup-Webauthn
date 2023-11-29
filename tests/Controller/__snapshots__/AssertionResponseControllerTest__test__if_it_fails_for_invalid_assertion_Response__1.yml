@@ -5,10 +5,8 @@
 -
     - info
     - 'Verify valid public key credential response'
-    -
-        nameId: JohnDoe123
+    - { nameId: JohnDoe123 }
 -
     - warning
     - 'Invalid public key credential response "Invalid response type"'
-    -
-        nameId: JohnDoe123
+    - { nameId: JohnDoe123 }

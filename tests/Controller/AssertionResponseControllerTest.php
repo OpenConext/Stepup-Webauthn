@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Test\Controller;
 
 use Surfnet\Webauthn\Controller\AssertionResponseController;
+use Surfnet\Webauthn\Entity\User;
 use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
 use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
 use Surfnet\Webauthn\ValidationJsonResponse;
@@ -34,8 +35,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAssertionResponseValidator;
 use Webauthn\AuthenticatorAttestationResponse;
+use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialLoader;
 use Webauthn\PublicKeyCredentialRequestOptions;
+use Webauthn\PublicKeyCredentialRpEntity;
 
 class AssertionResponseControllerTest extends TestCase
 {
@@ -103,7 +106,7 @@ class AssertionResponseControllerTest extends TestCase
         $response = Mockery::mock(AuthenticatorAssertionResponse::class);
         $publicKeyCredential = $this->setAuthenticatorResponse($response);
         $publicKeyCredential->shouldReceive('getRawId')->andReturn('Public key credential raw id 1234');
-        $options = Mockery::mock(PublicKeyCredentialRequestOptions::class);
+        $options = new PublicKeyCredentialRequestOptions('challenge');
         $this->store->shouldReceive('get')->andReturn($options);
         $this->assertionResponseValidator
             ->shouldReceive('check')
@@ -131,7 +134,7 @@ class AssertionResponseControllerTest extends TestCase
         $response = Mockery::mock(AuthenticatorAssertionResponse::class);
         $publicKeyCredential = $this->setAuthenticatorResponse($response);
         $publicKeyCredential->shouldReceive('getRawId')->andReturn('Public key credential raw id 1234');
-        $options = Mockery::mock(PublicKeyCredentialRequestOptions::class);
+        $options = new PublicKeyCredentialRequestOptions('challenge');
         $this->store->shouldReceive('get')->andReturn($options);
         $this->authenticationService->shouldReceive('authenticate');
         $this->store->shouldReceive('clear');
