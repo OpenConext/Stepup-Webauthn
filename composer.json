@@ -101,12 +101,6 @@
     "unit-tests": "ci/qa/phpunit",
     "jest": "yarn jest",
     "tsc": "yarn tsc --noEmit",
-    "coverage": [
-      "@phpunit-coverage",
-      "mkdir -p coverage/reports",
-      "vendor/bin/phpcov merge coverage/reports --html coverage"
-    ],
-    "phpunit-coverage": "vendor/bin/phpunit tests --coverage-php coverage/reports/unit.cov",
     "frontend-install": [
       "yarn install"
     ],
