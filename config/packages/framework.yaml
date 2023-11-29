@@ -4,7 +4,7 @@ imports:
 framework:
     assets:
         json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
-    secret: '%env(APP_SECRET)%'
+    secret: '%framework_secret%'
     csrf_protection: true
     error_controller: Surfnet\Webauthn\Controller\ExceptionController::show
     http_method_override: true

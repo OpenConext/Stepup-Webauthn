@@ -1,5 +1,6 @@
 parameters:
     locale: nl_NL
+    database_url: sqlite:///%kernel.project_dir%/var/webauthn.db
 
 services:
     # default configuration for services in *this* file
