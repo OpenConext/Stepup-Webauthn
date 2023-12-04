@@ -41,12 +41,6 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
      */
     private string $id;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    private string $fmt;
-
     public function __construct(
         string $publicKeyCredentialId,
         string $type,
@@ -57,7 +51,10 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
         string $credentialPublicKey,
         string $userHandle,
         int $counter,
-        string $fmt
+        /**
+         * @ORM\Column(type="string")
+         */
+        private string $fmt
     ) {
         parent::__construct(
             $publicKeyCredentialId,
@@ -70,7 +67,6 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
             $userHandle,
             $counter
         );
-        $this->fmt = $fmt;
     }
 
     public function getFmt(): string

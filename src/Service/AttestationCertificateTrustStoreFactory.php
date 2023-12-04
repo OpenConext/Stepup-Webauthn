@@ -22,9 +22,9 @@ namespace Surfnet\Webauthn\Service;
 
 use Symfony\Component\Finder\Finder;
 
-final class AttestationCertificateTrustStoreFactory
+final readonly class AttestationCertificateTrustStoreFactory
 {
-    public function __construct(private readonly string $trustedCertificatesDirectory)
+    public function __construct(private string $trustedCertificatesDirectory)
     {
     }
 

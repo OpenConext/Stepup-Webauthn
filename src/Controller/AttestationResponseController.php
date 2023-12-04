@@ -43,17 +43,17 @@ use Webauthn\PublicKeyCredentialLoader;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class AttestationResponseController
+final readonly class AttestationResponseController
 {
     public function __construct(
-        private readonly PublicKeyCredentialLoader $publicKeyCredentialLoader,
-        private readonly AuthenticatorAttestationResponseValidator $attestationResponseValidator,
-        private readonly PublicKeyCredentialUserEntityRepository $userEntityRepository,
-        private readonly PublicKeyCredentialSourceRepository $credentialSourceRepository,
-        private readonly PublicKeyCredentialCreationOptionsStore $store,
-        private readonly AttestationCertificateTrustStore $trustStore,
-        private readonly RegistrationService $registrationService,
-        private readonly LoggerInterface $logger
+        private PublicKeyCredentialLoader $publicKeyCredentialLoader,
+        private AuthenticatorAttestationResponseValidator $attestationResponseValidator,
+        private PublicKeyCredentialUserEntityRepository $userEntityRepository,
+        private PublicKeyCredentialSourceRepository $credentialSourceRepository,
+        private PublicKeyCredentialCreationOptionsStore $store,
+        private AttestationCertificateTrustStore $trustStore,
+        private RegistrationService $registrationService,
+        private LoggerInterface $logger
     ) {
     }
 

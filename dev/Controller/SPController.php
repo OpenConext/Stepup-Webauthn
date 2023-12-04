@@ -56,7 +56,7 @@ final class SPController extends AbstractController
 
     #[Route(path: '/demo/sp', name: 'sp_demo', methods: ['GET', 'POST'])]
     #[Route(path: '/', name: 'homepage', methods: ['GET', 'POST'])]
-    public function demoSpAction(Request $request): Response
+    public function demoSp(Request $request): Response
     {
         if (!$request->isMethod(Request::METHOD_POST)) {
             return $this->render('dev/sp.html.twig', ['nameId' => $request->get('nameId')]);
@@ -92,7 +92,7 @@ final class SPController extends AbstractController
     }
 
     #[Route(path: '/demo/sp/acs', name: 'sp_demo_acs', methods: ['POST'])]
-    public function assertionConsumerServiceAction(Request $request): Response
+    public function assertionConsumerService(Request $request): Response
     {
         $xmlResponse = $request->request->get('SAMLResponse');
         $xml = base64_decode($xmlResponse);
@@ -104,7 +104,7 @@ final class SPController extends AbstractController
 
             return $this->render('dev/acs.html.twig', [
                 'requestId' => $response->getId(),
-                'nameId' => $nameID ? [
+                'nameId' => $nameID instanceof \SAML2\XML\saml\NameID ? [
                     'value' => $nameID->getValue(),
                     'format' => $nameID->getFormat(),
                 ] : [],
@@ -151,7 +151,7 @@ final class SPController extends AbstractController
         $toSign = http_build_query($queryParams);
         $signature = $securityKey->signData($toSign);
 
-        return $toSign.'&Signature='.urlencode(base64_encode($signature));
+        return $toSign.'&Signature='.urlencode(base64_encode((string) $signature));
     }
 
     /**

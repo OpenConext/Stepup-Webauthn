@@ -27,6 +27,7 @@ use Surfnet\Webauthn\Service\ClientMetadataService;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Service\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Webauthn\Bundle\Service\PublicKeyCredentialCreationOptionsFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,7 +46,7 @@ final class RegistrationController extends AbstractController
     }
 
     #[Route(path: '/registration', name: 'app_identity_registration', methods: ['GET'])]
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending registration from SP');
 

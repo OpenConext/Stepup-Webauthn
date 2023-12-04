@@ -31,7 +31,7 @@ use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepository as BasePu
 
 final class UserRepository implements ServiceEntityRepositoryInterface, BasePublicKeyCredentialUserEntityRepository
 {
-    private EntityManagerInterface $manager;
+    private readonly EntityManagerInterface $manager;
 
     public function __construct(ManagerRegistry $registry)
     {

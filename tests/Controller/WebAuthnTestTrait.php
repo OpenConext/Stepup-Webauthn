@@ -24,7 +24,7 @@ use Mockery;
 use Mockery\MockInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Spatie\Snapshots\MatchesSnapshots;
-use Symfony\Component\Debug\BufferingLogger;
+use Symfony\Component\ErrorHandler\BufferingLogger;
 use Webauthn\AuthenticatorResponse;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialLoader;
@@ -41,10 +41,8 @@ trait WebAuthnTestTrait
      * @var MockInterface|PublicKeyCredentialLoader
      */
     private $publicKeyCredentialLoader;
-    /**
-     * @var BufferingLogger
-     */
-    private $logger;
+
+    private BufferingLogger $logger;
     /**
      * @var MockInterface|ServerRequestInterface
      */
@@ -54,7 +52,7 @@ trait WebAuthnTestTrait
      */
     private $request;
 
-    private function assertLogs()
+    private function assertLogs(): void
     {
         $this->assertMatchesSnapshot($this->logger->cleanLogs());
     }

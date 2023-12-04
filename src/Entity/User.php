@@ -39,14 +39,10 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
      */
     public readonly string $id;
 
-    /**
-     * @Assert\Length(max = 100)
-     */
+    #[Assert\Length(max: 100)]
     public readonly string $name;
 
-    /**
-     * @Assert\Length(max = 100)
-     */
+    #[Assert\Length(max: 100)]
     public readonly string $displayName;
 
     /**

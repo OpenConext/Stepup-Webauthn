@@ -23,6 +23,7 @@ namespace Surfnet\Webauthn\Controller;
 use Surfnet\Webauthn\Exception\NoAuthnrequestException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Surfnet\GsspBundle\Service\AuthenticationService;
 use Surfnet\GsspBundle\Service\RegistrationService;
@@ -37,7 +38,7 @@ class CancelController extends AbstractController
     }
 
     #[Route(path: '/cancel', name: 'app_cancel', methods: ['GET'])]
-    public function cancel()
+    public function cancel(): Response
     {
         $this->logger->notice('User cancelled the request');
         if ($this->authenticationService->authenticationRequired()) {
@@ -59,7 +60,7 @@ class CancelController extends AbstractController
     }
 
     #[Route(path: '/abort', name: 'app_abort', methods: ['GET'])]
-    public function abort()
+    public function abort(): Response
     {
         $this->logger->notice('User abort the request');
         if ($this->authenticationService->authenticationRequired()) {

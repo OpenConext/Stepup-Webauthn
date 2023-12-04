@@ -39,14 +39,14 @@ use Webauthn\PublicKeyCredentialLoader;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class AssertionResponseController
+final readonly class AssertionResponseController
 {
     public function __construct(
-        private readonly PublicKeyCredentialLoader $publicKeyCredentialLoader,
-        private readonly AuthenticatorAssertionResponseValidator $assertionResponseValidator,
-        private readonly AuthenticationService $authenticationService,
-        private readonly PublicKeyCredentialRequestOptionsStore $store,
-        private readonly LoggerInterface $logger
+        private PublicKeyCredentialLoader $publicKeyCredentialLoader,
+        private AuthenticatorAssertionResponseValidator $assertionResponseValidator,
+        private AuthenticationService $authenticationService,
+        private PublicKeyCredentialRequestOptionsStore $store,
+        private LoggerInterface $logger
     ) {
     }
 

@@ -56,18 +56,18 @@ class AttestationResponseControllerTest extends TestCase
     private $attestationResponseValidator;
     private $store;
     private $registrationService;
-    private $logger;
+    private BufferingLogger $logger;
     private $attestationCertificateAcceptanceService;
-    private $controller;
+    private AttestationResponseController $controller;
     private $psr7Request;
     private $request;
 
-    public function test__construct()
+    public function test__construct(): void
     {
         $this->assertInstanceOf(AttestationResponseController::class, $this->controller);
     }
 
-    public function test__there_is_no_pending_registration_from_SP()
+    public function test__there_is_no_pending_registration_from_SP(): void
     {
         $this->registrationService->shouldReceive(['registrationRequired' => false]);
         $this->assertEquals(
@@ -77,7 +77,7 @@ class AttestationResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__when_there_is_an_invalid_public_key_credential_response()
+    public function test__when_there_is_an_invalid_public_key_credential_response(): void
     {
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
         $response = Mockery::mock(AuthenticatorAssertionResponse::class);
@@ -89,7 +89,7 @@ class AttestationResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__when_there_is_not_an_existing_public_key_credential_creation_options_in_session()
+    public function test__when_there_is_not_an_existing_public_key_credential_creation_options_in_session(): void
     {
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
         $this->setAuthenticatorResponse(Mockery::mock(AuthenticatorAttestationResponse::class));
@@ -101,7 +101,7 @@ class AttestationResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__when_attestation_response_is_invalid()
+    public function test__when_attestation_response_is_invalid(): void
     {
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
         $response = Mockery::mock(AuthenticatorAttestationResponse::class);
@@ -126,7 +126,7 @@ class AttestationResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__verify_if_attestation_certificate_is_not_supported()
+    public function test__verify_if_attestation_certificate_is_not_supported(): void
     {
         $credentialSource = $this->preRoll();
         $this->attestationCertificateAcceptanceService
@@ -140,7 +140,7 @@ class AttestationResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__verify_if_attestation_certificate_is_not_found()
+    public function test__verify_if_attestation_certificate_is_not_found(): void
     {
         $credentialSource = $this->preRoll();
         $this->attestationCertificateAcceptanceService
@@ -155,7 +155,7 @@ class AttestationResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__verify_if_attestation_is_valid()
+    public function test__verify_if_attestation_is_valid(): void
     {
         $this->registrationService->shouldReceive(['registrationRequired' => true]);
         $response = Mockery::mock(AuthenticatorAttestationResponse::class);

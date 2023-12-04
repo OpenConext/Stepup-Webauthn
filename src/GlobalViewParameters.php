@@ -24,14 +24,14 @@ use Surfnet\Webauthn\Service\ClientMetadataService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class GlobalViewParameters
+final readonly class GlobalViewParameters
 {
     public function __construct(
-        private readonly TranslatorInterface $translator,
-        private readonly ClientMetadataService $clientMetadataService,
-        private readonly RequestStack $request,
-        private readonly array $supportUrl,
-        private readonly string $supportEmail
+        private TranslatorInterface $translator,
+        private ClientMetadataService $clientMetadataService,
+        private RequestStack $request,
+        private array $supportUrl,
+        private string $supportEmail
     ) {
     }
 

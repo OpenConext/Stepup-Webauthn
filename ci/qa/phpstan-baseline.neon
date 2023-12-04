@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Cannot cast mixed to string\\.$#"
+			count: 1
+			path: ../../dev/Controller/SPController.php
+
+		-
 			message: "#^Method Dev\\\\Controller\\\\SPController\\:\\:signRequestQuery\\(\\) has parameter \\$queryParams with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../dev/Controller/SPController.php
@@ -21,11 +26,6 @@ parameters:
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function base64_encode expects string, mixed given\\.$#"
-			count: 1
-			path: ../../dev/Controller/SPController.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function base64_encode expects string, string\\|false given\\.$#"
 			count: 1
 			path: ../../dev/Controller/SPController.php
@@ -41,44 +41,14 @@ parameters:
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Controller\\\\AuthenticationController\\:\\:__invoke\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: ../../src/Controller/AuthenticationController.php
-
-		-
 			message: "#^Parameter \\#2 \\$allowCredentials of method Webauthn\\\\Bundle\\\\Service\\\\PublicKeyCredentialRequestOptionsFactory\\:\\:create\\(\\) expects array\\<Webauthn\\\\PublicKeyCredentialDescriptor\\>, array\\<Surfnet\\\\Webauthn\\\\Entity\\\\PublicKeyCredentialSource\\> given\\.$#"
 			count: 1
 			path: ../../src/Controller/AuthenticationController.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Controller\\\\CancelController\\:\\:abort\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: ../../src/Controller/CancelController.php
-
-		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Controller\\\\CancelController\\:\\:cancel\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: ../../src/Controller/CancelController.php
-
-		-
-			message: "#^Access to an undefined property Surfnet\\\\Webauthn\\\\Controller\\\\ExceptionController\\:\\:\\$clientMetadataService\\.$#"
-			count: 1
-			path: ../../src/Controller/ExceptionController.php
-
-		-
 			message: "#^Method Surfnet\\\\Webauthn\\\\Controller\\\\ExceptionController\\:\\:getPageTitleAndDescription\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../src/Controller/ExceptionController.php
-
-		-
-			message: "#^Property Surfnet\\\\Webauthn\\\\Controller\\\\ExceptionController\\:\\:\\$exceptionMetadataService is never read, only written\\.$#"
-			count: 1
-			path: ../../src/Controller/ExceptionController.php
-
-		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Controller\\\\RegistrationController\\:\\:__invoke\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: ../../src/Controller/RegistrationController.php
 
 		-
 			message: "#^Property Surfnet\\\\Webauthn\\\\Entity\\\\PublicKeyCredentialSource\\:\\:\\$id is unused\\.$#"

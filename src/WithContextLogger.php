@@ -38,7 +38,7 @@ final class WithContextLogger extends AbstractLogger
     /**
      * Logs with an arbitrary level.
      */
-    public function log(mixed $level, string|Stringable $message, array $context = array()): void
+    public function log(mixed $level, string|Stringable $message, array $context = []): void
     {
         $this->logger->log($level, $message, array_merge($this->context, $context));
     }

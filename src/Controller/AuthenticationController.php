@@ -34,6 +34,7 @@ use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 use Webauthn\Bundle\Service\PublicKeyCredentialRequestOptionsFactory;
@@ -56,7 +57,7 @@ class AuthenticationController extends AbstractController
     }
 
     #[Route(path: '/authentication', name: 'app_identity_authentication', methods: ['GET', 'POST'])]
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending authentication request from SP');
 

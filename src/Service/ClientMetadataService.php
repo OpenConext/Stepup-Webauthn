@@ -25,11 +25,11 @@ use Surfnet\GsspBundle\Service\StateHandlerInterface;
 use Surfnet\StepupBundle\Request\RequestId;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ClientMetadataService
+final readonly class ClientMetadataService
 {
     public function __construct(
-        private readonly RequestId $requestId,
-        private readonly StateHandlerInterface $stateHandler
+        private RequestId $requestId,
+        private StateHandlerInterface $stateHandler
     ) {
     }
 
