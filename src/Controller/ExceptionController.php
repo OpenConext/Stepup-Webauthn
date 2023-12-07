@@ -20,24 +20,31 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Controller;
 
+use Surfnet\StepupBundle\Request\RequestId;
 use Surfnet\Webauthn\Exception\AttestationCertificateNotSupportedException;
 use Surfnet\Webauthn\Exception\NoAuthnrequestException;
 use Surfnet\Webauthn\Exception\UserNotFoundException;
 use Surfnet\Webauthn\Service\ClientMetadataService;
-use Exception;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\StepupBundle\Controller\ExceptionController as BaseExceptionController;
 use Surfnet\StepupBundle\Exception\Art;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 final class ExceptionController extends BaseExceptionController
 {
-    public function __construct(private readonly ClientMetadataService $clientMetadataService)
+    public function __construct(
+        private readonly ClientMetadataService $clientMetadataService,
+        TranslatorInterface $translator,
+        RequestId $requestId
+    )
     {
+        parent::__construct($translator, $requestId);
     }
 
-    public function show(Request $request, Exception $exception): Response
+    public function show(Request $request, Throwable $exception): Response
     {
         $statusCode = $this->getStatusCode($exception);
 
@@ -59,7 +66,7 @@ final class ExceptionController extends BaseExceptionController
         );
     }
 
-    protected function getPageTitleAndDescription(Exception $exception): array
+    protected function getPageTitleAndDescription(Throwable $exception): array
     {
         $translator = $this->getTranslator();
 
@@ -86,11 +93,7 @@ final class ExceptionController extends BaseExceptionController
         return parent::getPageTitleAndDescription($exception);
     }
 
-    /**
-     * @param Exception $exception
-     * @return int HTTP status code
-     */
-    protected function getStatusCode(Exception $exception): int
+    protected function getStatusCode(Throwable $exception): int
     {
         if ($exception instanceof NoAuthnrequestException) {
             return Response::HTTP_BAD_REQUEST;
