@@ -2,9 +2,11 @@
 # Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
 # https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
+    app_env: prod
+    app_debug: false
+    app_secret: SeTW1ThY0uR0WnS3cR37
     # The Symfony app secret. For more details see:
     # https://symfony.com/doc/current/reference/configuration/framework.html#secret
-    framework_secret: "SeTW1ThY0uR0WnS3cR37"
     database_url: "mysql://webauthn:webauthn_secret@mariadb:3306/webauthn"
     support_url:
         en_GB: "https://support.example.org/faq-strong-authentication"
