@@ -1,7 +1,6 @@
 webauthn:
     credential_repository: Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository
     user_repository: Surfnet\Webauthn\Repository\UserRepository
-    token_binding_support_handler: Webauthn\TokenBinding\IgnoreTokenBindingHandler
     creation_profiles:
         default:
             public_key_credential_parameters:
@@ -12,7 +11,7 @@ webauthn:
             challenge_length: 64
             timeout: 60000
             authenticator_selection_criteria:
-                attachment_mode: !php/const Webauthn\AuthenticatorSelectionCriteria::AUTHENTICATOR_ATTACHMENT_NO_PREFERENCE
+                authenticator_attachment: !php/const Webauthn\AuthenticatorSelectionCriteria::AUTHENTICATOR_ATTACHMENT_NO_PREFERENCE
                 require_resident_key: false
                 user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_PREFERRED
             #  this is needed for SURFsecureID as we want to whitelist authenticators by vendor/certification (default is none)

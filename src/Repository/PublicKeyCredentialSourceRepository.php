@@ -26,11 +26,14 @@ use Assert\Assertion;
 use Doctrine\Persistence\ManagerRegistry;
 use Webauthn\AttestationStatement\AttestationObject;
 use Webauthn\AuthenticatorAttestationResponse;
-use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepository as BasePublicKeyCredentialSourceRepository;
+use Webauthn\Bundle\Repository\DoctrineCredentialSourceRepository;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialDescriptor;
 
-class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceRepository
+/**
+ * @extends DoctrineCredentialSourceRepository<PublicKeyCredentialSource>
+ */
+class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

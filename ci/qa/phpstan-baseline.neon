@@ -76,7 +76,7 @@ parameters:
 			path: ../../src/Entity/User.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Entity\\\\User\\:\\:getRoles\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\$repositoryClass of attribute class Doctrine\\\\ORM\\\\Mapping\\\\Entity constructor expects class\\-string\\<Doctrine\\\\ORM\\\\EntityRepository\\<T of object\\>\\>\\|null, 'Surfnet\\\\\\\\Webauthn\\\\\\\\Repository\\\\\\\\UserRepository' given\\.$#"
 			count: 1
 			path: ../../src/Entity/User.php
 

@@ -22,21 +22,19 @@ namespace Surfnet\Webauthn\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Surfnet\Webauthn\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Webauthn\PublicKeyCredentialSource;
 use Webauthn\PublicKeyCredentialUserEntity;
 
-/**
- * @ORM\Table(name="users")
- * @ORM\Entity(repositoryClass="Surfnet\Webauthn\Repository\UserRepository")
- */
+#[ORM\Table(name: 'users')]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends PublicKeyCredentialUserEntity implements UserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="string", length=36)
-     */
+     #[ORM\Id]
+     #[ORM\Column(type:"string", length:36)]
     public readonly string $id;
 
     #[Assert\Length(max: 100)]
@@ -47,12 +45,13 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
 
     /**
      * @var ArrayCollection<PublicKeyCredentialSource>
-     * @ORM\ManyToMany(targetEntity="Surfnet\Webauthn\Entity\PublicKeyCredentialSource")
-     * @ORM\JoinTable(name="users_user_handles",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="user_handle", referencedColumnName="id", unique=true)}
-     *      )
      */
+    #[ORM\ManyToMany(targetEntity:PublicKeyCredentialSource::class)]
+    #[ORM\JoinTable(
+        name: "users_user_handles",
+        joinColumns:[new JoinColumn(name: "user_id", referencedColumnName: "id")],
+        inverseJoinColumns:[new JoinColumn(name:"user_handle", referencedColumnName: "id", unique: true)]
+    )]
     protected ArrayCollection $publicKeyCredentialSources;
 
     public function __construct(string $id, string $name, string $displayName)
@@ -63,8 +62,6 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
 
     /**
      * WebAuthn project does not care about roles of any user.
-     *
-     * @return array
      */
     public function getRoles(): array
     {

@@ -38,6 +38,7 @@ use Exception;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\AuthenticatorAttestationResponseValidator;
 use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepository;
+use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepositoryInterface;
 use Webauthn\PublicKeyCredentialLoader;
 
 /**
@@ -48,7 +49,7 @@ final readonly class AttestationResponseController
     public function __construct(
         private PublicKeyCredentialLoader $publicKeyCredentialLoader,
         private AuthenticatorAttestationResponseValidator $attestationResponseValidator,
-        private PublicKeyCredentialUserEntityRepository $userEntityRepository,
+        private PublicKeyCredentialUserEntityRepositoryInterface $userEntityRepository,
         private PublicKeyCredentialSourceRepository $credentialSourceRepository,
         private PublicKeyCredentialCreationOptionsStore $store,
         private AttestationCertificateTrustStore $trustStore,

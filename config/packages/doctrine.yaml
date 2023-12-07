@@ -10,7 +10,9 @@ doctrine:
 
         url: '%database_url%'
     orm:
+        report_fields_where_declared: true
         auto_generate_proxy_classes: false
+        enable_lazy_ghost_objects: true
         metadata_cache_driver:
             type: service
             id: doctrine.result_cache_pool
@@ -20,15 +22,16 @@ doctrine:
         result_cache_driver:
             type: service
             id: doctrine.result_cache_pool
-        naming_strategy: doctrine.orm.naming_strategy.underscore
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+
         auto_mapping: true
         mappings:
-            App:
+            Surfnet\\\Webauthn:
                 is_bundle: false
-                type: annotation
+                type: attribute
                 dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'Surfnet\WebauthnEntity'
-                alias: App
+                prefix: 'Surfnet\Webauthn\Entity'
+                alias: Surfnet\\Webauthn
 
 framework:
     cache:

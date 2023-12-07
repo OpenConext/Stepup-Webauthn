@@ -7,8 +7,10 @@ framework:
     secret: '%framework_secret%'
     csrf_protection: true
     error_controller: Surfnet\Webauthn\Controller\ExceptionController::show
-    http_method_override: true
-
+    http_method_override: false
+    handle_all_throwables: true
+    annotations:
+        enabled: false
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
     # Remove or comment this section to explicitly disable session support.
     session:

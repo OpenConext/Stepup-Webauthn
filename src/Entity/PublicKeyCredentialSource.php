@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
 use Symfony\Component\Uid\AbstractUid;
 use Webauthn\PublicKeyCredentialSource as BasePublicKeyCredentialSource;
 use Webauthn\TrustPath\TrustPath;
@@ -29,16 +30,14 @@ use function is_bool;
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
- * @ORM\Table(name="public_key_credential_sources")
- * @ORM\Entity(repositoryClass="Surfnet\WebauthnRepository\PublicKeyCredentialSourceRepository")
  */
+#[ORM\Table(name:"public_key_credential_sources")]
+#[ORM\Entity(repositoryClass: PublicKeyCredentialSourceRepository::class)]
 class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column(type:"integer")]
     private string $id;
 
     public function __construct(
@@ -51,9 +50,7 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
         string $credentialPublicKey,
         string $userHandle,
         int $counter,
-        /**
-         * @ORM\Column(type="string")
-         */
+        #[ORM\Column(type: "string")]
         private string $fmt
     ) {
         parent::__construct(

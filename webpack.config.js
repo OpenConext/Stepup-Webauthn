@@ -9,8 +9,8 @@ Encore
     .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
     .addStyleEntry('global', './assets/scss/application.scss')
-    // .addStyleEntry('global', './assets/scss/registration.scss')
-    // .addStyleEntry('global', './assets/scss/authentication.scss')
+    .addEntry('registration', './assets/typescript/registration.tsx')
+    .addEntry('authentication', './assets/typescript/authentication.tsx')
     .enableSassLoader(function (options) {
         options.sassOptions = {
             outputStyle: 'expanded',
