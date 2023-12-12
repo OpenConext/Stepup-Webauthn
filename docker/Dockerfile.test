@@ -1,7 +1,7 @@
 FROM ghcr.io/openconext/openconext-basecontainers/php82-apache2:latest
 # Set the default workdir
 WORKDIR /var/www/html
-ADD output.tar /var/www/html/
+ADD output.zip /var/www/html/
 # Add the application configuration files
 RUN cp .env.dist .env
 RUN cp config/openconext/parameters.yaml.dist config/openconext/parameters.yaml
