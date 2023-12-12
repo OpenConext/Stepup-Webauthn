@@ -4,7 +4,6 @@ RUN tar -xvjf /tmp/*.tar.bz2 -C /var/www/html/ && \
   rm -rf /tmp/*.tar.bz2
 
 # Add the application configuration files
-RUN cp .env.dist .env
 RUN cp config/openconext/parameters.yaml.dist config/openconext/parameters.yaml
 
 # Add the config files for Apache2
