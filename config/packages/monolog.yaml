@@ -13,3 +13,12 @@ monolog:
         console:
             type: console
             process_psr_3_messages: false
+
+when@dev:
+    monolog:
+        handlers:
+            prod-signaler:
+                channels: ['!event']
+                type: fingers_crossed
+                action_level: INFO
+                passthru_level: INFO

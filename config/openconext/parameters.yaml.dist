@@ -7,7 +7,7 @@ parameters:
     app_secret: SeTW1ThY0uR0WnS3cR37
     # The Symfony app secret. For more details see:
     # https://symfony.com/doc/current/reference/configuration/framework.html#secret
-    database_url: "mysql://webauthn:webauthn_secret@mariadb:3306/webauthn"
+    database_url: 'mysql://webauthn_user:webauthn_secret@mariadb:3306/webauthn'
     support_url:
         en_GB: "https://support.example.org/faq-strong-authentication"
         nl_NL: "https://support.example.org/faq-sterke-authenticatie"

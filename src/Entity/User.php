@@ -20,9 +20,10 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection as ArrayCollectionAlias;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource as PublicKeyCredentialSourceEntity;
 use Surfnet\Webauthn\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -44,20 +45,20 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
     public readonly string $displayName;
 
     /**
-     * @var ArrayCollection<PublicKeyCredentialSource>
+     * @var ArrayCollectionAlias<PublicKeyCredentialSourceEntity>
      */
-    #[ORM\ManyToMany(targetEntity:PublicKeyCredentialSource::class)]
+    #[ORM\ManyToMany(targetEntity: PublicKeyCredentialSourceEntity::class)]
     #[ORM\JoinTable(
         name: "users_user_handles",
         joinColumns:[new JoinColumn(name: "user_id", referencedColumnName: "id")],
         inverseJoinColumns:[new JoinColumn(name:"user_handle", referencedColumnName: "id", unique: true)]
     )]
-    protected ArrayCollection $publicKeyCredentialSources;
+    protected ArrayCollectionAlias $publicKeyCredentialSources;
 
     public function __construct(string $id, string $name, string $displayName)
     {
         parent::__construct($name, $id, $displayName);
-        $this->publicKeyCredentialSources = new ArrayCollection();
+        $this->publicKeyCredentialSources = new ArrayCollectionAlias();
     }
 
     /**
