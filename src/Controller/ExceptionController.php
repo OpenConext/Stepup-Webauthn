@@ -39,8 +39,7 @@ final class ExceptionController extends BaseExceptionController
         private readonly ClientMetadataService $clientMetadataService,
         TranslatorInterface $translator,
         RequestId $requestId
-    )
-    {
+    ) {
         parent::__construct($translator, $requestId);
     }
 

@@ -37,8 +37,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\AuthenticatorAttestationResponseValidator;
-use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepository;
-use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepositoryInterface;
+use Webauthn\Bundle\Repository\CanRegisterUserEntity;
 use Webauthn\PublicKeyCredentialLoader;
 
 /**
@@ -49,7 +48,7 @@ final readonly class AttestationResponseController
     public function __construct(
         private PublicKeyCredentialLoader $publicKeyCredentialLoader,
         private AuthenticatorAttestationResponseValidator $attestationResponseValidator,
-        private PublicKeyCredentialUserEntityRepositoryInterface $userEntityRepository,
+        private CanRegisterUserEntity $userRegistrationRepository,
         private PublicKeyCredentialSourceRepository $credentialSourceRepository,
         private PublicKeyCredentialCreationOptionsStore $store,
         private AttestationCertificateTrustStore $trustStore,
@@ -125,7 +124,7 @@ final readonly class AttestationResponseController
 
         $logger->info('Saving user');
 
-        $this->userEntityRepository->saveUserEntity($publicKeyCredentialCreationOptions->getUser());
+        $this->userRegistrationRepository->saveUserEntity($publicKeyCredentialCreationOptions->user);
         $this->credentialSourceRepository->saveCredentialSource($credentialSource);
 
         $logger->info('Register user');

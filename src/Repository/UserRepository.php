@@ -26,10 +26,11 @@ use Ramsey\Uuid\Uuid;
 use Surfnet\Webauthn\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use LogicException;
+use Webauthn\Bundle\Repository\CanRegisterUserEntity;
 use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepositoryInterface;
 use Webauthn\PublicKeyCredentialUserEntity;
 
-final readonly class UserRepository implements ServiceEntityRepositoryInterface, PublicKeyCredentialUserEntityRepositoryInterface
+final readonly class UserRepository implements ServiceEntityRepositoryInterface, CanRegisterUserEntity, PublicKeyCredentialUserEntityRepositoryInterface
 {
     private EntityManagerInterface $manager;
 

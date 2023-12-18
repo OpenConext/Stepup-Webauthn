@@ -33,3 +33,6 @@ services:
 
     Surfnet\Webauthn\Service\AttestationCertificateTrustStore:
         factory: '@Surfnet\Webauthn\Service\AttestationCertificateTrustStoreFactory'
+
+    Webauthn\Bundle\Repository\CanRegisterUserEntity:
+        alias: Surfnet\Webauthn\Repository\UserRepository
