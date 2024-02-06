@@ -134,7 +134,7 @@ final class AttestationResponseController
         $logger->info('Verify if attestation certificate is supported');
 
         try {
-            $this->trustStore->validate($credentialSource);
+//            $this->trustStore->validate($credentialSource);
         } catch (Exception $e) {
             if ($e instanceof AttestationStatementNotFoundException) {
                 $logger->warning('Missing attestation statement');

@@ -30,14 +30,17 @@ use Surfnet\StepupBundle\Controller\ExceptionController as BaseExceptionControll
 use Surfnet\StepupBundle\Exception\Art;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ExceptionController extends BaseExceptionController
 {
     private $clientMetadataService;
 
-    public function __construct(ClientMetadataService $exceptionMetadataService)
+    public function __construct(ClientMetadataService $exceptionMetadataService, TranslatorInterface $translator)
     {
         $this->clientMetadataService = $exceptionMetadataService;
+
+        parent::__construct($translator);
     }
 
     public function showAction(Request $request, Exception $exception)
@@ -65,22 +68,21 @@ final class ExceptionController extends BaseExceptionController
     /**
      * @param Exception $exception
      * @return array View parameters 'title' and 'description'
+     * @return array{'title': string, 'description': string}
      */
     protected function getPageTitleAndDescription(Exception $exception)
     {
-        $translator = $this->getTranslator();
-
         if ($exception instanceof UserNotFoundException) {
-            $title = $translator->trans('user_not_found.title');
-            $description = $translator->trans('user_not_found.description');
+            $title = $this->translator->trans('user_not_found.title');
+            $description = $this->translator->trans('user_not_found.description');
         }
         if ($exception instanceof NoAuthnrequestException) {
-            $title = $translator->trans('error_title');
-            $description = $translator->trans('status.no_active_request');
+            $title = $this->translator->trans('error_title');
+            $description = $this->translator->trans('status.no_active_request');
         }
         if ($exception instanceof AttestationCertificateNotSupportedException) {
-            $title = $translator->trans('error_title');
-            $description = $translator->trans('status.authenticator_not_supported');
+            $title = $this->translator->trans('error_title');
+            $description = $this->translator->trans('status.authenticator_not_supported');
         }
 
         if (isset($title) && isset($description)) {

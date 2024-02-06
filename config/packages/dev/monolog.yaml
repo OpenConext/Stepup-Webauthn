@@ -3,7 +3,7 @@ monolog:
         main_logfile:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.log'
-            level: NOTICE
+            level: debug
         console:
             type: console
             process_psr_3_messages: false
