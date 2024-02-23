@@ -1,0 +1,30 @@
+# This file is auto-generated during the composer install
+parameters:
+    support_url:
+        en_GB: 'https://support.example.org/faq-strong-authentication'
+        nl_NL: 'https://support.example.org/faq-sterke-authenticatie'
+    support_email: support@support.nl
+    locales:
+        - nl_NL
+        - en_GB
+    user_display_name: 'OpenConext DEV Environment'
+    webauthn_name: 'OpenConext DEV Environment'
+    webauthn_logo: 'https://openconext.org/wp-content/uploads/2016/11/openconext_logo-med.png'
+    #  Cypress has some issues correctly setting the RPID of the virtual authenticator, because of how it sets domain: https://github.com/cypress-io/cypress/issues/2193.
+    #  Therefore, we set the RPID to match what Cypress sets while testing.
+    webauthn_relying_party_id: 'openconext.local'
+    trusted_certificates_directory: '%kernel.root_dir%/../app/files/trusted_certificates'
+#    saml_idp_publickey: '%kernel.root_dir%/../ci/docker/webauthn/webauthn_idp.crt'
+#    saml_idp_privatekey: '%kernel.root_dir%/../ci/docker/webauthn/webauthn_idp.key'
+#    saml_metadata_publickey: '%kernel.root_dir%/../ci/docker/webauthn/webauthn_idp.crt'
+#    saml_metadata_privatekey: '%kernel.root_dir%/../ci/docker/webauthn/webauthn_idp.key'
+#    saml_remote_sp_entity_id: 'https://gateway.dev.openconext.local/gssp/webauthn/metadata'
+#    saml_remote_sp_certificate: '%kernel.root_dir%/../vendor/surfnet/stepup-gssp-bundle/src/Resources/keys/pieter.aai.surfnet.nl.pem'
+#    saml_remote_sp_acs: 'https://pieter.aai.surfnet.nl/simplesamlphp/module.php/saml/sp/saml2-acs.php/default-sp'
+    saml_idp_publickey: '/config/webauthn/webauthn_idp.crt'
+    saml_idp_privatekey: '/config/webauthn/webauthn_idp.key'
+    saml_metadata_publickey: '/config/webauthn/webauthn_idp.crt'
+    saml_metadata_privatekey: '/config/webauthn/webauthn_idp.key'
+    saml_remote_sp_entity_id: 'https://webauthn.test/saml/metadata'
+    saml_remote_sp_certificate: '/config/gateway/gateway_gssp_sp.crt'
+    saml_remote_sp_acs: 'https://webauthn.test/demo/sp/acs'
