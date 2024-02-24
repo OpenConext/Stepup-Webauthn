@@ -3,15 +3,35 @@
 {% block body %}
     <h2>{{ 'registration.sub_title'|trans }}</h2>
 
-    <div id="root"></div>
+    <form
+            {{ stimulus_controller('@web-auth/webauthn-stimulus',
+                {
+                    creationResultUrl: path('verify-attestation'),
+                    creationOptionsUrl: path('webauthn.controller.security.main.creation.options')
+                }
+            ) }}
+    >
+        <label for="username">Username</label>
+        <input name="username" type="text" id="username" placeholder="Type your username here" autocomplete="username webauthn">
+
+        <div class="mb-6">
+            <label for="inputDisplayName">Display name</label>
+            <input
+                    type="text"
+                    name="displayName"
+                    id="inputDisplayName" autocomplete="displayName" required autofocus
+                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    placeholder="Username"
+            />
+        </div>
+        <button
+                type="submit"
+                {{ stimulus_action('@web-auth/webauthn-stimulus', 'signup') }}
+        >
+            Register
+        </button>
+    </form>
 
     {% include 'default/variables.twig' %}
-    {% block javascripts %}
-        <script>
-            var publicKeyOptions = {{ publicKeyOptions | json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE')) | raw }};
-            var responseUrl = {{ url('verify-attestation') | json_encode | raw }};
-        </script>
-        {{ encore_entry_script_tags('registration') }}
-    {% endblock %}
 
 {% endblock %}
