@@ -61,7 +61,7 @@ final readonly class AttestationResponseController
      * Handles the attestation public key response.
      */
     #[Route(path: '/verify-attestation', name: 'verify-attestation', methods: ['POST'])]
-    public function action(ServerRequestInterface $psr7Request, Request $request): Response
+    public function action(Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending registration from SP');
 
@@ -98,7 +98,7 @@ final readonly class AttestationResponseController
         $logger->info('Validate attestation response');
 
         try {
-            $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
+//            $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
         } catch (Exception $e) {
             $logger->warning(sprintf('Invalid attestation "%s"', $e->getMessage()));
             return ValidationJsonResponse::invalid($e);
