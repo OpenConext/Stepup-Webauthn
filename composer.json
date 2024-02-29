@@ -33,6 +33,7 @@
     "nyholm/psr7": "^1.8",
     "openconext/monitor-bundle": "^4.0",
     "ramsey/uuid": "^4.7",
+    "spomky-labs/cbor-bundle": "*",
     "spomky-labs/cbor-php": "^3.0",
     "surfnet/stepup-bundle": "^6.0",
     "surfnet/stepup-gssp-bundle": "^5.0",
@@ -47,6 +48,7 @@
     "symfony/monolog-bundle": "^3.8",
     "symfony/runtime": "6.*.*",
     "symfony/security-bundle": "^6.4",
+    "symfony/stimulus-bundle": "^2.15",
     "symfony/templating": "^6.4",
     "symfony/translation": "^6.4",
     "symfony/twig-bundle": "^6.4",
@@ -56,6 +58,7 @@
     "twig/twig": "^3.8",
     "web-auth/cose-lib": "^4.2",
     "web-auth/webauthn-lib": "^4.7",
+    "web-auth/webauthn-stimulus": "*",
     "web-auth/webauthn-symfony-bundle": "^4.7",
     "web-token/jwt-signature-algorithm-rsa": "^3.2"
   },

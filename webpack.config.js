@@ -9,8 +9,8 @@ Encore
     .setPublicPath('/build')
     .cleanupOutputBeforeBuild()
     .addStyleEntry('global', './assets/scss/application.scss')
-    .addEntry('app', './assets/app.js')
     .enableStimulusBridge('./assets/controllers.json')
+    .addEntry('app', './assets/app.js')
     .enableSassLoader(function (options) {
         options.sassOptions = {
             outputStyle: 'expanded',
