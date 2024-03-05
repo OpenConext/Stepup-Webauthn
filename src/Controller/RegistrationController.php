@@ -78,7 +78,7 @@ final class RegistrationController extends AbstractController
         return $this->render(
             'default\registration.html.twig',
             [
-                'publicKeyOptions' => $publicKeyCredentialCreationOptions
+                'userEntity' => $userEntity
             ] + $this->clientMetadataService->generateMetadata($request)
         );
     }
