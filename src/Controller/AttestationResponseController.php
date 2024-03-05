@@ -27,7 +27,8 @@ use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
 use Surfnet\Webauthn\Service\AttestationCertificateTrustStore;
 use Surfnet\Webauthn\ValidationJsonResponse;
 use Surfnet\Webauthn\WithContextLogger;
-use Psr\Http\Message\ServerRequestInterface;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\RegistrationService;
@@ -97,8 +98,11 @@ final readonly class AttestationResponseController
 
         $logger->info('Validate attestation response');
 
+        $psr17Factory = new Psr17Factory();
+        $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+        $psr7Request = $psrHttpFactory->createRequest($request);
         try {
-//            $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
+            $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
         } catch (Exception $e) {
             $logger->warning(sprintf('Invalid attestation "%s"', $e->getMessage()));
             return ValidationJsonResponse::invalid($e);
