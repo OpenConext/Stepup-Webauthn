@@ -11,26 +11,30 @@
                 }
             ) }}
     >
-        <label for="username">Username</label>
-        <input name="username" type="text" id="username" placeholder="Type your username here" autocomplete="username webauthn">
-
-        <div class="mb-6">
-            <label for="inputDisplayName">Display name</label>
-            <input
-                    type="text"
-                    name="displayName"
-                    id="inputDisplayName" autocomplete="displayName" required autofocus
-                    class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    placeholder="Username"
-            />
-        </div>
-        <button
-                type="submit"
-                {{ stimulus_action('@web-auth/webauthn-stimulus', 'signup') }}
+        <input
+                type="hidden"
+                name="username"
+                id="username"
+                value="{{ userEntity.name() }}"
         >
-            Register
+        <input
+                    type="hidden"
+                    name="displayName"
+                    id="inputDisplayName"
+                    value="{{ userEntity.displayName() }}"
+        >
+        <button id="registerButton" {{ stimulus_controller('registration') }}
+                {{ stimulus_action('@web-auth/webauthn-stimulus', 'signup') }}
+        hidden>
+
         </button>
     </form>
+
+    <script>
+        window.onload = function(){
+            document.getElementById("registerButton").click();
+        }
+    </script>
 
     {% include 'default/variables.twig' %}
 
