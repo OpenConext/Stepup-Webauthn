@@ -6,8 +6,8 @@
     <form
             {{ stimulus_controller('@web-auth/webauthn-stimulus',
                 {
-                    creationResultUrl: path('verify-attestation'),
-                    creationOptionsUrl: path('attestation-options1')
+                    creationResultUrl: path('attestation-verification'),
+                    creationOptionsUrl: path('attestation-options')
                 }
             ) }}
     >
