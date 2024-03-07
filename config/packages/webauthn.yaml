@@ -1,12 +1,8 @@
 webauthn:
     credential_repository: Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository
     user_repository: Surfnet\Webauthn\Repository\UserRepository
-    # Uncomment/comment the comment below for Webauthn libary logging/debugging
+    # Uncomment/comment the line below for Webauthn libary logging/debugging
     logger: Psr\Log\LoggerInterface
-#    metadata:
-#        enabled: true
-#        mds_repository: Surfnet\Webauthn\Service\ClientMetadataService
-#        status_report_repository:
     creation_profiles:
         default:
             public_key_credential_parameters:
@@ -15,7 +11,6 @@ webauthn:
             rp:
                 name: '%webauthn_name%'
                 icon: '%webauthn_logo%'
-                id: '%webauthn_id%'
             challenge_length: 64
             timeout: 60000
             authenticator_selection_criteria:
