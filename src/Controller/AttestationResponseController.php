@@ -99,7 +99,7 @@ final readonly class AttestationResponseController
         $logger->info('Validate attestation response');
 
         $psr17Factory = new Psr17Factory();
-        $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
+        $psrHttpFactory = new PsrHttpFactory($psr17Factory);
         $psr7Request = $psrHttpFactory->createRequest($request);
         try {
             $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
