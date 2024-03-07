@@ -61,7 +61,7 @@ final readonly class AttestationResponseController
     /**
      * Handles the attestation public key response.
      */
-    #[Route(path: '/verify-attestation', name: 'verify-attestation', methods: ['POST'])]
+    #[Route(path: '/attestation-verification', name: 'attestation-verification', methods: ['POST'])]
     public function action(Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending registration from SP');
