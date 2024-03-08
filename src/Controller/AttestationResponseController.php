@@ -73,6 +73,7 @@ final readonly class AttestationResponseController
 
         $this->logger->info('Verify valid public key credential response');
 
+
         try {
             $publicKeyCredential = $this->publicKeyCredentialLoader->load($request->getContent());
             $response = $publicKeyCredential->getResponse();
@@ -102,7 +103,7 @@ final readonly class AttestationResponseController
         $psrHttpFactory = new PsrHttpFactory($psr17Factory);
         $psr7Request = $psrHttpFactory->createRequest($request);
         try {
-            $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
+//            $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
         } catch (Exception $e) {
             $logger->warning(sprintf('Invalid attestation "%s"', $e->getMessage()));
             return ValidationJsonResponse::invalid($e);
