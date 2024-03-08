@@ -34,15 +34,14 @@ class InMemoryAttestationCertificateTrustStore implements AttestationCertificate
     }
 
     public function validate(PublicKeyCredentialSource $source): void
-    {
-        if ($source->getAttestationType() === AttestationStatement::TYPE_NONE) {
+    {if ($source->attestationType === AttestationStatement::TYPE_NONE) {
             throw new AttestationStatementNotFoundException();
         }
-        $trustPath = $source->getTrustPath();
+        $trustPath = $source->trustPath;
         if (!$trustPath instanceof CertificateTrustPath) {
             throw new InvalidTrustPathException();
         }
-        $certificates = $trustPath->getCertificates();
+        $certificates = $trustPath->certificates;
         if (!in_array(implode(PHP_EOL, $certificates), $this->trustedCertificates)) {
             throw new AttestationCertificateNotSupportedException(sprintf('This attestationcertificate is not in our truststore: "%s"', implode(PHP_EOL, $certificates)));
         }
