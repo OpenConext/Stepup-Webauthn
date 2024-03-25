@@ -18,22 +18,19 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Surfnet\Webauthn\Service;
 
-use App\Entity\PublicKeyCredentialSource;
-use App\Exception\AttestationCertificateNotSupportedException;
-use App\Exception\AttestationStatementNotFoundException;
-use App\Exception\InvalidTrustPathException;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
+use Surfnet\Webauthn\Exception\AttestationCertificateNotSupportedException;
+use Surfnet\Webauthn\Exception\AttestationStatementNotFoundException;
+use Surfnet\Webauthn\Exception\InvalidTrustPathException;
 use Webauthn\AttestationStatement\AttestationStatement;
 use Webauthn\TrustPath\CertificateTrustPath;
 
 class InMemoryAttestationCertificateTrustStore implements AttestationCertificateTrustStore
 {
-    private $trustedCertificates;
-
-    public function __construct(array $trustedCertificates)
+    public function __construct(private readonly array $trustedCertificates)
     {
-        $this->trustedCertificates = $trustedCertificates;
     }
 
     public function validate(PublicKeyCredentialSource $source): void

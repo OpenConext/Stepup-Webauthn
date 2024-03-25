@@ -18,19 +18,22 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Surfnet\Webauthn\Repository;
 
-use App\Entity\PublicKeyCredentialSource;
-use App\Entity\User;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
+use Surfnet\Webauthn\Entity\User;
 use Assert\Assertion;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Webauthn\AttestationStatement\AttestationObject;
 use Webauthn\AuthenticatorAttestationResponse;
-use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepository as BasePublicKeyCredentialSourceRepository;
+use Webauthn\Bundle\Repository\DoctrineCredentialSourceRepository;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialDescriptor;
 
-class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceRepository
+/**
+ * @extends DoctrineCredentialSourceRepository<PublicKeyCredentialSource>
+ */
+class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

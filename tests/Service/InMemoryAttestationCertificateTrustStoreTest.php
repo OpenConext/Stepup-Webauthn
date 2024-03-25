@@ -18,12 +18,12 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Surfnet\Webauthn\Service;
 
-use App\Entity\PublicKeyCredentialSource;
-use App\Exception\AttestationCertificateNotSupportedException;
-use App\Exception\AttestationStatementNotFoundException;
-use App\Exception\InvalidTrustPathException;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
+use Surfnet\Webauthn\Exception\AttestationCertificateNotSupportedException;
+use Surfnet\Webauthn\Exception\AttestationStatementNotFoundException;
+use Surfnet\Webauthn\Exception\InvalidTrustPathException;
 use PHPUnit\Framework\TestCase;
 use Webauthn\AttestationStatement\AttestationStatement;
 use Webauthn\TrustPath\CertificateTrustPath;
@@ -31,7 +31,7 @@ use Webauthn\TrustPath\EmptyTrustPath;
 
 class InMemoryAttestationCertificateTrustStoreTest extends TestCase
 {
-    public function test__should_have_an_attestation_statement()
+    public function test__should_have_an_attestation_statement(): void
     {
         $this->expectException(AttestationStatementNotFoundException::class);
         $trustStore = new InMemoryAttestationCertificateTrustStore([]);
@@ -40,7 +40,7 @@ class InMemoryAttestationCertificateTrustStoreTest extends TestCase
         $trustStore->validate($source);
     }
 
-    public function test__should_have_certificate_trust_path()
+    public function test__should_have_certificate_trust_path(): void
     {
         $this->expectException(InvalidTrustPathException::class);
         $trustStore = new InMemoryAttestationCertificateTrustStore([]);
@@ -60,7 +60,7 @@ class InMemoryAttestationCertificateTrustStoreTest extends TestCase
     public function test__should_know_the_certificate_is_not_supported(
         array $keyCertificates,
         array $trustedCertificates
-    ) {
+    ): void {
         $this->expectException(AttestationCertificateNotSupportedException::class);
         $trustStore = new InMemoryAttestationCertificateTrustStore($trustedCertificates);
         $source = \Mockery::mock(PublicKeyCredentialSource::class);
@@ -76,7 +76,7 @@ class InMemoryAttestationCertificateTrustStoreTest extends TestCase
      * @param string[] $keyCertificates
      * @param string[] $trustedCertificates
      */
-    public function test__should_accept_the_valid_certificates(array $keyCertificates, array $trustedCertificates)
+    public function test__should_accept_the_valid_certificates(array $keyCertificates, array $trustedCertificates): void
     {
         $trustStore = new InMemoryAttestationCertificateTrustStore($trustedCertificates);
         $source = \Mockery::mock(PublicKeyCredentialSource::class);
@@ -88,7 +88,7 @@ class InMemoryAttestationCertificateTrustStoreTest extends TestCase
         $this->assertNull(null);
     }
 
-    public function invalidCertificatesProvider()
+    public function invalidCertificatesProvider(): array
     {
         return [
             [[], []],
@@ -99,7 +99,7 @@ class InMemoryAttestationCertificateTrustStoreTest extends TestCase
         ];
     }
 
-    public function validCertificatesProvider()
+    public function validCertificatesProvider(): array
     {
         return [
             [['cer 1'], ['cer 1']],

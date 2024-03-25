@@ -1,0 +1,32 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# https://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    app_env: prod
+    app_debug: false
+    app_secret: SeTW1ThY0uR0WnS3cR37
+    # The Symfony app secret. For more details see:
+    # https://symfony.com/doc/current/reference/configuration/framework.html#secret
+    database_url: 'mysql://webauthn_user:webauthn_secret@mariadb:3306/webauthn'
+    support_url:
+        en_GB: "https://support.example.org/faq-strong-authentication"
+        nl_NL: "https://support.example.org/faq-sterke-authenticatie"
+    support_email: support@support.nl
+    locales:
+        - nl_NL
+        - en_GB
+
+    # WebAuthn user display name
+    user_display_name: OpenConext DEV Environment
+    webauthn_name: OpenConext DEV Environment
+    webauthn_logo: 'https://openconext.org/wp-content/uploads/2016/11/openconext_logo-med.png'
+    trusted_certificates_directory: '%kernel.project_dir%/app/files/trusted_certificates'
+
+    saml_idp_publickey: '/config/webauthn/webauthn_idp.crt'
+    saml_idp_privatekey: '/config/webauthn/webauthn_idp.key'
+    saml_metadata_publickey: '/config/webauthn/webauthn_idp.crt'
+    saml_metadata_privatekey: '/config/webauthn/webauthn_idp.key'
+    saml_remote_sp_entity_id: 'https://gateway.dev.openconext.local/gssp/webauthn/metadata'
+    saml_remote_sp_certificate: '/config/gateway/gateway_gssp_sp.crt'
+    saml_remote_sp_acs: 'https://gateway.dev.openconext.local/gssp/webauthn/consume-assertion'
+

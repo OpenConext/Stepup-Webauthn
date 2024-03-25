@@ -13,15 +13,12 @@
 -
     - info
     - 'Validate attestation response'
-    -
-        nameId: userId123
+    - { nameId: userId123 }
 -
     - info
     - 'Verify if attestation certificate is supported'
-    -
-        nameId: userId123
+    - { nameId: userId123 }
 -
     - warning
     - 'Missing attestation statement'
-    -
-        nameId: userId123
+    - { nameId: userId123 }

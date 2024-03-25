@@ -6,7 +6,7 @@
 ###########################
 
 /.web-server-pid
-/config/packages/parameters.yml
+/config/openconext/parameters.yaml
 /build/
 /var/*
 !/var/cache
@@ -26,11 +26,6 @@
 /node_modules/
 /web/build
 .env
-
-# Vagrant files #
-#################
-.vagrant
-homestead/vendor
 
 # Code coverage reports #
 #################
@@ -63,7 +58,7 @@ yarn-error.log
 ###< phpunit/phpunit ###
 
 ###> squizlabs/php_codesniffer ###
-/.phpcs-cache
+ci/qa/.phpcs-cache
 ###< squizlabs/php_codesniffer ###
 
 ###> symfony/phpunit-bridge ###
@@ -73,5 +68,3 @@ yarn-error.log
 ###< symfony/phpunit-bridge ###
 
 *~
-
-local-php-security-checker

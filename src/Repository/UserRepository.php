@@ -18,35 +18,33 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Surfnet\Webauthn\Repository;
 
-use Ramsey\Uuid\Uuid;
-use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
+use Ramsey\Uuid\Uuid;
+use Surfnet\Webauthn\Entity\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use LogicException;
+use Webauthn\Bundle\Repository\CanRegisterUserEntity;
+use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepositoryInterface;
 use Webauthn\PublicKeyCredentialUserEntity;
-use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepository as BasePublicKeyCredentialUserEntityRepository;
 
-final class UserRepository implements ServiceEntityRepositoryInterface, BasePublicKeyCredentialUserEntityRepository
+final readonly class UserRepository implements ServiceEntityRepositoryInterface, CanRegisterUserEntity, PublicKeyCredentialUserEntityRepositoryInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $manager;
+    private EntityManagerInterface $manager;
 
     public function __construct(ManagerRegistry $registry)
     {
+        /** @var EntityManagerInterface $manager */
         $manager = $registry->getManagerForClass(User::class);
 
-        if (null === $manager) {
+        if (is_null($manager)) {
             throw new LogicException(sprintf(
                 'Could not find the entity manager for class "%s". Check your Doctrine configuration to make sure it is configured to load this entity’s metadata.',
                 User::class
             ));
         }
-
         $this->manager = $manager;
     }
 
@@ -105,5 +103,10 @@ final class UserRepository implements ServiceEntityRepositoryInterface, BasePubl
     {
         $this->manager->persist($userEntity);
         $this->manager->flush();
+    }
+
+    public function generateNextUserEntityId(): string
+    {
+        return Uuid::uuid4()->toString();
     }
 }

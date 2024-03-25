@@ -18,37 +18,27 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\NoAuthnrequestException;
-use InvalidArgumentException;
+use Surfnet\Webauthn\Exception\NoAuthnrequestException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Surfnet\GsspBundle\Service\AuthenticationService;
 use Surfnet\GsspBundle\Service\RegistrationService;
 
 class CancelController extends AbstractController
 {
-    private $authenticationService;
-    private $registrationService;
-    private $logger;
-
     public function __construct(
-        AuthenticationService $authenticationService,
-        RegistrationService $registrationService,
-        LoggerInterface $logger
+        private readonly AuthenticationService $authenticationService,
+        private readonly RegistrationService $registrationService,
+        private readonly LoggerInterface $logger
     ) {
-        $this->authenticationService = $authenticationService;
-        $this->registrationService = $registrationService;
-        $this->logger = $logger;
     }
 
-    /**
-     * @Route("/cancel", name="app_cancel", methods={"GET"})
-     * @throws InvalidArgumentException
-     */
-    public function cancel()
+    #[Route(path: '/cancel', name: 'app_cancel', methods: ['GET'])]
+    public function cancel(): Response
     {
         $this->logger->notice('User cancelled the request');
         if ($this->authenticationService->authenticationRequired()) {
@@ -69,11 +59,8 @@ class CancelController extends AbstractController
         throw new NoAuthnrequestException();
     }
 
-    /**
-     * @Route("/abort", name="app_abort", methods={"GET"})
-     * @throws InvalidArgumentException
-     */
-    public function abort()
+    #[Route(path: '/abort', name: 'app_abort', methods: ['GET'])]
+    public function abort(): Response
     {
         $this->logger->notice('User abort the request');
         if ($this->authenticationService->authenticationRequired()) {

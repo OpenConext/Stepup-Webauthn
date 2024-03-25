@@ -20,16 +20,16 @@ declare(strict_types=1);
 
 namespace Test\Controller;
 
-use App\Controller\AssertionResponseController;
-use App\Exception\NoActiveAuthenrequestException;
-use App\PublicKeyCredentialRequestOptionsStore;
-use App\ValidationJsonResponse;
+use Surfnet\Webauthn\Controller\AssertionResponseController;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
+use Surfnet\Webauthn\ValidationJsonResponse;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
-use Symfony\Component\Debug\BufferingLogger;
+use Symfony\Component\ErrorHandler\BufferingLogger;
 use Symfony\Component\HttpFoundation\Request;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAssertionResponseValidator;
@@ -41,21 +41,21 @@ class AssertionResponseControllerTest extends TestCase
 {
     use WebAuthnTestTrait;
 
-    private $controller;
+    private AssertionResponseController $controller;
     private $publicKeyCredentialLoader;
     private $assertionResponseValidator;
     private $authenticationService;
     private $store;
-    private $logger;
+    private BufferingLogger $logger;
     private $psr7Request;
     private $request;
 
-    public function test__construct()
+    public function test__construct(): void
     {
         $this->assertInstanceOf(AssertionResponseController::class, $this->controller);
     }
 
-    public function test__there_is_no_pending_authentication_from_SP()
+    public function test__there_is_no_pending_authentication_from_SP(): void
     {
         $this->authenticationService->shouldReceive(['authenticationRequired' => false]);
         $this->assertEquals(
@@ -65,7 +65,7 @@ class AssertionResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__if_it_fails_for_invalid_assertion_Response()
+    public function test__if_it_fails_for_invalid_assertion_Response(): void
     {
         $this->authenticationService->shouldReceive([
             'authenticationRequired' => true,
@@ -79,7 +79,7 @@ class AssertionResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__if_there_is_no_pending_credential_assert_options()
+    public function test__if_there_is_no_pending_credential_assert_options(): void
     {
         $this->authenticationService->shouldReceive([
             'authenticationRequired' => true,
@@ -94,7 +94,7 @@ class AssertionResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__if_public_key_credential_is_invalid()
+    public function test__if_public_key_credential_is_invalid(): void
     {
         $this->authenticationService->shouldReceive([
             'authenticationRequired' => true,
@@ -103,7 +103,7 @@ class AssertionResponseControllerTest extends TestCase
         $response = Mockery::mock(AuthenticatorAssertionResponse::class);
         $publicKeyCredential = $this->setAuthenticatorResponse($response);
         $publicKeyCredential->shouldReceive('getRawId')->andReturn('Public key credential raw id 1234');
-        $options = Mockery::mock(PublicKeyCredentialRequestOptions::class);
+        $options = new PublicKeyCredentialRequestOptions('challenge');
         $this->store->shouldReceive('get')->andReturn($options);
         $this->assertionResponseValidator
             ->shouldReceive('check')
@@ -122,7 +122,7 @@ class AssertionResponseControllerTest extends TestCase
         $this->assertLogs();
     }
 
-    public function test__if_public_key_credential_is_valid()
+    public function test__if_public_key_credential_is_valid(): void
     {
         $this->authenticationService->shouldReceive([
             'authenticationRequired' => true,
@@ -131,7 +131,7 @@ class AssertionResponseControllerTest extends TestCase
         $response = Mockery::mock(AuthenticatorAssertionResponse::class);
         $publicKeyCredential = $this->setAuthenticatorResponse($response);
         $publicKeyCredential->shouldReceive('getRawId')->andReturn('Public key credential raw id 1234');
-        $options = Mockery::mock(PublicKeyCredentialRequestOptions::class);
+        $options = new PublicKeyCredentialRequestOptions('challenge');
         $this->store->shouldReceive('get')->andReturn($options);
         $this->authenticationService->shouldReceive('authenticate');
         $this->store->shouldReceive('clear');

@@ -18,25 +18,19 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Surfnet\Webauthn\Service;
 
 use DateTime;
 use Surfnet\GsspBundle\Service\StateHandlerInterface;
 use Surfnet\StepupBundle\Request\RequestId;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ClientMetadataService
+final readonly class ClientMetadataService
 {
-    private $requestId;
-    /**
-     * @var StateHandlerInterface
-     */
-    private $stateHandler;
-
-    public function __construct(RequestId $requestId, StateHandlerInterface $stateHandler)
-    {
-        $this->requestId = $requestId;
-        $this->stateHandler = $stateHandler;
+    public function __construct(
+        private RequestId $requestId,
+        private StateHandlerInterface $stateHandler
+    ) {
     }
 
     public function generateMetadata(Request $request): array

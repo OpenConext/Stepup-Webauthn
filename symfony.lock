@@ -138,9 +138,6 @@
             "ref": ""
         }
     },
-    "jakub-onderka/php-parallel-lint": {
-        "version": "v1.0.0"
-    },
     "justinrainbow/json-schema": {
         "version": "5.2.8"
     },
@@ -215,6 +212,18 @@
     },
     "phpspec/prophecy": {
         "version": "1.8.1"
+    },
+    "phpstan/phpstan": {
+        "version": "1.10",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.0",
+            "ref": "5e490cc197fb6bb1ae22e5abbc531ddc633b6767"
+        },
+        "files": [
+            "phpstan.dist.neon"
+        ]
     },
     "phpunit/php-code-coverage": {
         "version": "7.0.7"
@@ -428,9 +437,6 @@
         "version": "v4.3.3"
     },
     "symfony/dom-crawler": {
-        "version": "v4.3.3"
-    },
-    "symfony/dotenv": {
         "version": "v4.3.3"
     },
     "symfony/error-handler": {
@@ -651,6 +657,18 @@
             "config/packages/twig.yaml",
             "config/routes/dev/twig.yaml",
             "templates/base.html.twig"
+        ]
+    },
+    "symfony/uid": {
+        "version": "6.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "6.2",
+            "ref": "d294ad4add3e15d7eb1bae0221588ca89b38e558"
+        },
+        "files": [
+            "config/packages/uid.yaml"
         ]
     },
     "symfony/validator": {

@@ -18,20 +18,14 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Surfnet\Webauthn\Service;
 
 use Symfony\Component\Finder\Finder;
 
-final class AttestationCertificateTrustStoreFactory
+final readonly class AttestationCertificateTrustStoreFactory
 {
-    /**
-     * @var string
-     */
-    private $trustedCertificatesDirectory;
-
-    public function __construct(string $trustedCertificatesDirectory)
+    public function __construct(private string $trustedCertificatesDirectory)
     {
-        $this->trustedCertificatesDirectory = $trustedCertificatesDirectory;
     }
 
     public function __invoke(): AttestationCertificateTrustStore

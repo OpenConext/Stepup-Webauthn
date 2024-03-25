@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd $(dirname $0)/../../
+
+printf "Running tslint\n"
+yarn tslint --project tsconfig.json
+printf "Running phplint\n"
+./vendor/bin/phplint --no-ansi -n --no-progress --configuration=ci/qa/phplint.yaml $1
+printf "Running yaml lint\n"
+./bin/console lint:yaml config --no-ansi

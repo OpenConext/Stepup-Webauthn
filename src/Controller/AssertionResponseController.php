@@ -18,12 +18,12 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\NoActiveAuthenrequestException;
-use App\PublicKeyCredentialRequestOptionsStore;
-use App\ValidationJsonResponse;
-use App\WithContextLogger;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
+use Surfnet\Webauthn\ValidationJsonResponse;
+use Surfnet\Webauthn\WithContextLogger;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
@@ -39,37 +39,21 @@ use Webauthn\PublicKeyCredentialLoader;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class AssertionResponseController
+final readonly class AssertionResponseController
 {
-    private $publicKeyCredentialLoader;
-    private $assertionResponseValidator;
-    private $logger;
-    private $authenticationService;
-    private $store;
-
     public function __construct(
-        PublicKeyCredentialLoader $publicKeyCredentialLoader,
-        AuthenticatorAssertionResponseValidator $assertionResponseValidator,
-        AuthenticationService $authenticationService,
-        PublicKeyCredentialRequestOptionsStore $store,
-        LoggerInterface $logger
+        private PublicKeyCredentialLoader $publicKeyCredentialLoader,
+        private AuthenticatorAssertionResponseValidator $assertionResponseValidator,
+        private AuthenticationService $authenticationService,
+        private PublicKeyCredentialRequestOptionsStore $store,
+        private LoggerInterface $logger
     ) {
-        $this->assertionResponseValidator = $assertionResponseValidator;
-        $this->publicKeyCredentialLoader = $publicKeyCredentialLoader;
-        $this->logger = $logger;
-        $this->authenticationService = $authenticationService;
-        $this->store = $store;
     }
 
     /**
      * Handles the assertion public key response.
-     *
-     * @Route("/verify-assertion", methods={"POST"}, name="verify-assertion", )
-     *
-     * @param ServerRequestInterface $psr7Request
-     * @param Request $request
-     * @return Response
      */
+    #[Route(path: '/verify-assertion', name: 'verify-assertion', methods: ['POST'])]
     public function action(ServerRequestInterface $psr7Request, Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending authentication from SP');

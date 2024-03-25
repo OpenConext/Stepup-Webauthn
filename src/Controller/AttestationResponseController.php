@@ -18,15 +18,15 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\AttestationStatementNotFoundException;
-use App\Exception\NoActiveAuthenrequestException;
-use App\PublicKeyCredentialCreationOptionsStore;
-use App\Repository\PublicKeyCredentialSourceRepository;
-use App\Service\AttestationCertificateTrustStore;
-use App\ValidationJsonResponse;
-use App\WithContextLogger;
+use Surfnet\Webauthn\Exception\AttestationStatementNotFoundException;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialCreationOptionsStore;
+use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
+use Surfnet\Webauthn\Service\AttestationCertificateTrustStore;
+use Surfnet\Webauthn\ValidationJsonResponse;
+use Surfnet\Webauthn\WithContextLogger;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
@@ -37,52 +37,30 @@ use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\AuthenticatorAttestationResponseValidator;
-use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepository;
+use Webauthn\Bundle\Repository\CanRegisterUserEntity;
 use Webauthn\PublicKeyCredentialLoader;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class AttestationResponseController
+final readonly class AttestationResponseController
 {
-    private $userEntityRepository;
-    private $credentialSourceRepository;
-    private $publicKeyCredentialLoader;
-    private $attestationResponseValidator;
-    private $store;
-    private $registrationService;
-    private $logger;
-    private $trustStore;
-
     public function __construct(
-        PublicKeyCredentialLoader $publicKeyCredentialLoader,
-        AuthenticatorAttestationResponseValidator $attestationResponseValidator,
-        PublicKeyCredentialUserEntityRepository $userEntityRepository,
-        PublicKeyCredentialSourceRepository $credentialSourceRepository,
-        PublicKeyCredentialCreationOptionsStore $store,
-        AttestationCertificateTrustStore $trustStore,
-        RegistrationService $registrationService,
-        LoggerInterface $logger
+        private PublicKeyCredentialLoader $publicKeyCredentialLoader,
+        private AuthenticatorAttestationResponseValidator $attestationResponseValidator,
+        private CanRegisterUserEntity $userRegistrationRepository,
+        private PublicKeyCredentialSourceRepository $credentialSourceRepository,
+        private PublicKeyCredentialCreationOptionsStore $store,
+        private AttestationCertificateTrustStore $trustStore,
+        private RegistrationService $registrationService,
+        private LoggerInterface $logger
     ) {
-        $this->attestationResponseValidator = $attestationResponseValidator;
-        $this->userEntityRepository = $userEntityRepository;
-        $this->credentialSourceRepository = $credentialSourceRepository;
-        $this->publicKeyCredentialLoader = $publicKeyCredentialLoader;
-        $this->store = $store;
-        $this->registrationService = $registrationService;
-        $this->logger = $logger;
-        $this->trustStore = $trustStore;
     }
 
     /**
      * Handles the attestation public key response.
-     *
-     * @Route("/verify-attestation", methods={"POST"}, name="verify-attestation", )
-     *
-     * @param ServerRequestInterface $psr7Request
-     * @param Request $request
-     * @return Response
      */
+    #[Route(path: '/verify-attestation', name: 'verify-attestation', methods: ['POST'])]
     public function action(ServerRequestInterface $psr7Request, Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending registration from SP');
@@ -146,7 +124,7 @@ final class AttestationResponseController
 
         $logger->info('Saving user');
 
-        $this->userEntityRepository->saveUserEntity($publicKeyCredentialCreationOptions->getUser());
+        $this->userRegistrationRepository->saveUserEntity($publicKeyCredentialCreationOptions->user);
         $this->credentialSourceRepository->saveCredentialSource($credentialSource);
 
         $logger->info('Register user');

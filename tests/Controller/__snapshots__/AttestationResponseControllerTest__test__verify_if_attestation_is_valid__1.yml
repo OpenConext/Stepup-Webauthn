@@ -13,25 +13,20 @@
 -
     - info
     - 'Validate attestation response'
-    -
-        nameId: userId123
+    - { nameId: userId123 }
 -
     - info
     - 'Verify if attestation certificate is supported'
-    -
-        nameId: userId123
+    - { nameId: userId123 }
 -
     - info
     - 'Saving user'
-    -
-        nameId: userId123
+    - { nameId: userId123 }
 -
     - info
     - 'Register user'
-    -
-        nameId: userId123
+    - { nameId: userId123 }
 -
     - info
     - 'Attestation verify success, user registered'
-    -
-        nameId: userId123
+    - { nameId: userId123 }
