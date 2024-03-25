@@ -1,6 +1,8 @@
 webauthn:
     credential_repository: Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository
     user_repository: Surfnet\Webauthn\Repository\UserRepository
+    # Uncomment/comment the line below for Webauthn libary logging/debugging
+    logger: Psr\Log\LoggerInterface
     creation_profiles:
         default:
             public_key_credential_parameters:

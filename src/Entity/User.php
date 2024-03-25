@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection as ArrayCollectionAlias;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Surfnet\Webauthn\Entity\PublicKeyCredentialSource as PublicKeyCredentialSourceEntity;
@@ -53,7 +54,7 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
         joinColumns:[new JoinColumn(name: "user_id", referencedColumnName: "id")],
         inverseJoinColumns:[new JoinColumn(name:"user_handle", referencedColumnName: "id", unique: true)]
     )]
-    protected ArrayCollectionAlias $publicKeyCredentialSources;
+    protected Collection $publicKeyCredentialSources;
 
     public function __construct(string $id, string $name, string $displayName)
     {
