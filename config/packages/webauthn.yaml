@@ -9,6 +9,7 @@ webauthn:
                 - !php/const Cose\Algorithms::COSE_ALGORITHM_ES256
                 - !php/const Cose\Algorithms::COSE_ALGORITHM_RS256
             rp:
+                id: '%webauthn_id%'
                 name: '%webauthn_name%'
                 icon: '%webauthn_logo%'
             challenge_length: 64
