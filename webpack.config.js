@@ -17,7 +17,6 @@ Encore
             includePaths: ['public'],
         };
     })
-    .enableTypeScriptLoader()
     .cleanupOutputBeforeBuild()
     .enableSingleRuntimeChunk()
     .enableSourceMaps()
