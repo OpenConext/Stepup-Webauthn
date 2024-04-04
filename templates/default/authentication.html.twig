@@ -3,16 +3,33 @@
 {% block body %}
     <h2>{{ 'authentication.sub_title'|trans }}</h2>
 
-    <div id="root">
-    </div>
+    <form
+            {{ stimulus_controller('@web-auth/webauthn-stimulus',
+                {
+                    requestResultUrl: path('verify-assertion'),
+                    requestOptionsUrl: path('request-options'),
+                    requestSuccessRedirectUri: path('app_identity_authentication')
+                }
+            ) }}
+    >
+        <input
+                type="hidden"
+                name="username"
+                id="inputUsername"
+                value="{{ nameId }}"
+                class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+        />
 
-    {% include 'default/variables.twig' %}
-    {% block javascripts %}
+        <button id="authenticationButton" {{ stimulus_controller('authentication') }}
+                {{ stimulus_action('@web-auth/webauthn-stimulus', 'signin') }}
+                hidden>
+        </button>
+
         <script>
-            var publicKeyOptions = {{ publicKeyOptions | json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE')) | raw }};
-            var responseUrl = {{ url('verify-assertion') | json_encode | raw }};
+            window.onload = function(){
+                document.getElementById("authenticationButton").click();
+            }
         </script>
-        {{ encore_entry_script_tags('authentication') }}
-    {% endblock %}
+    </form>
 
 {% endblock %}

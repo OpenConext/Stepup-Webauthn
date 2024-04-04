@@ -25,7 +25,6 @@ use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
 use Symfony\Component\Uid\AbstractUid;
 use Webauthn\PublicKeyCredentialSource as BasePublicKeyCredentialSource;
 use Webauthn\TrustPath\TrustPath;
-use function is_bool;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
@@ -39,6 +38,12 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
      #[ORM\GeneratedValue]
      #[ORM\Column(type:"integer")]
     private string $id;
+
+    /**
+     * Override the $uvInitialized field which we do not use, but needs
+     * to be initialized. Needed to prevent read before written errors.
+     */
+    public ?bool $uvInitialized = false;
 
     public function __construct(
         string $publicKeyCredentialId,
@@ -66,14 +71,21 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
         );
     }
 
+    /**
+     * Warning: the id field is accessed directly in :\Webauthn\CeremonyStep\CheckAllowedCredentialList::process
+     * The entity tracks a numeric auto increment id value, but the CheckAllowedCredentialList expects the
+     * publicKeyCredentialId.
+     */
+    public function __get(string $name)
+    {
+        if ($name == 'id') {
+            return $this->publicKeyCredentialId;
+        }
+    }
+
     public function getFmt(): string
     {
         return $this->fmt;
-    }
-
-    public function getId(): string
-    {
-        return $this->publicKeyCredentialId;
     }
 
     /**

@@ -56,6 +56,11 @@ class ValidationJsonResponse extends JsonResponse
         return new self(['status' => 'error', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
 
+    public static function unableToLoadAuthenticationOptions(Exception $e): self
+    {
+        return new self(['status' => 'error', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
+    }
+
     public static function valid(): self
     {
         return new self(['status' => 'ok', 'errorMessage' => '']);

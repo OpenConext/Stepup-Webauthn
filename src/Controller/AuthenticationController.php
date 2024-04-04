@@ -20,13 +20,11 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Controller;
 
-use Surfnet\Webauthn\Exception\AttestationCertificateNotSupportedException;
 use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
 use Surfnet\Webauthn\Exception\UserNotFoundException;
 use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
 use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
 use Surfnet\Webauthn\Repository\UserRepository;
-use Surfnet\Webauthn\Service\AttestationCertificateTrustStore;
 use Surfnet\Webauthn\Service\ClientMetadataService;
 use Surfnet\Webauthn\WithContextLogger;
 use Psr\Log\LoggerInterface;
@@ -51,7 +49,6 @@ class AuthenticationController extends AbstractController
         private readonly PublicKeyCredentialRequestOptionsFactory $publicKeyCredentialRequestOptionsFactory,
         private readonly PublicKeyCredentialSourceRepository $publicKeyCredentialSourceRepository,
         private readonly PublicKeyCredentialRequestOptionsStore $store,
-        private readonly AttestationCertificateTrustStore $trustStore,
         private readonly ClientMetadataService $clientMetadataService
     ) {
     }
@@ -96,14 +93,6 @@ class AuthenticationController extends AbstractController
             throw new UnrecoverableErrorException('One credential source allowed');
         }
 
-        $logger->info('Verify if attestation certificate is supported');
-        try {
-            $this->trustStore->validate($allowedCredentials[0]);
-        } catch (Throwable $exception) {
-            $logger->warning(sprintf('Attestation certificate is no longer supported "%s"', $exception->getMessage()));
-            throw new AttestationCertificateNotSupportedException();
-        }
-
         $publicKeyCredentialRequestOptions = $this->publicKeyCredentialRequestOptionsFactory->create(
             'default',
             $allowedCredentials
@@ -115,7 +104,10 @@ class AuthenticationController extends AbstractController
 
         return $this->render(
             'default/authentication.html.twig',
-            ['publicKeyOptions' => $publicKeyCredentialRequestOptions] +
+            [
+                'publicKeyOptions' => $publicKeyCredentialRequestOptions,
+                'nameId' => $nameId
+            ] +
             $this->clientMetadataService->generateMetadata($request)
         );
     }

@@ -55,22 +55,22 @@ class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceReposi
             PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_NFC
         ]);
         /** @var AttestationObject $attestationObject */
-        $attestationObject = $response->getAttestationObject();
-        $attestationStatement = $attestationObject->getAttStmt();
-        $authenticatorData = $attestationObject->getAuthData();
-        $attestedCredentialData = $authenticatorData->getAttestedCredentialData();
+        $attestationObject = $response->attestationObject;
+        $attestationStatement = $attestationObject->attStmt;
+        $authenticatorData = $attestationObject->authData;
+        $attestedCredentialData = $authenticatorData->attestedCredentialData;
         Assertion::notNull($attestedCredentialData, 'No attested credential data available');
         return new PublicKeyCredentialSource(
-            $publicKeyCredentialDescriptor->getId(),
-            $publicKeyCredentialDescriptor->getType(),
-            $publicKeyCredentialDescriptor->getTransports(),
-            $attestationStatement->getType(),
-            $attestationStatement->getTrustPath(),
-            $attestedCredentialData->getAaguid(),
-            $attestedCredentialData->getCredentialPublicKey(),
+            $publicKeyCredentialDescriptor->id,
+            $publicKeyCredentialDescriptor->type,
+            $publicKeyCredentialDescriptor->transports,
+            $attestationStatement->type,
+            $attestationStatement->trustPath,
+            $attestedCredentialData->aaguid,
+            $attestedCredentialData->credentialPublicKey,
             $userHandle,
-            $authenticatorData->getSignCount(),
-            $attestationStatement->getFmt()
+            $authenticatorData->signCount,
+            $attestationStatement->fmt
         );
     }
 
@@ -81,9 +81,9 @@ class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceReposi
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         return $qb->select('c')
-            ->from($this->getClass(), 'c')
+            ->from($this->class, 'c')
             ->where('c.userHandle = :user_handle')
-            ->setParameter(':user_handle', $user->getId())
+            ->setParameter(':user_handle', $user->id)
             ->getQuery()
             ->execute();
     }
