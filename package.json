@@ -21,6 +21,7 @@
     "webpack-import-glob-loader": "^1.6.3"
   },
   "dependencies": {
+    "bootstrap": "^3",
     "core-js": "^3.2.1",
     "css-loader": "^6",
     "glob-parent": ">=5.1.2",
