@@ -9,7 +9,6 @@ webauthn:
                 - !php/const Cose\Algorithms::COSE_ALGORITHM_ES256
                 - !php/const Cose\Algorithms::COSE_ALGORITHM_RS256
             rp:
-                id: '%webauthn_id%'
                 name: '%webauthn_name%'
                 icon: '%webauthn_logo%'
             challenge_length: 64
@@ -25,3 +24,9 @@ webauthn:
             challenge_length: 64
             timeout: 30000
             user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_PREFERRED
+
+    metadata:
+        enabled: true
+        mds_repository: 'Surfnet\Webauthn\Service\MetadataStatementService'
+        status_report_repository: 'Surfnet\Webauthn\Service\MetadataStatementService'
+

@@ -20,8 +20,10 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Controller;
 
+use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Surfnet\Webauthn\PublicKeyCredentialCreationOptionsStore;
-use Symfony\Component\HttpFoundation\Request;
+use Surfnet\Webauthn\ValidationJsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Webauthn\Bundle\Security\Handler\DefaultCreationOptionsHandler;
@@ -30,7 +32,8 @@ final readonly class AttestationRequestController
 {
     public function __construct(
         private PublicKeyCredentialCreationOptionsStore $creationOptionsStore,
-        private DefaultCreationOptionsHandler $creationOptionsHandler
+        private DefaultCreationOptionsHandler $creationOptionsHandler,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -38,17 +41,21 @@ final readonly class AttestationRequestController
      * Handles the attestation public key request.
      */
     #[Route(path: '/attestation-options', name: 'attestation-options', methods: ['POST'])]
-    public function action(Request $request): Response
+    public function action(): Response
     {
-            $publicKeyCredentialCreationOptions = $this->creationOptionsStore->get();
-            $userEntity = $publicKeyCredentialCreationOptions->user;
+        $publicKeyCredentialCreationOptions = $this->creationOptionsStore->get();
+        $userEntity = $publicKeyCredentialCreationOptions->user;
 
+        try {
             $response = $this->creationOptionsHandler->onCreationOptions(
                 $publicKeyCredentialCreationOptions,
                 $userEntity
             );
+        } catch (RuntimeException $e) {
+            $this->logger->warning(sprintf('Unable to create the attestation options: "%s"', $e->getMessage()));
+            return ValidationJsonResponse::failedAttestationRequest($e);
+        }
 
-            return $response;
+        return $response;
     }
-    //TODO: add failurehandler
 }

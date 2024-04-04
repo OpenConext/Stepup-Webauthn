@@ -20,11 +20,10 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Controller;
 
-use Surfnet\Webauthn\Exception\AttestationStatementNotFoundException;
 use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
 use Surfnet\Webauthn\PublicKeyCredentialCreationOptionsStore;
 use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
-use Surfnet\Webauthn\Service\AttestationCertificateTrustStore;
+use Surfnet\Webauthn\Service\MetadataStatementService;
 use Surfnet\Webauthn\ValidationJsonResponse;
 use Surfnet\Webauthn\WithContextLogger;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -51,8 +50,8 @@ final readonly class AttestationResponseController
         private AuthenticatorAttestationResponseValidator $attestationResponseValidator,
         private CanRegisterUserEntity $userRegistrationRepository,
         private PublicKeyCredentialSourceRepository $credentialSourceRepository,
+        private MetadataStatementService $mds,
         private PublicKeyCredentialCreationOptionsStore $store,
-        private AttestationCertificateTrustStore $trustStore,
         private RegistrationService $registrationService,
         private LoggerInterface $logger
     ) {
@@ -76,7 +75,7 @@ final readonly class AttestationResponseController
 
         try {
             $publicKeyCredential = $this->publicKeyCredentialLoader->load($request->getContent());
-            $response = $publicKeyCredential->getResponse();
+            $response = $publicKeyCredential->response;
             if (!$response instanceof AuthenticatorAttestationResponse) {
                 throw new UnrecoverableErrorException('Invalid response type');
             }
@@ -94,7 +93,7 @@ final readonly class AttestationResponseController
             return ValidationJsonResponse::noPendingCredentialCreationOptions($e);
         }
 
-        $nameId = $publicKeyCredentialCreationOptions->getUser()->getId();
+        $nameId = $publicKeyCredentialCreationOptions->user->id;
         $logger = WithContextLogger::from($this->logger, ['nameId' => $nameId]);
 
         $logger->info('Validate attestation response');
@@ -103,7 +102,8 @@ final readonly class AttestationResponseController
         $psrHttpFactory = new PsrHttpFactory($psr17Factory);
         $psr7Request = $psrHttpFactory->createRequest($request);
         try {
-//            $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
+            $pkco = $this->attestationResponseValidator->check($response, $publicKeyCredentialCreationOptions, $psr7Request);
+            $this->mds->verifyMeetsRequiredAuthenticatorStatus($pkco);
         } catch (Exception $e) {
             $logger->warning(sprintf('Invalid attestation "%s"', $e->getMessage()));
             return ValidationJsonResponse::invalid($e);
@@ -113,19 +113,6 @@ final readonly class AttestationResponseController
             $publicKeyCredential,
             $nameId
         );
-
-        $logger->info('Verify if attestation certificate is supported');
-
-        try {
-            $this->trustStore->validate($credentialSource);
-        } catch (Exception $e) {
-            if ($e instanceof AttestationStatementNotFoundException) {
-                $logger->warning('Missing attestation statement');
-                return ValidationJsonResponse::missingAttestationStatement($e);
-            }
-            $logger->warning(sprintf('Attestation certificate is not supported "%s"', $e->getMessage()));
-            return ValidationJsonResponse::deviceNotSupported($e);
-        }
 
         $logger->info('Saving user');
 

@@ -59,7 +59,7 @@ final class ExceptionController extends BaseExceptionController
         return $this->render(
             $template,
             $this->clientMetadataService->generateMetadata($request) +
-            ['error_code' => $errorCode] +
+            ['errorMessage' => $errorCode] +
             $this->getPageTitleAndDescription($exception),
             $response
         );

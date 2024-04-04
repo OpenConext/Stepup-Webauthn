@@ -1,6 +1,7 @@
-# Next
-- Fix favicon location
-- Update yarn packages
+# 2.0.0
+- Replace the Webauthn frontend solution. The homemade Typescript/React app is replaced with a Stimulus app.
+- Drop PHP 7 support
+- Move to Symfony 6.4
 
 # 1.0.14
 -  Import buffer to prevent missing reference error #64

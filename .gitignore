@@ -7,8 +7,13 @@
 
 /.web-server-pid
 /config/openconext/parameters.yaml
+/config/openconext/mds/blob.jwt
+/config/openconext/mds/fido2-mds.cer
 /build/
 /var/*
+!var/mds/
+!var/mds/.gitkeep
+/var/mds/*
 !/var/cache
 /var/cache/*
 !var/cache/.gitkeep
