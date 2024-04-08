@@ -25,6 +25,7 @@ parameters:
     fido2_jwt_mds_blob_file_name: '%kernel.project_dir%/config/openconext/mds/blob.jwt'
     fido2_jwt_mds_root_certificate_file_name: '%kernel.project_dir%/config/openconext/mds/fido2-mds.cer'
     fido2_mds_cache_dir: '%kernel.project_dir%/var/mds/'
+    saml_idp_publickey: /config/webauthn/webauthn_idp.crt
     saml_idp_privatekey: '/config/webauthn/webauthn_idp.key'
     saml_metadata_publickey: '/config/webauthn/webauthn_idp.crt'
     saml_metadata_privatekey: '/config/webauthn/webauthn_idp.key'
