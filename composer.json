@@ -33,7 +33,7 @@
     "nyholm/psr7": "^1.8",
     "openconext/monitor-bundle": "^4.0",
     "ramsey/uuid": "^4.7",
-    "spomky-labs/cbor-bundle": "*",
+    "spomky-labs/cbor-bundle": "^3.0",
     "spomky-labs/cbor-php": "^3.0",
     "surfnet/stepup-bundle": "^6.0",
     "surfnet/stepup-gssp-bundle": "^5.0",
@@ -56,11 +56,11 @@
     "symfony/webpack-encore-bundle": "^2.1",
     "symfony/yaml": "^6.4",
     "twig/twig": "^3.8",
-    "web-auth/cose-lib": "^4.2",
-    "web-auth/webauthn-lib": "^4.7",
-    "web-auth/webauthn-stimulus": "*",
-    "web-auth/webauthn-symfony-bundle": "^4.7",
-    "web-token/jwt-signature-algorithm-rsa": "^3.2"
+    "web-auth/cose-lib": "^4.3",
+    "web-auth/webauthn-lib": "^4.8",
+    "web-auth/webauthn-stimulus": "^4.8",
+    "web-auth/webauthn-symfony-bundle": "^4.8",
+    "web-token/jwt-signature-algorithm-rsa": "^3.3"
   },
   "require-dev": {
     "malukenho/docheader": "^1",
