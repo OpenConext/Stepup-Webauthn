@@ -30,12 +30,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ValidationJsonResponse extends JsonResponse
 {
-
-    public static function invalidPublicKeyCredentialResponse(Exception $e): self
-    {
-        return new self(['status' => 'error', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
-    }
-
     public static function noAuthenticationRequired(Exception $e): self
     {
         return new self(['status' => 'noAuthenticationRequired', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
@@ -46,17 +40,7 @@ class ValidationJsonResponse extends JsonResponse
         return new self(['status' => 'deviceNotSupported', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
 
-    public static function noPendingCredentialAssertOptions(Exception $e): self
-    {
-        return new self(['status' => 'error', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
-    }
-
-    public static function failedAttestationRequest(Exception $e): self
-    {
-        return new self(['status' => 'error', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
-    }
-
-    public static function unableToLoadAuthenticationOptions(Exception $e): self
+    public static function reportErrorMessage(Exception $e): self
     {
         return new self(['status' => 'error', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
@@ -74,11 +58,6 @@ class ValidationJsonResponse extends JsonResponse
     public static function noRegistrationRequired(Exception $e): self
     {
         return new self(['status' => 'noRegistrationRequired', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
-    }
-
-    public static function noPendingCredentialCreationOptions(Exception $e): self
-    {
-        return new self(['status' => 'error', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
 
     public static function missingAttestationStatement(Exception $e): self

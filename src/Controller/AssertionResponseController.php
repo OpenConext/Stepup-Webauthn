@@ -78,7 +78,7 @@ final readonly class AssertionResponseController
             }
         } catch (Exception $exception) {
             $logger->warning(sprintf('Invalid public key credential response "%s"', $exception->getMessage()));
-            return ValidationJsonResponse::invalidPublicKeyCredentialResponse($exception);
+            return ValidationJsonResponse::reportErrorMessage($exception);
         }
 
         $logger->info('Verify if there is an existing public key credential assertion options in session');
@@ -91,10 +91,9 @@ final readonly class AssertionResponseController
             }
             /** @var PublicKeyCredentialSource $publicKeyCredentialSource */
             $publicKeyCredentialSource = reset($allowedCredentials);
-
         } catch (Exception $exception) {
             $logger->warning(sprintf('Invalid attestation response "%s"', $exception->getMessage()));
-            return ValidationJsonResponse::noPendingCredentialAssertOptions($exception);
+            return ValidationJsonResponse::reportErrorMessage($exception);
         }
 
         $logger->info('Validate assertion response');

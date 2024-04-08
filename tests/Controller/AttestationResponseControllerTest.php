@@ -83,7 +83,7 @@ class AttestationResponseControllerTest extends TestCase
         $response = Mockery::mock(AuthenticatorAssertionResponse::class);
         $this->setAuthenticatorResponse($response);
         $this->assertEquals(
-            ValidationJsonResponse::invalidPublicKeyCredentialResponse(new UnrecoverableErrorException('Invalid response type')),
+            ValidationJsonResponse::reportErrorMessage(new UnrecoverableErrorException('Invalid response type')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();
@@ -95,7 +95,7 @@ class AttestationResponseControllerTest extends TestCase
         $this->setAuthenticatorResponse(Mockery::mock(AuthenticatorAttestationResponse::class));
         $this->store->shouldReceive('get')->andThrow(UnrecoverableErrorException::class, 'Some Error');
         $this->assertEquals(
-            ValidationJsonResponse::noPendingCredentialCreationOptions(new UnrecoverableErrorException('Some Error')),
+            ValidationJsonResponse::reportErrorMessage(new UnrecoverableErrorException('Some Error')),
             $this->controller->action($this->psr7Request, $this->request)
         );
         $this->assertLogs();

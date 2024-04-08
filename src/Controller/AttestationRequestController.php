@@ -53,7 +53,7 @@ final readonly class AttestationRequestController
             );
         } catch (RuntimeException $e) {
             $this->logger->warning(sprintf('Unable to create the attestation options: "%s"', $e->getMessage()));
-            return ValidationJsonResponse::failedAttestationRequest($e);
+            return ValidationJsonResponse::reportErrorMessage($e);
         }
 
         return $response;

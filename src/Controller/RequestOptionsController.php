@@ -80,7 +80,7 @@ final readonly class RequestOptionsController
             );
         } catch (RuntimeException $e) {
             $this->logger->warning(sprintf('Unable to create the authentication options: "%s"', $e->getMessage()));
-            return ValidationJsonResponse::unableToLoadAuthenticationOptions($e);
+            return ValidationJsonResponse::reportErrorMessage($e);
         }
 
         return $response;

@@ -81,7 +81,7 @@ final readonly class AttestationResponseController
             }
         } catch (Exception $e) {
             $this->logger->warning(sprintf('Invalid public key credential response "%s"', $e->getMessage()));
-            return ValidationJsonResponse::invalidPublicKeyCredentialResponse($e);
+            return ValidationJsonResponse::reportErrorMessage($e);
         }
 
         $this->logger->info('Verify if there is an existing public key credential creation options in session');
@@ -90,7 +90,7 @@ final readonly class AttestationResponseController
             $publicKeyCredentialCreationOptions = $this->store->get();
         } catch (Exception $e) {
             $this->logger->warning('No pending public key credential creation options in session');
-            return ValidationJsonResponse::noPendingCredentialCreationOptions($e);
+            return ValidationJsonResponse::reportErrorMessage($e);
         }
 
         $nameId = $publicKeyCredentialCreationOptions->user->id;
