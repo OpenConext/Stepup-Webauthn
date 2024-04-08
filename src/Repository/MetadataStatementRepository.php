@@ -32,29 +32,24 @@ use Webauthn\MetadataService\Exception\MetadataStatementLoadingException;
 use Webauthn\MetadataService\Exception\MissingMetadataStatementException;
 use Webauthn\MetadataService\Service\MetadataBLOBPayloadEntry;
 use Webauthn\MetadataService\Statement\MetadataStatement;
+use function file_get_contents;
+use function hash;
 
 class MetadataStatementRepository
 {
     private array $statements;
     private array $statusReports;
 
+    /**
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     */
     public function __construct(
         private readonly string $jwtMdsBlobFileName,
         private readonly string $jwtMdsRootCertFileName,
         private readonly string $mdsCacheDir,
         private readonly CertificateChainValidator $certificateChainValidator,
     ) {
-        $contents = file_get_contents($this->jwtMdsBlobFileName);
-        $contentsSignature = hash('sha256', $contents);
-
-        if (!file_exists($this->mdsCacheDir . $contentsSignature)) {
-            $certificates = [];
-            $payload = $this->getJwsPayload($contents, $certificates);
-            $this->validateCertificates(... $certificates);
-            file_put_contents($this->mdsCacheDir . $contentsSignature, $payload);
-        } else {
-            $payload = file_get_contents($this->mdsCacheDir . $contentsSignature);
-        }
+        $payload = $this->warmCache();
         $data = json_decode($payload, true, flags: JSON_THROW_ON_ERROR);
 
         foreach ($data['entries'] as $datum) {
@@ -129,6 +124,24 @@ class MetadataStatementRepository
         $payload !== null || throw MetadataStatementLoadingException::create(
             'Invalid response from the metadata service. The payload is missing.'
         );
+
+        return $payload;
+    }
+
+    private function warmCache(): string
+    {
+        $contents = file_get_contents($this->jwtMdsBlobFileName);
+        $contentsSignature = hash('sha256', $contents);
+        if (!file_exists($this->mdsCacheDir . $contentsSignature)) {
+            $certificates = [];
+            $payload = $this->getJwsPayload($contents, $certificates);
+            $this->validateCertificates(... $certificates);
+            file_put_contents($this->mdsCacheDir . $contentsSignature, $payload);
+        }
+        if (!isset($payload)) {
+            // The cache is warmed up, retrieve the payload from the filesystem
+            $payload = file_get_contents($this->mdsCacheDir . $contentsSignature);
+        }
 
         return $payload;
     }
