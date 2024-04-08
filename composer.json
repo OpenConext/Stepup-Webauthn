@@ -102,8 +102,6 @@
     "phpstan": "./ci/qa/phpstan",
     "phpstan-baseline": "./ci/qa/phpstan-update-baseline",
     "unit-tests": "ci/qa/phpunit",
-    "jest": "yarn jest",
-    "tsc": "yarn tsc --noEmit",
     "frontend-install": [
       "yarn install"
     ],

@@ -26,6 +26,9 @@ use Webauthn\MetadataService\Statement\StatusReport;
 
 class AuthenticatorStatusValidator
 {
+    /**
+     * @var string[]
+     */
     private readonly array $allowedStatus;
 
     public function __construct()

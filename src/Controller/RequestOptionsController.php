@@ -34,6 +34,7 @@ use Throwable;
 use Webauthn\Bundle\Security\Handler\DefaultCreationOptionsHandler;
 use Webauthn\Bundle\Security\Handler\DefaultRequestOptionsHandler;
 use function array_key_exists;
+use function is_array;
 use function json_decode;
 use function sprintf;
 
@@ -55,7 +56,7 @@ final readonly class RequestOptionsController
     {
 
         $requestContent = json_decode($request->getContent(), true);
-        if (!array_key_exists('username', $requestContent)) {
+        if (!is_array($requestContent) || !array_key_exists('username', $requestContent)) {
             throw new UserNotFoundException(
                 'The user was not found in the request json content. It should be stored in the username field.'
             );

@@ -18,24 +18,11 @@
 
 declare(strict_types=1);
 
-namespace Surfnet\Webauthn\Service;
+namespace Surfnet\Webauthn\Exception;
 
-use Symfony\Component\Finder\Finder;
+use RuntimeException as CoreRuntimeException;
 
-final readonly class AttestationCertificateTrustStoreFactory
+class RuntimeException extends CoreRuntimeException
 {
-    public function __construct(private string $trustedCertificatesDirectory)
-    {
-    }
 
-    public function __invoke(): AttestationCertificateTrustStore
-    {
-        $finder = new Finder();
-        $finder->files()->in($this->trustedCertificatesDirectory);
-        $certificates = [];
-        foreach ($finder as $file) {
-            $certificates[] = $file->getContents();
-        }
-        return new InMemoryAttestationCertificateTrustStore($certificates);
-    }
 }

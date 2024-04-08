@@ -21,8 +21,9 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Surfnet\Webauthn\Exception\RuntimeException;
 use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
-use Symfony\Component\Uid\AbstractUid;
+use Symfony\Component\Uid\Uuid;
 use Webauthn\PublicKeyCredentialSource as BasePublicKeyCredentialSource;
 use Webauthn\TrustPath\TrustPath;
 
@@ -51,7 +52,7 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
         array $transports,
         string $attestationType,
         TrustPath $trustPath,
-        AbstractUid $aaguid,
+        Uuid $aaguid,
         string $credentialPublicKey,
         string $userHandle,
         int $counter,
@@ -76,11 +77,12 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
      * The entity tracks a numeric auto increment id value, but the CheckAllowedCredentialList expects the
      * publicKeyCredentialId.
      */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
-        if ($name == 'id') {
+        if ($name === 'id') {
             return $this->publicKeyCredentialId;
         }
+        throw new RuntimeException(sprintf('Not allowed to access "%s" via the magic __get function', $name));
     }
 
     public function getFmt(): string

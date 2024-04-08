@@ -41,6 +41,3 @@ services:
 
     Surfnet\GsspBundle\Service\ValueStore\SessionValueStore:
         alias: surfnet_gssp.value_store.service
-
-    Surfnet\Webauthn\Service\AttestationCertificateTrustStore:
-        factory: '@Surfnet\Webauthn\Service\AttestationCertificateTrustStoreFactory'

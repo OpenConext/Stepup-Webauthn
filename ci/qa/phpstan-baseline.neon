@@ -156,11 +156,6 @@ parameters:
 			path: ../../src/Service/ClientMetadataService.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Service\\\\InMemoryAttestationCertificateTrustStore\\:\\:__construct\\(\\) has parameter \\$trustedCertificates with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../src/Service/InMemoryAttestationCertificateTrustStore.php
-
-		-
 			message: "#^Cannot call method getEntityId\\(\\) on Surfnet\\\\SamlBundle\\\\Entity\\\\IdentityProvider\\|null\\.$#"
 			count: 1
 			path: ../../src/Twig/GsspExtension.php

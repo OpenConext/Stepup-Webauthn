@@ -57,16 +57,12 @@ trait WebAuthnTestTrait
         $this->assertMatchesSnapshot($this->logger->cleanLogs());
     }
 
-    private function setAuthenticatorResponse(AuthenticatorResponse $response): MockInterface&PublicKeyCredential
+    private function setAuthenticatorResponse(AuthenticatorResponse $response): PublicKeyCredential
     {
         $content = 'The http content with AuthenticatorAssertionResponse';
-        $this->request->shouldReceive([
-            'getContent' => $content,
-        ]);
-        $publicKeyCredential = Mockery::mock(PublicKeyCredential::class);
-        $publicKeyCredential->shouldReceive([
-            'getResponse' => $response,
-        ]);
+
+        $this->request = Request::create('https://webauthn.dev.openconext.local', 'POST', [], [] , [], [], $content);
+        $publicKeyCredential = new PublicKeyCredential('fictional', 'public-key', 'Public key credential raw id 1234', $response);
         $this->publicKeyCredentialLoader
             ->shouldReceive('load')
             ->with($content)
