@@ -14,9 +14,7 @@ Install (with build archive)
 
 ### 1. Copy and configure the configuration files
  
-```cp .env.dist .env```
-
-```cp config/packages/parameters.yml.dist config/packages/parameters.yml```
+```cp config/openconext/parameters.yml.dist config/openconext/parameters.yml```
 
 ### 2. Create archive
 
@@ -45,7 +43,7 @@ Install (without build archive)
 
 ```cp .env.dist .env```
 
-```cp config/packages/parameters.yml.dist config/packages/parameters.yml```
+```cp config/openconext/parameters.yml.dist config/openconext/parameters.yml```
 
 ```composer dump-env prod```
 
