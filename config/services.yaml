@@ -12,7 +12,6 @@ services:
             $supportEmail: '%support_email%'
             $locales: '%locales%'
             $userDisplayName: '%user_display_name%'
-            $trustedCertificatesDirectory: '%trusted_certificates_directory%'
             $jwtMdsBlobFileName: '%fido2_jwt_mds_blob_file_name%'
             $jwtMdsRootCertFileName: '%fido2_jwt_mds_root_certificate_file_name%'
             $mdsCacheDir: '%fido2_mds_cache_dir%'
