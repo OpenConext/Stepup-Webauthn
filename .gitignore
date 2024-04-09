@@ -8,7 +8,7 @@
 /.web-server-pid
 /config/openconext/parameters.yaml
 /config/openconext/mds/blob.jwt
-/config/openconext/mds/fido2-mds.cer
+/config/openconext/mds/root.crt
 /build/
 /var/*
 !var/mds/
