@@ -14,7 +14,6 @@ services:
             $supportEmail: '%support_email%'
             $locales: '%locales%'
             $userDisplayName: '%user_display_name%'
-            $trustedCertificatesDirectory: '%trusted_certificates_directory%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

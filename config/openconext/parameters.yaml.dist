@@ -21,7 +21,6 @@ parameters:
     webauthn_name: OpenConext DEV Environment
     webauthn_logo: 'https://openconext.org/wp-content/uploads/2016/11/openconext_logo-med.png'
 
-    trusted_certificates_directory: '%kernel.project_dir%/app/files/trusted_certificates'
     fido2_jwt_mds_blob_file_name: '%kernel.project_dir%/config/openconext/mds/blob.jwt'
     fido2_jwt_mds_root_certificate_file_name: '%kernel.project_dir%/config/openconext/mds/root.crt'
     fido2_mds_cache_dir: '%kernel.project_dir%/var/mds/'
