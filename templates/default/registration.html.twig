@@ -19,14 +19,16 @@
                 value="{{ userEntity.name() }}"
         >
         <input
-                    type="hidden"
-                    name="displayName"
-                    id="inputDisplayName"
-                    value="{{ userEntity.displayName() }}"
+                type="hidden"
+                name="displayName"
+                id="inputDisplayName"
+                value="{{ userEntity.displayName() }}"
         >
-        <button id="registerButton" {{ stimulus_controller('registration') }}
+        <button
+                id="registerButton" {{ stimulus_controller('registration') }}
                 {{ stimulus_action('@web-auth/webauthn-stimulus', 'signup') }}
-        hidden>
+                hidden
+        >
 
         </button>
     </form>
