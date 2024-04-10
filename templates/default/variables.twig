@@ -1,38 +1,5 @@
-{% set translations = {
-    'authentication.start_button': 'authentication.start_button' | trans,
-    'registration.start_button': 'registration.start_button' | trans,
-    'registration.sub_title':  'registration.sub_title' | trans,
-    'status.registration_initial':  'status.registration_initial' | trans,
-    'status.missing_attestation_statement':  'status.missing_attestation_statement' | trans,
-    'authentication.sub_title':  'authentication.sub_title' | trans,
-    'status.authentication_initial':  'status.authentication_initial' | trans,
-    'status.general_error':  'status.general_error' | trans,
-    'status.webauthn_not_supported':  'status.webauthn_not_supported' | trans,
-    'status.no_active_request':  'status.no_active_request' | trans,
-    'status.authenticator_not_supported':  'status.authenticator_not_supported' | trans,
-    'retry':  'retry' | trans,
-    'cancel':  'cancel' | trans,
-    'abort':  'abort' | trans,
-    'error_title':  'error_title' | trans,
-    'user_not_found.title':  'user_not_found.title' | trans,
-    'user_not_found.description':  'user_not_found.description' | trans,
-    'stepup.error.support_page.mail_to':  'stepup.error.support_page.mail_to' | trans,
-    'stepup.error.support_page.mail_subject':  'stepup.error.support_page.mail_subject' | trans,
-    'stepup.error.support_page.mail_intro':  'stepup.error.support_page.mail_intro' | trans,
-    'stepup.error.support_page.mail_closure':  'stepup.error.support_page.mail_closure' | trans,
-    'stepup.error.timestamp':  'stepup.error.timestamp' | trans,
-    'stepup.error.hostname':  'stepup.error.hostname' | trans,
-    'stepup.error.request_id':  'stepup.error.request_id' | trans,
-    'stepup.error.sari':  'stepup.error.sari' | trans,
-    'stepup.error.error_code':  'stepup.error.error_code' | trans,
-    'stepup.error.user_agent':  'stepup.error.user_agent' | trans,
-    'stepup.error.ip_address':  'stepup.error.ip_address' | trans,
-    'stepup.error.support_page.text': 'stepup.error.support_page.text'|trans({'%support_url%': global_view_parameters.supportUrl })
-} %}
-
-    {% block javascripts %}
-        <script>
-            var translations = {{ translations | json_encode | raw }};
-            var requestInformation = {{ global_view_parameters.requestInformation | json_encode | raw }};
-        </script>
-    {% endblock %}
+{% block javascripts %}
+    <script>
+        var requestInformation = {{ global_view_parameters.requestInformation | json_encode | raw }};
+    </script>
+{% endblock %}

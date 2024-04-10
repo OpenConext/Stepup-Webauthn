@@ -3,8 +3,8 @@
 {% block body %}
     <h2>{{ 'authentication.sub_title'|trans }}</h2>
 
-    <form
-            {{ stimulus_controller('@web-auth/webauthn-stimulus',
+    <form id="form"
+        {{ stimulus_controller('@web-auth/webauthn-stimulus',
                 {
                     requestResultUrl: path('verify-assertion'),
                     requestOptionsUrl: path('request-options'),
@@ -12,6 +12,9 @@
                 }
             ) }}
     >
+
+        <span>{{ 'status.authentication_initial'|trans }}</span>
+
         <input
                 type="hidden"
                 name="username"
@@ -24,12 +27,26 @@
                 {{ stimulus_action('@web-auth/webauthn-stimulus', 'signin') }}
                 hidden>
         </button>
-
-        <script>
-            window.onload = function(){
-                document.getElementById("authenticationButton").click();
-            }
-        </script>
     </form>
+
+
+    {%  include 'partial/error_table.html.twig' with
+        {
+            'timestamp': 'timestamp',
+            'hostname': 'hostname',
+            'requestId': 'requestId',
+            'errorMessage': 'errorMessage',
+            'sari': 'sari',
+            'userAgent': 'userAgent',
+            'ipAddress': 'ipAddress',
+        } %}
+
+    <script>
+        window.onload = function(){
+            document.getElementById("authenticationButton").click();
+        }
+    </script>
+
+    {% include 'default/variables.twig' %}
 
 {% endblock %}

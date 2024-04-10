@@ -1,9 +1,10 @@
+
 {% extends 'base.html.twig' %}
 
 {% block body %}
     <h2>{{ 'registration.sub_title'|trans }}</h2>
 
-    <form
+    <form id="form"
             {{ stimulus_controller('@web-auth/webauthn-stimulus',
                 {
                     creationResultUrl: path('attestation-verification'),
@@ -12,6 +13,8 @@
                 }
             ) }}
     >
+        <span>{{ 'status.registration_initial'|trans }}</span>
+
         <input
                 type="hidden"
                 name="username"
@@ -32,6 +35,18 @@
 
         </button>
     </form>
+
+    {% include 'partial/error_table.html.twig' with
+        {
+            'timestamp': 'timestamp',
+            'hostname': 'hostname',
+            'requestId': 'requestId',
+            'errorMessage': 'errorMessage',
+            'sari': 'sari',
+            'userAgent': 'userAgent',
+            'ipAddress': 'ipAddress',
+        }
+    %}
 
     <script>
         window.onload = function(){
