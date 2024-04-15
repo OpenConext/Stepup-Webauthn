@@ -75,12 +75,11 @@ final class RegistrationController extends AbstractController
 
         $this->logger->info('Return registration page for user attestation');
 
-        $response = $this->render(
+        return $this->render(
             'default\registration.html.twig',
             [
                 'userEntity' => $userEntity
             ] + $this->clientMetadataService->generateMetadata($request)
         );
-        return $response;
     }
 }
