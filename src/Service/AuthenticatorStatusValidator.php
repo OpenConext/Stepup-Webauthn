@@ -23,6 +23,7 @@ namespace Surfnet\Webauthn\Service;
 use Surfnet\Webauthn\Exception\AuthenticatorStatusNotSupportedException;
 use Webauthn\MetadataService\Statement\AuthenticatorStatus;
 use Webauthn\MetadataService\Statement\StatusReport;
+use function array_walk;
 
 class AuthenticatorStatusValidator
 {
@@ -56,18 +57,22 @@ class AuthenticatorStatusValidator
     {
         $meetsRequirement = false;
         $reportsProcessed = 0;
+        $reportLog = [];
         foreach ($statusReports as $report) {
             if (in_array($report->status, $this->allowedStatus)) {
                 $meetsRequirement = true;
             }
             $reportsProcessed++;
+            $reportLog[] = $report->status;
         }
 
         if (!$meetsRequirement) {
             throw new AuthenticatorStatusNotSupportedException(
                 sprintf(
-                    'Of the %d StatusReports tested, none met one of the required FIDO Certified statuses',
-                    $reportsProcessed
+                    'Of the %d StatusReports tested, none met one of the required FIDO Certified statuses. ' .
+                    'Reports tested: "%s"',
+                    $reportsProcessed,
+                    implode(', ', $reportLog)
                 )
             );
         }
