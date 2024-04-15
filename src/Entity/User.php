@@ -20,7 +20,7 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection as ArrayCollectionAlias;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -46,7 +46,7 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
     public readonly string $displayName;
 
     /**
-     * @var ArrayCollectionAlias<PublicKeyCredentialSourceEntity>
+     * @var Collection<PublicKeyCredentialSourceEntity>
      */
     #[ORM\ManyToMany(targetEntity: PublicKeyCredentialSourceEntity::class)]
     #[ORM\JoinTable(
@@ -59,7 +59,7 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
     public function __construct(string $id, string $name, string $displayName)
     {
         parent::__construct($name, $id, $displayName);
-        $this->publicKeyCredentialSources = new ArrayCollectionAlias();
+        $this->publicKeyCredentialSources = new ArrayCollection();
     }
 
     /**
