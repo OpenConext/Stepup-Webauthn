@@ -81,7 +81,7 @@ parameters:
 			path: ../../src/Entity/User.php
 
 		-
-			message: "#^Property Surfnet\\\\Webauthn\\\\Entity\\\\User\\:\\:\\$publicKeyCredentialSources with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
+			message: "#^Property Surfnet\\\\Webauthn\\\\Entity\\\\User\\:\\:\\$publicKeyCredentialSources with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: ../../src/Entity/User.php
 
@@ -104,11 +104,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$request of method Surfnet\\\\Webauthn\\\\Service\\\\ClientMetadataService\\:\\:generateMetadata\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\Request, Symfony\\\\Component\\\\HttpFoundation\\\\Request\\|null given\\.$#"
 			count: 1
 			path: ../../src/GlobalViewParameters.php
-
-		-
-			message: "#^Generator expects value type Symfony\\\\Component\\\\HttpKernel\\\\Bundle\\\\BundleInterface, object given\\.$#"
-			count: 1
-			path: ../../src/Kernel.php
 
 		-
 			message: "#^Method Surfnet\\\\Webauthn\\\\PublicKeyCredentialCreationOptionsStore\\:\\:get\\(\\) should return Webauthn\\\\PublicKeyCredentialCreationOptions but returns mixed\\.$#"
