@@ -15,8 +15,9 @@ webauthn:
             timeout: 60000
             authenticator_selection_criteria:
                 authenticator_attachment: !php/const Webauthn\AuthenticatorSelectionCriteria::AUTHENTICATOR_ATTACHMENT_NO_PREFERENCE
+                resident_key: !php/const Webauthn\AuthenticatorSelectionCriteria::RESIDENT_KEY_REQUIREMENT_NO_PREFERENCE
                 require_resident_key: false
-                user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_DISCOURAGED
+                user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_PREFERRED
             #  this is needed for SURFsecureID as we want to whitelist authenticators by vendor/certification (default is none)
             attestation_conveyance: !php/const Webauthn\PublicKeyCredentialCreationOptions::ATTESTATION_CONVEYANCE_PREFERENCE_DIRECT
     request_profiles:
