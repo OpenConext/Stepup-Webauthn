@@ -18,60 +18,21 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace Surfnet\Webauthn;
 
-use App\Service\ClientMetadataService;
+use Surfnet\Webauthn\Service\ClientMetadataService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class GlobalViewParameters
+final readonly class GlobalViewParameters
 {
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    /**
-     * @var string[]
-     */
-    private $locales;
-
-    /**
-     * @var string[]
-     */
-    private $supportUrl;
-    private $supportEmail;
-    /**
-     * @var ClientMetadataService
-     */
-    private $clientMetadataService;
-    /**
-     * @var RequestStack
-     */
-    private $request;
-
-    /**
-     * @param TranslatorInterface $translator
-     * @param array $locales
-     * @param ClientMetadataService $clientMetadataService
-     * @param RequestStack $request
-     * @param array $supportUrl
-     * @param string|null $supportEmail
-     */
     public function __construct(
-        TranslatorInterface $translator,
-        array $locales,
-        ClientMetadataService $clientMetadataService,
-        RequestStack $request,
-        array $supportUrl,
-        string $supportEmail = null
+        private TranslatorInterface $translator,
+        private ClientMetadataService $clientMetadataService,
+        private RequestStack $request,
+        private array $supportUrl,
+        private string $supportEmail
     ) {
-        $this->translator = $translator;
-        $this->locales = $locales;
-        $this->supportUrl = $supportUrl;
-        $this->supportEmail = $supportEmail;
-        $this->clientMetadataService = $clientMetadataService;
-        $this->request = $request;
     }
 
     /**

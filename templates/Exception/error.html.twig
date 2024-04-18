@@ -6,40 +6,17 @@
 {% block body %}
     <p>{{ description }}</p>
 
-    <table class="table table-bordered">
-        <tr>
-            <th>{{ 'stepup.error.timestamp'|trans }}</th>
-            <td>{{ timestamp }}</td>
-        </tr>
-        <tr>
-            <th>{{ 'stepup.error.hostname'|trans }}</th>
-            <td>{{ hostname }}</td>
-        </tr>
-        <tr>
-            <th>{{ 'stepup.error.request_id'|trans }}</th>
-            <td>{{ request_id }}</td>
-        </tr>
-        <tr>
-            <th>{{ 'stepup.error.error_code'|trans }}</th>
-            <td>{{ error_code }}</td>
-        </tr>
-        {% if sari %}
-        <tr>
-            <th>{{ 'stepup.error.sari'|trans }}</th>
-            <td>{{ sari }}</td>
-        </tr>
-        {% endif %}
-        {% if user_agent %}
-        <tr>
-            <th>{{ 'stepup.error.user_agent'|trans }}</th>
-            <td>{{ user_agent }}</td>
-        </tr>
-        {% endif %}
-        <tr>
-            <th>{{ 'stepup.error.ip_address'|trans }}</th>
-            <td>{{ ip_address }}</td>
-        </tr>
-    </table>
+    {%  include 'partial/error_table.html.twig' with
+    {
+        'timestamp': timestamp,
+        'hostname': hostname,
+        'requestId': request_id,
+        'errorMessage': errorMessage,
+        'sari': sari,
+        'userAgent': user_agent,
+        'ipAddress': ip_address
+    }
+    %}
 
     <p>{{ 'stepup.error.support_page.text'|trans({'%support_url%': global_view_parameters.supportUrl })|raw }}</p>
 

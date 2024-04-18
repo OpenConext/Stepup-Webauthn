@@ -20,7 +20,12 @@ declare(strict_types=1);
 
 namespace Dev\Controller;
 
+use Exception;
+use SAML2\Message;
+use SAML2\Response as SamlResponse;
+use SAML2\StatusResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use DOMDocument;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
@@ -28,9 +33,6 @@ use SAML2\Assertion;
 use SAML2\Certificate\PrivateKeyLoader;
 use SAML2\Configuration\PrivateKey;
 use SAML2\DOMDocumentFactory;
-use SAML2\Message;
-use SAML2\Response;
-use Surfnet\GsspBundle\Service\RegistrationService;
 use Surfnet\SamlBundle\Entity\IdentityProvider;
 use Surfnet\SamlBundle\Entity\ServiceProvider;
 use Surfnet\SamlBundle\Http\Exception\AuthnFailedSamlResponseException;
@@ -45,29 +47,16 @@ use Symfony\Component\HttpFoundation\Request;
  */
 final class SPController extends AbstractController
 {
-    private $identityProvider;
-    private $serviceProvider;
-    private $postBinding;
-
     public function __construct(
-        ServiceProvider $serviceProvider,
-        IdentityProvider $identityProvider,
-        PostBinding $postBinding
+        private readonly ServiceProvider $serviceProvider,
+        private readonly IdentityProvider $identityProvider,
+        private readonly PostBinding $postBinding
     ) {
-        $this->identityProvider = $identityProvider;
-        $this->serviceProvider = $serviceProvider;
-        $this->postBinding = $postBinding;
     }
 
-    /**
-     * @Route("/demo/sp", name="sp_demo")
-     * @Route("/", name="homepage")
-     *
-     * See @see RegistrationService for a more clean example.
-     *
-     * @throws \Exception
-     */
-    public function demoSpAction(Request $request)
+    #[Route(path: '/demo/sp', name: 'sp_demo', methods: ['GET', 'POST'])]
+    #[Route(path: '/', name: 'homepage', methods: ['GET', 'POST'])]
+    public function demoSp(Request $request): Response
     {
         if (!$request->isMethod(Request::METHOD_POST)) {
             return $this->render('dev/sp.html.twig', ['nameId' => $request->get('nameId')]);
@@ -102,12 +91,8 @@ final class SPController extends AbstractController
         return $response;
     }
 
-    /**
-     * @Route("/demo/sp/acs", name="sp_demo_acs")
-     *
-     * See @see RegistrationService for a more clean example.
-     */
-    public function assertionConsumerServiceAction(Request $request)
+    #[Route(path: '/demo/sp/acs', name: 'sp_demo_acs', methods: ['POST'])]
+    public function assertionConsumerService(Request $request): Response
     {
         $xmlResponse = $request->request->get('SAMLResponse');
         $xml = base64_decode($xmlResponse);
@@ -119,9 +104,9 @@ final class SPController extends AbstractController
 
             return $this->render('dev/acs.html.twig', [
                 'requestId' => $response->getId(),
-                'nameId' => $nameID ? [
-                    'value' => $nameID->value,
-                    'format' => $nameID->Format,
+                'nameId' => $nameID instanceof \SAML2\XML\saml\NameID ? [
+                    'value' => $nameID->getValue(),
+                    'format' => $nameID->getFormat(),
                 ] : [],
                 'issuer' => $response->getIssuer(),
                 'relayState' => $request->get(AuthnRequest::PARAMETER_RELAY_STATE, ''),
@@ -144,48 +129,37 @@ final class SPController extends AbstractController
 
     /**
      * Formats xml.
-     *
-     * @param string $xml
-     *
-     * @return string
      */
-    private function toFormattedXml($xml)
+    private function toFormattedXml(string $xml): string|false
     {
-        $domxml = new DOMDocument('1.0');
-        $domxml->preserveWhiteSpace = false;
-        $domxml->formatOutput = true;
-        $domxml->loadXML($xml);
+        $domXml = new DOMDocument('1.0');
+        $domXml->preserveWhiteSpace = false;
+        $domXml->formatOutput = true;
+        $domXml->loadXML($xml);
 
-        return $domxml->saveXML();
+        return $domXml->saveXML();
     }
 
     /**
      * Sign AuthnRequest query parameters.
-     *
-     * @param array $queryParams
-     * @return string
-     *
-     * @throws \Exception
+     * @throws Exception
      */
-    private function signRequestQuery(array $queryParams)
+    private function signRequestQuery(array $queryParams): string
     {
-        /** @var  $securityKey */
         $securityKey = $this->loadServiceProviderPrivateKey();
         $queryParams[AuthnRequest::PARAMETER_SIGNATURE_ALGORITHM] = $securityKey->type;
         $toSign = http_build_query($queryParams);
         $signature = $securityKey->signData($toSign);
 
-        return $toSign.'&Signature='.urlencode(base64_encode($signature));
+        return $toSign.'&Signature='.urlencode(base64_encode((string) $signature));
     }
 
     /**
      * Loads the private key from the service provider.
      *
-     * @return XMLSecurityKey
-     *
-     * @throws \Exception
+     * @throws Exception
      */
-    private function loadServiceProviderPrivateKey()
+    private function loadServiceProviderPrivateKey(): XMLSecurityKey
     {
         $keyLoader = new PrivateKeyLoader();
         $privateKey = $keyLoader->loadPrivateKey(
@@ -198,18 +172,16 @@ final class SPController extends AbstractController
     }
 
     /**
-     * @param string $xml
-     *
-     * @return Message
-     *
-     * @throws \Exception
+     * @throws Exception
      */
-    private function toUnsignedErrorResponse($xml)
+    private function toUnsignedErrorResponse(string $xml): StatusResponse
     {
         $previous = libxml_disable_entity_loader(true);
         $asXml = DOMDocumentFactory::fromString($xml);
         libxml_disable_entity_loader($previous);
 
-        return Response::fromXML($asXml->documentElement);
+        /** @var StatusResponse $statusResponse */
+        $statusResponse = SamlResponse::fromXML($asXml->documentElement);
+        return $statusResponse;
     }
 }

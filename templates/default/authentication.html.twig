@@ -3,16 +3,50 @@
 {% block body %}
     <h2>{{ 'authentication.sub_title'|trans }}</h2>
 
-    <div id="root">
-    </div>
+    <form id="form"
+        {{ stimulus_controller('@web-auth/webauthn-stimulus',
+                {
+                    requestResultUrl: path('verify-assertion'),
+                    requestOptionsUrl: path('request-options'),
+                    requestSuccessRedirectUri: path('app_identity_authentication')
+                }
+            ) }}
+    >
+
+        <span>{{ 'status.authentication_initial'|trans }}</span>
+
+        <input
+                type="hidden"
+                name="username"
+                id="inputUsername"
+                value="{{ nameId }}"
+                class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+        />
+
+        <button id="authenticationButton" {{ stimulus_controller('authentication') }}
+                {{ stimulus_action('@web-auth/webauthn-stimulus', 'signin') }}
+                hidden>
+        </button>
+    </form>
+
+
+    {%  include 'partial/error_table.html.twig' with
+        {
+            'timestamp': 'timestamp',
+            'hostname': 'hostname',
+            'requestId': 'requestId',
+            'errorMessage': 'errorMessage',
+            'sari': 'sari',
+            'userAgent': 'userAgent',
+            'ipAddress': 'ipAddress',
+        } %}
+
+    <script>
+        window.onload = function(){
+            document.getElementById("authenticationButton").click();
+        }
+    </script>
 
     {% include 'default/variables.twig' %}
-    {% block javascripts %}
-        <script>
-            var publicKeyOptions = {{ publicKeyOptions | json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE')) | raw }};
-            var responseUrl = {{ url('verify-assertion') | json_encode | raw }};
-        </script>
-        {{ encore_entry_script_tags('authentication') }}
-    {% endblock %}
 
 {% endblock %}

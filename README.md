@@ -35,13 +35,24 @@ See one of the following guides:
 
 [Production installation](docs/deployment.md)
 
+Setting the desired Symfony application environment
+===================================================
+There are 2 ways you can influence the desired Symfony application environment.
+
+1. Set the `app_env` parameter in `config/openconext/parameters.yaml` to `dev`, `test` or `prod`
+2. Override the `app_env` param by providing an environment variable named `APP_ENV`
+
+- The default value for the application environment will be `prod`
+- Do not try to use a .env file to override the `app_env` param. That file will not be evaluated by Symfony as we decided not use the DotEnv component.
+
+
 Tests and metrics
 ======================
 
 To run all required test you can run the following commands from the dev env:
 
 ```bash 
- composer test 
+ composer check 
 ```
 
 Every part can be run separately. Check "scripts" section of the composer.json file for the different options.

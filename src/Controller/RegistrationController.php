@@ -18,55 +18,35 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\NoAuthnrequestException;
-use App\PublicKeyCredentialCreationOptionsStore;
-use App\Repository\UserRepository;
-use App\Service\ClientMetadataService;
+use Surfnet\Webauthn\Exception\NoAuthnrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialCreationOptionsStore;
+use Surfnet\Webauthn\Repository\UserRepository;
+use Surfnet\Webauthn\Service\ClientMetadataService;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Service\RegistrationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Webauthn\Bundle\Service\PublicKeyCredentialCreationOptionsFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 final class RegistrationController extends AbstractController
 {
-    private $registrationService;
-    private $userRepository;
-    private $publicKeyCredentialCreationOptionsFactory;
-    private $creationOptionsStore;
-    private $logger;
-    private $userDisplayName;
-    private $clientMetadataService;
-
     public function __construct(
-        RegistrationService $registrationService,
-        UserRepository $userRepository,
-        PublicKeyCredentialCreationOptionsFactory $publicKeyCredentialCreationOptionsFactory,
-        PublicKeyCredentialCreationOptionsStore $creationOptionsStore,
-        LoggerInterface $logger,
-        ClientMetadataService $clientMetadataService,
-        string $userDisplayName
+        private readonly RegistrationService $registrationService,
+        private readonly UserRepository $userRepository,
+        private readonly PublicKeyCredentialCreationOptionsFactory $publicKeyCredentialCreationOptionsFactory,
+        private readonly PublicKeyCredentialCreationOptionsStore $creationOptionsStore,
+        private readonly LoggerInterface $logger,
+        private readonly ClientMetadataService $clientMetadataService,
+        private readonly string $userDisplayName
     ) {
-        $this->registrationService = $registrationService;
-        $this->userRepository = $userRepository;
-        $this->publicKeyCredentialCreationOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
-        $this->creationOptionsStore = $creationOptionsStore;
-        $this->logger = $logger;
-        $this->userDisplayName = $userDisplayName;
-        $this->clientMetadataService = $clientMetadataService;
     }
 
-    /**
-     * Replace this example code with whatever you need.
-     *
-     * See @see RegistrationService for a more clean example.
-     *
-     * @Route("/registration", name="app_identity_registration")
-     */
-    public function __invoke(Request $request)
+    #[Route(path: '/registration', name: 'app_identity_registration', methods: ['GET'])]
+    public function __invoke(Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending registration from SP');
 
@@ -98,7 +78,7 @@ final class RegistrationController extends AbstractController
         return $this->render(
             'default\registration.html.twig',
             [
-                'publicKeyOptions' => $publicKeyCredentialCreationOptions
+                'userEntity' => $userEntity
             ] + $this->clientMetadataService->generateMetadata($request)
         );
     }

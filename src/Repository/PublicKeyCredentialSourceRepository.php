@@ -18,19 +18,22 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Surfnet\Webauthn\Repository;
 
-use App\Entity\PublicKeyCredentialSource;
-use App\Entity\User;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
+use Surfnet\Webauthn\Entity\User;
 use Assert\Assertion;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Webauthn\AttestationStatement\AttestationObject;
 use Webauthn\AuthenticatorAttestationResponse;
-use Webauthn\Bundle\Repository\PublicKeyCredentialSourceRepository as BasePublicKeyCredentialSourceRepository;
+use Webauthn\Bundle\Repository\DoctrineCredentialSourceRepository;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialDescriptor;
 
-class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceRepository
+/**
+ * @extends DoctrineCredentialSourceRepository<PublicKeyCredentialSource>
+ */
+class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -52,22 +55,22 @@ class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceR
             PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_NFC
         ]);
         /** @var AttestationObject $attestationObject */
-        $attestationObject = $response->getAttestationObject();
-        $attestationStatement = $attestationObject->getAttStmt();
-        $authenticatorData = $attestationObject->getAuthData();
-        $attestedCredentialData = $authenticatorData->getAttestedCredentialData();
+        $attestationObject = $response->attestationObject;
+        $attestationStatement = $attestationObject->attStmt;
+        $authenticatorData = $attestationObject->authData;
+        $attestedCredentialData = $authenticatorData->attestedCredentialData;
         Assertion::notNull($attestedCredentialData, 'No attested credential data available');
         return new PublicKeyCredentialSource(
-            $publicKeyCredentialDescriptor->getId(),
-            $publicKeyCredentialDescriptor->getType(),
-            $publicKeyCredentialDescriptor->getTransports(),
-            $attestationStatement->getType(),
-            $attestationStatement->getTrustPath(),
-            $attestedCredentialData->getAaguid(),
-            $attestedCredentialData->getCredentialPublicKey(),
+            $publicKeyCredentialDescriptor->id,
+            $publicKeyCredentialDescriptor->type,
+            $publicKeyCredentialDescriptor->transports,
+            $attestationStatement->type,
+            $attestationStatement->trustPath,
+            $attestedCredentialData->aaguid,
+            $attestedCredentialData->credentialPublicKey,
             $userHandle,
-            $authenticatorData->getSignCount(),
-            $attestationStatement->getFmt()
+            $authenticatorData->signCount,
+            $attestationStatement->fmt
         );
     }
 
@@ -78,9 +81,9 @@ class PublicKeyCredentialSourceRepository extends BasePublicKeyCredentialSourceR
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         return $qb->select('c')
-            ->from($this->getClass(), 'c')
+            ->from($this->class, 'c')
             ->where('c.userHandle = :user_handle')
-            ->setParameter(':user_handle', $user->getId())
+            ->setParameter(':user_handle', $user->id)
             ->getQuery()
             ->execute();
     }

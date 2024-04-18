@@ -18,60 +18,50 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace Surfnet\Webauthn;
 
 use Exception;
 use Surfnet\StepupBundle\Exception\Art;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Return status response for web gui. @see public/typescript/gui files.
+ * Return status response for Stimulus app
  */
 class ValidationJsonResponse extends JsonResponse
 {
-
-    public static function invalidPublicKeyCredentialResponse(Exception $e)
+    public static function noAuthenticationRequired(Exception $e): self
     {
-        return new self(['status' => 'error', 'error_code' => Art::forException($e)], 400);
+        return new self(['status' => 'noAuthenticationRequired', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
 
-    public static function noAuthenticationRequired(Exception $e)
+    public static function deviceNotSupported(Exception $e): self
     {
-        return new self(['status' => 'noAuthenticationRequired', 'error_code' => Art::forException($e)], 400);
+        return new self(['status' => 'deviceNotSupported', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
 
-    public static function deviceNotSupported(Exception $e)
+    public static function reportErrorMessage(Exception $e): self
     {
-        return new self(['status' => 'deviceNotSupported', 'error_code' => Art::forException($e)], 400);
+        return new self(['status' => 'error', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
 
-    public static function noPendingCredentialAssertOptions(Exception $e)
+    public static function valid(): self
     {
-        return new self(['status' => 'error', 'error_code' => Art::forException($e)], 400);
+        return new self(['status' => 'ok', 'errorMessage' => '']);
     }
 
-    public static function valid()
+    public static function invalid(Exception $e): self
     {
-        return new self(['status' => 'ok']);
+        return new self(['status' => 'invalid', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
 
-    public static function invalid(Exception $e)
+    public static function noRegistrationRequired(Exception $e): self
     {
-        return new self(['status' => 'invalid', 'error_code' => Art::forException($e)], 400);
+        return new self(['status' => 'noRegistrationRequired', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
 
-    public static function noRegistrationRequired(Exception $e)
+    public static function missingAttestationStatement(Exception $e): self
     {
-        return new self(['status' => 'noRegistrationRequired', 'error_code' => Art::forException($e)], 400);
-    }
-
-    public static function noPendingCredentialCreationOptions(Exception $e)
-    {
-        return new self(['status' => 'error', 'error_code' => Art::forException($e)], 400);
-    }
-
-    public static function missingAttestationStatement(Exception $e)
-    {
-        return new self(['status' => 'missingAttestationStatement', 'error_code' => Art::forException($e)], 400);
+        return new self(['status' => 'missingAttestationStatement', 'errorMessage' => Art::forException($e)], Response::HTTP_BAD_REQUEST);
     }
 }

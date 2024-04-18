@@ -18,46 +18,43 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace Surfnet\Webauthn\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource as PublicKeyCredentialSourceEntity;
+use Surfnet\Webauthn\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Webauthn\PublicKeyCredentialSource;
 use Webauthn\PublicKeyCredentialUserEntity;
 
-/**
- * @ORM\Table(name="users")
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- */
+#[ORM\Table(name: 'users')]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends PublicKeyCredentialUserEntity implements UserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="string", length=36)
-     */
-    protected $id;
+     #[ORM\Id]
+     #[ORM\Column(type:"string", length:36)]
+    public readonly string $id;
+
+    #[Assert\Length(max: 100)]
+    public readonly string $name;
+
+    #[Assert\Length(max: 100)]
+    public readonly string $displayName;
 
     /**
-     * @Assert\Length(max = 100)
+     * @var Collection<PublicKeyCredentialSourceEntity>
      */
-    protected $name;
-
-    /**
-     * @Assert\Length(max = 100)
-     */
-    protected $displayName;
-
-    /**
-     * @var PublicKeyCredentialSource[]
-     * @ORM\ManyToMany(targetEntity="App\Entity\PublicKeyCredentialSource")
-     * @ORM\JoinTable(name="users_user_handles",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="user_handle", referencedColumnName="id", unique=true)}
-     *      )
-     */
-    protected $publicKeyCredentialSources;
+    #[ORM\ManyToMany(targetEntity: PublicKeyCredentialSourceEntity::class)]
+    #[ORM\JoinTable(
+        name: "users_user_handles",
+        joinColumns:[new JoinColumn(name: "user_id", referencedColumnName: "id")],
+        inverseJoinColumns:[new JoinColumn(name:"user_handle", referencedColumnName: "id", unique: true)]
+    )]
+    protected Collection $publicKeyCredentialSources;
 
     public function __construct(string $id, string $name, string $displayName)
     {
@@ -67,8 +64,6 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
 
     /**
      * WebAuthn project does not care about roles of any user.
-     *
-     * @return array
      */
     public function getRoles(): array
     {
@@ -98,5 +93,10 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
     public function getPublicKeyCredentialSources(): array
     {
         return $this->publicKeyCredentialSources->getValues();
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return 'id';
     }
 }

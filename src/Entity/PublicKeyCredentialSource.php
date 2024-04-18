@@ -18,35 +18,33 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace Surfnet\Webauthn\Entity;
 
-use Base64Url\Base64Url;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
+use Surfnet\Webauthn\Exception\RuntimeException;
+use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
+use Symfony\Component\Uid\Uuid;
 use Webauthn\PublicKeyCredentialSource as BasePublicKeyCredentialSource;
 use Webauthn\TrustPath\TrustPath;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
- * @ORM\Table(name="public_key_credential_sources")
- * @ORM\Entity(repositoryClass="App\Repository\PublicKeyCredentialSourceRepository")
  */
+#[ORM\Table(name:"public_key_credential_sources")]
+#[ORM\Entity(repositoryClass: PublicKeyCredentialSourceRepository::class)]
 class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
 {
-    /**
-     * @var string
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column(type:"integer")]
+    private string $id;
 
     /**
-     * @var string
-     * @ORM\Column(type="string")
+     * Override the $uvInitialized field which we do not use, but needs
+     * to be initialized. Needed to prevent read before written errors.
      */
-    private $fmt;
+    public ?bool $uvInitialized = false;
 
     public function __construct(
         string $publicKeyCredentialId,
@@ -54,11 +52,12 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
         array $transports,
         string $attestationType,
         TrustPath $trustPath,
-        UuidInterface $aaguid,
+        Uuid $aaguid,
         string $credentialPublicKey,
         string $userHandle,
         int $counter,
-        string $fmt
+        #[ORM\Column(type: "string")]
+        private string $fmt
     ) {
         parent::__construct(
             $publicKeyCredentialId,
@@ -71,17 +70,24 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
             $userHandle,
             $counter
         );
-        $this->fmt = $fmt;
+    }
+
+    /**
+     * Warning: the id field is accessed directly in :\Webauthn\CeremonyStep\CheckAllowedCredentialList::process
+     * The entity tracks a numeric auto increment id value, but the CheckAllowedCredentialList expects the
+     * publicKeyCredentialId.
+     */
+    public function __get(string $name): mixed
+    {
+        if ($name === 'id') {
+            return $this->publicKeyCredentialId;
+        }
+        throw new RuntimeException(sprintf('Not allowed to access "%s" via the magic __get function', $name));
     }
 
     public function getFmt(): string
     {
         return $this->fmt;
-    }
-
-    public function getId(): string
-    {
-        return $this->publicKeyCredentialId;
     }
 
     /**
@@ -90,15 +96,29 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
     public function jsonSerialize(): array
     {
         return [
-            'id' => Base64Url::encode($this->publicKeyCredentialId),
+            'id' => $this->base64UrlEncode($this->publicKeyCredentialId),
             'type' => $this->type,
             'transports' => $this->transports,
             'attestationType' => $this->attestationType,
             'trustPath' => $this->trustPath,
-            'aaguid' => $this->aaguid->toString(),
-            'credentialPublicKey' => Base64Url::encode($this->credentialPublicKey),
-            'userHandle' => Base64Url::encode($this->userHandle),
+            'aaguid' => $this->aaguid->toBase32(),
+            'credentialPublicKey' => $this->base64UrlEncode($this->credentialPublicKey),
+            'userHandle' => $this->base64UrlEncode($this->userHandle),
             'counter' => $this->counter,
         ];
+    }
+
+    /**
+     * Encode data to Base64URL
+     * From: https://base64.guru/developers/php/examples/base64url
+     */
+    private function base64UrlEncode(string $data): string
+    {
+        // First of all you should encode $data to Base64 string
+        $b64 = base64_encode($data);
+        // Convert Base64 to Base64URL by replacing “+” with “-” and “/” with “_”
+        $url = strtr($b64, '+/', '-_');
+        // Remove padding character from the end of line and return the Base64URL result
+        return rtrim($url, '=');
     }
 }

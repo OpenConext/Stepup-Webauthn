@@ -10,6 +10,9 @@
     {% block stylesheets %}
         {{ encore_entry_link_tags('global') }}
     {% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
 </head>
 <body>
 
@@ -17,7 +20,7 @@
 
     <div class="content">
         <div class="page-header container-fluid">
-            <img class="pull-right logo" src="{{ asset('images/header-logo.png') }}" alt="logo"/>
+            <img class="pull-right logo" src="{{ asset('build/images/header-logo.png') }}" alt="logo"/>
             <h1>{% block header_title %}{% endblock %}</h1>
         </div>
     </div>
@@ -28,19 +31,18 @@
     <hr>
 
     {% block footer %}
-    <footer>
-        <div class="container-fluid">
-            <div class="pull-left">
-                <a href="{{ path('app_cancel') }}">{{ 'cancel'|trans }}</a>
+        <footer>
+            <div class="container-fluid">
+                <div class="pull-left">
+                    <a href="{{ path('app_cancel') }}">{{ 'cancel'|trans }}</a>
+                </div>
+                <div class="pull-right">
+                    <a href="{{ global_view_parameters.supportUrl }}" target="_blank">Help</a>
+                </div>
             </div>
-            <div class="pull-right">
-                <a href="{{ global_view_parameters.supportUrl }}" target="_blank">Help</a>
-            </div>
-        </div>
-    </footer>
+        </footer>
     {% endblock %}
 
-    {% block javascripts %}{% endblock %}
 </div>
 </body>
 </html>

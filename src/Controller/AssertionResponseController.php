@@ -18,16 +18,17 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\NoActiveAuthenrequestException;
-use App\PublicKeyCredentialRequestOptionsStore;
-use App\ValidationJsonResponse;
-use App\WithContextLogger;
-use Psr\Http\Message\ServerRequestInterface;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
+use Surfnet\Webauthn\ValidationJsonResponse;
+use Surfnet\Webauthn\WithContextLogger;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
+use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,42 +36,27 @@ use Exception;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAssertionResponseValidator;
 use Webauthn\PublicKeyCredentialLoader;
+use Webauthn\PublicKeyCredentialSource;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class AssertionResponseController
+final readonly class AssertionResponseController
 {
-    private $publicKeyCredentialLoader;
-    private $assertionResponseValidator;
-    private $logger;
-    private $authenticationService;
-    private $store;
-
     public function __construct(
-        PublicKeyCredentialLoader $publicKeyCredentialLoader,
-        AuthenticatorAssertionResponseValidator $assertionResponseValidator,
-        AuthenticationService $authenticationService,
-        PublicKeyCredentialRequestOptionsStore $store,
-        LoggerInterface $logger
+        private PublicKeyCredentialLoader $publicKeyCredentialLoader,
+        private AuthenticatorAssertionResponseValidator $assertionResponseValidator,
+        private AuthenticationService $authenticationService,
+        private PublicKeyCredentialRequestOptionsStore $store,
+        private LoggerInterface $logger,
     ) {
-        $this->assertionResponseValidator = $assertionResponseValidator;
-        $this->publicKeyCredentialLoader = $publicKeyCredentialLoader;
-        $this->logger = $logger;
-        $this->authenticationService = $authenticationService;
-        $this->store = $store;
     }
 
     /**
      * Handles the assertion public key response.
-     *
-     * @Route("/verify-assertion", methods={"POST"}, name="verify-assertion", )
-     *
-     * @param ServerRequestInterface $psr7Request
-     * @param Request $request
-     * @return Response
      */
-    public function action(ServerRequestInterface $psr7Request, Request $request): Response
+    #[Route(path: '/verify-assertion', name: 'verify-assertion', methods: ['POST'])]
+    public function action(Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending authentication from SP');
 
@@ -86,28 +72,39 @@ final class AssertionResponseController
         try {
             $content = $request->getContent();
             $publicKeyCredential = $this->publicKeyCredentialLoader->load($content);
-            $response = $publicKeyCredential->getResponse();
+            $response = $publicKeyCredential->response;
             if (!$response instanceof AuthenticatorAssertionResponse) {
                 throw new UnrecoverableErrorException('Invalid response type');
             }
         } catch (Exception $exception) {
             $logger->warning(sprintf('Invalid public key credential response "%s"', $exception->getMessage()));
-            return ValidationJsonResponse::invalidPublicKeyCredentialResponse($exception);
+            return ValidationJsonResponse::reportErrorMessage($exception);
         }
 
         $logger->info('Verify if there is an existing public key credential assertion options in session');
         try {
             $publicKeyCredentialRequestOptions = $this->store->get();
+            $allowedCredentials = $publicKeyCredentialRequestOptions->allowCredentials;
+            if (count($allowedCredentials) !== 1) {
+                $logger->error('One credential source allowed');
+                throw new UnrecoverableErrorException('More than one publicKeyCredentialSource found in store');
+            }
+            /** @var PublicKeyCredentialSource $publicKeyCredentialSource */
+            $publicKeyCredentialSource = reset($allowedCredentials);
         } catch (Exception $exception) {
             $logger->warning(sprintf('Invalid attestation response "%s"', $exception->getMessage()));
-            return ValidationJsonResponse::noPendingCredentialAssertOptions($exception);
+            return ValidationJsonResponse::reportErrorMessage($exception);
         }
 
         $logger->info('Validate assertion response');
 
+        $psr17Factory = new Psr17Factory();
+        $psrHttpFactory = new PsrHttpFactory($psr17Factory);
+        $psr7Request = $psrHttpFactory->createRequest($request);
+
         try {
             $this->assertionResponseValidator->check(
-                $publicKeyCredential->getRawId(),
+                $publicKeyCredentialSource,
                 $response,
                 $publicKeyCredentialRequestOptions,
                 $psr7Request,

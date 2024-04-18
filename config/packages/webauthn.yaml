@@ -1,18 +1,21 @@
 webauthn:
-    credential_repository: App\Repository\PublicKeyCredentialSourceRepository
-    user_repository: App\Repository\UserRepository
-    token_binding_support_handler: Webauthn\TokenBinding\IgnoreTokenBindingHandler
+    credential_repository: Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository
+    user_repository: Surfnet\Webauthn\Repository\UserRepository
+    # Uncomment/comment the line below for Webauthn libary logging/debugging
+    logger: Psr\Log\LoggerInterface
     creation_profiles:
         default:
             public_key_credential_parameters:
                 - !php/const Cose\Algorithms::COSE_ALGORITHM_ES256
+                - !php/const Cose\Algorithms::COSE_ALGORITHM_RS256
             rp:
                 name: '%webauthn_name%'
                 icon: '%webauthn_logo%'
             challenge_length: 64
             timeout: 60000
             authenticator_selection_criteria:
-                attachment_mode: !php/const Webauthn\AuthenticatorSelectionCriteria::AUTHENTICATOR_ATTACHMENT_NO_PREFERENCE
+                authenticator_attachment: !php/const Webauthn\AuthenticatorSelectionCriteria::AUTHENTICATOR_ATTACHMENT_NO_PREFERENCE
+                resident_key: !php/const Webauthn\AuthenticatorSelectionCriteria::RESIDENT_KEY_REQUIREMENT_NO_PREFERENCE
                 require_resident_key: false
                 user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_PREFERRED
             #  this is needed for SURFsecureID as we want to whitelist authenticators by vendor/certification (default is none)
@@ -21,4 +24,10 @@ webauthn:
         default:
             challenge_length: 64
             timeout: 30000
-            user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_PREFERRED
+            user_verification: !php/const Webauthn\AuthenticatorSelectionCriteria::USER_VERIFICATION_REQUIREMENT_DISCOURAGED
+
+    metadata:
+        enabled: true
+        mds_repository: 'Surfnet\Webauthn\Service\MetadataStatementService'
+        status_report_repository: 'Surfnet\Webauthn\Service\MetadataStatementService'
+

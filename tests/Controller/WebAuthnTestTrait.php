@@ -24,7 +24,7 @@ use Mockery;
 use Mockery\MockInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Spatie\Snapshots\MatchesSnapshots;
-use Symfony\Component\Debug\BufferingLogger;
+use Symfony\Component\ErrorHandler\BufferingLogger;
 use Webauthn\AuthenticatorResponse;
 use Webauthn\PublicKeyCredential;
 use Webauthn\PublicKeyCredentialLoader;
@@ -41,10 +41,8 @@ trait WebAuthnTestTrait
      * @var MockInterface|PublicKeyCredentialLoader
      */
     private $publicKeyCredentialLoader;
-    /**
-     * @var BufferingLogger
-     */
-    private $logger;
+
+    private BufferingLogger $logger;
     /**
      * @var MockInterface|ServerRequestInterface
      */
@@ -54,24 +52,17 @@ trait WebAuthnTestTrait
      */
     private $request;
 
-    private function assertLogs()
+    private function assertLogs(): void
     {
         $this->assertMatchesSnapshot($this->logger->cleanLogs());
     }
 
-    /**
-     * @return MockInterface|PublicKeyCredential
-     */
-    private function setAuthenticatorResponse(AuthenticatorResponse $response): MockInterface
+    private function setAuthenticatorResponse(AuthenticatorResponse $response): PublicKeyCredential
     {
         $content = 'The http content with AuthenticatorAssertionResponse';
-        $this->request->shouldReceive([
-            'getContent' => $content,
-        ]);
-        $publicKeyCredential = Mockery::mock(PublicKeyCredential::class);
-        $publicKeyCredential->shouldReceive([
-            'getResponse' => $response,
-        ]);
+
+        $this->request = Request::create('https://webauthn.dev.openconext.local', 'POST', [], [] , [], [], $content);
+        $publicKeyCredential = new PublicKeyCredential('fictional', 'public-key', 'Public key credential raw id 1234', $response);
         $this->publicKeyCredentialLoader
             ->shouldReceive('load')
             ->with($content)

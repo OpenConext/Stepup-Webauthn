@@ -18,22 +18,21 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Surfnet\Webauthn\Controller;
 
-use App\Exception\AttestationCertificateNotSupportedException;
-use App\Exception\NoActiveAuthenrequestException;
-use App\Exception\UserNotFoundException;
-use App\PublicKeyCredentialRequestOptionsStore;
-use App\Repository\PublicKeyCredentialSourceRepository;
-use App\Repository\UserRepository;
-use App\Service\AttestationCertificateTrustStore;
-use App\Service\ClientMetadataService;
-use App\WithContextLogger;
+use Surfnet\Webauthn\Exception\NoActiveAuthenrequestException;
+use Surfnet\Webauthn\Exception\UserNotFoundException;
+use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
+use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
+use Surfnet\Webauthn\Repository\UserRepository;
+use Surfnet\Webauthn\Service\ClientMetadataService;
+use Surfnet\Webauthn\WithContextLogger;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 use Webauthn\Bundle\Service\PublicKeyCredentialRequestOptionsFactory;
@@ -43,43 +42,19 @@ use Webauthn\Bundle\Service\PublicKeyCredentialRequestOptionsFactory;
  */
 class AuthenticationController extends AbstractController
 {
-    private $authenticationService;
-    private $userRepository;
-    private $publicKeyCredentialRequestOptionsFactory;
-    private $logger;
-    private $publicKeyCredentialSourceRepository;
-    private $store;
-    private $trustStore;
-    private $clientMetadataService;
-
     public function __construct(
-        AuthenticationService $authenticationService,
-        UserRepository $userRepository,
-        LoggerInterface $logger,
-        PublicKeyCredentialRequestOptionsFactory $publicKeyCredentialCreationOptionsFactory,
-        PublicKeyCredentialSourceRepository $publicKeyCredentialSourceRepository,
-        PublicKeyCredentialRequestOptionsStore $store,
-        AttestationCertificateTrustStore $trustStore,
-        ClientMetadataService $clientMetadataService
+        private readonly AuthenticationService $authenticationService,
+        private readonly UserRepository $userRepository,
+        private readonly LoggerInterface $logger,
+        private readonly PublicKeyCredentialRequestOptionsFactory $publicKeyCredentialRequestOptionsFactory,
+        private readonly PublicKeyCredentialSourceRepository $publicKeyCredentialSourceRepository,
+        private readonly PublicKeyCredentialRequestOptionsStore $store,
+        private readonly ClientMetadataService $clientMetadataService
     ) {
-        $this->authenticationService = $authenticationService;
-        $this->userRepository = $userRepository;
-        $this->publicKeyCredentialRequestOptionsFactory = $publicKeyCredentialCreationOptionsFactory;
-        $this->logger = $logger;
-        $this->publicKeyCredentialSourceRepository = $publicKeyCredentialSourceRepository;
-        $this->store = $store;
-        $this->trustStore = $trustStore;
-        $this->clientMetadataService = $clientMetadataService;
     }
 
-    /**
-     * Replace this example code with whatever you need.
-     *
-     * See @see AuthenticationService for a more clean example.
-     *
-     * @Route("/authentication", name="app_identity_authentication")
-     */
-    public function __invoke(Request $request)
+    #[Route(path: '/authentication', name: 'app_identity_authentication', methods: ['GET', 'POST'])]
+    public function __invoke(Request $request): Response
     {
         $this->logger->info('Verifying if there is a pending authentication request from SP');
 
@@ -118,14 +93,6 @@ class AuthenticationController extends AbstractController
             throw new UnrecoverableErrorException('One credential source allowed');
         }
 
-        $logger->info('Verify if attestation certificate is supported');
-        try {
-            $this->trustStore->validate($allowedCredentials[0]);
-        } catch (Throwable $exception) {
-            $logger->warning(sprintf('Attestation certificate is no longer supported "%s"', $exception->getMessage()));
-            throw new AttestationCertificateNotSupportedException();
-        }
-
         $publicKeyCredentialRequestOptions = $this->publicKeyCredentialRequestOptionsFactory->create(
             'default',
             $allowedCredentials
@@ -137,7 +104,10 @@ class AuthenticationController extends AbstractController
 
         return $this->render(
             'default/authentication.html.twig',
-            ['publicKeyOptions' => $publicKeyCredentialRequestOptions] +
+            [
+                'publicKeyOptions' => $publicKeyCredentialRequestOptions,
+                'nameId' => $nameId
+            ] +
             $this->clientMetadataService->generateMetadata($request)
         );
     }

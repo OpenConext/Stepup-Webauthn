@@ -12,24 +12,22 @@ services:
             $supportEmail: '%support_email%'
             $locales: '%locales%'
             $userDisplayName: '%user_display_name%'
-            $trustedCertificatesDirectory: '%trusted_certificates_directory%'
+            $jwtMdsBlobFileName: '%fido2_jwt_mds_blob_file_name%'
+            $jwtMdsRootCertFileName: '%fido2_jwt_mds_root_certificate_file_name%'
+            $mdsCacheDir: '%fido2_mds_cache_dir%'
 
-    App\:
+    Surfnet\Webauthn\:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-    App\Repository\:
+    Surfnet\Webauthn\Repository\:
         resource: '../src/Repository/*'
 
-    App\Controller\:
+    Surfnet\Webauthn\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
     Surfnet\GsspBundle\Service\ValueStore\SessionValueStore:
         alias: surfnet_gssp.value_store.service
 
-    App\Service\InMemoryAttestationCertificateTrustStore:
-        arguments:
-            - '$trustedCertificates': []
-
-    App\Service\AttestationCertificateTrustStore:
-        factory: '@App\Service\AttestationCertificateTrustStoreFactory'
+    Webauthn\Bundle\Repository\CanRegisterUserEntity:
+        alias: Surfnet\Webauthn\Repository\UserRepository

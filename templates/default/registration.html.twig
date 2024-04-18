@@ -1,17 +1,59 @@
+
 {% extends 'base.html.twig' %}
 
 {% block body %}
     <h2>{{ 'registration.sub_title'|trans }}</h2>
 
-    <div id="root"></div>
+    <form id="form"
+            {{ stimulus_controller('@web-auth/webauthn-stimulus',
+                {
+                    creationResultUrl: path('attestation-verification'),
+                    creationOptionsUrl: path('attestation-options'),
+                    creationSuccessRedirectUri: path('app_identity_registration')
+                }
+            ) }}
+    >
+        <span>{{ 'status.registration_initial'|trans }}</span>
+
+        <input
+                type="hidden"
+                name="username"
+                id="username"
+                value="{{ userEntity.name() }}"
+        >
+        <input
+                type="hidden"
+                name="displayName"
+                id="inputDisplayName"
+                value="{{ userEntity.displayName() }}"
+        >
+        <button
+                id="registerButton" {{ stimulus_controller('registration') }}
+                {{ stimulus_action('@web-auth/webauthn-stimulus', 'signup') }}
+                hidden
+        >
+
+        </button>
+    </form>
+
+    {% include 'partial/error_table.html.twig' with
+        {
+            'timestamp': 'timestamp',
+            'hostname': 'hostname',
+            'requestId': 'requestId',
+            'errorMessage': 'errorMessage',
+            'sari': 'sari',
+            'userAgent': 'userAgent',
+            'ipAddress': 'ipAddress',
+        }
+    %}
+
+    <script>
+        window.onload = function(){
+            document.getElementById("registerButton").click();
+        }
+    </script>
 
     {% include 'default/variables.twig' %}
-    {% block javascripts %}
-        <script>
-            var publicKeyOptions = {{ publicKeyOptions | json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE')) | raw }};
-            var responseUrl = {{ url('verify-attestation') | json_encode | raw }};
-        </script>
-        {{ encore_entry_script_tags('registration') }}
-    {% endblock %}
 
 {% endblock %}

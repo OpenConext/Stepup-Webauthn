@@ -13,10 +13,8 @@
 -
     - info
     - 'Validate attestation response'
-    -
-        nameId: userId123
+    - { nameId: userId123 }
 -
     - warning
     - 'Invalid attestation "Invalid"'
-    -
-        nameId: userId123
+    - { nameId: userId123 }
