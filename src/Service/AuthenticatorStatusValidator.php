@@ -30,6 +30,11 @@ class AuthenticatorStatusValidator
      * @var string[]
      */
     private readonly array $allowedStatus;
+    /**
+     * @var string[]
+     */
+    private readonly array $deniedStatus;
+
 
     public function __construct()
     {
@@ -44,6 +49,13 @@ class AuthenticatorStatusValidator
             AuthenticatorStatus::FIDO_CERTIFIED_L2plus,
             AuthenticatorStatus::FIDO_CERTIFIED_L3plus,
         ];
+        $this->deniedStatus = [
+            AuthenticatorStatus::REVOKED,
+            AuthenticatorStatus::ATTESTATION_KEY_COMPROMISE,
+            AuthenticatorStatus::USER_KEY_PHYSICAL_COMPROMISE,
+            AuthenticatorStatus::USER_KEY_REMOTE_COMPROMISE,
+            AuthenticatorStatus::USER_VERIFICATION_BYPASS
+        ];
     }
 
     /**
@@ -57,6 +69,9 @@ class AuthenticatorStatusValidator
         $meetsRequirement = false;
         $reportsProcessed = 0;
         $reportLog = [];
+        /* The status of the attestation can be multivalued, containing both a certification as a revocation.
+           First test for valid certification, then for reasons to deny
+        */
         foreach ($statusReports as $report) {
             if (in_array($report->status, $this->allowedStatus)) {
                 $meetsRequirement = true;
@@ -64,11 +79,19 @@ class AuthenticatorStatusValidator
             $reportsProcessed++;
             $reportLog[] = $report->status;
         }
+        if ($meetsRequirement) {
+            foreach ($statusReports as $report) {
+                if (in_array($report->status, $this->deniedStatus)) {
+                    $meetsRequirement = false;
+                }
+            }
+        }
 
         if (!$meetsRequirement) {
             throw new AuthenticatorStatusNotSupportedException(
                 sprintf(
-                    'Of the %d StatusReports tested, none met one of the required FIDO Certified statuses. ' .
+                    'Of the %d StatusReports tested, none met one of the required FIDO Certified statuses,
+                        or the status was explicitly denied. ' .
                     'Reports tested: "%s"',
                     $reportsProcessed,
                     implode(', ', $reportLog)
