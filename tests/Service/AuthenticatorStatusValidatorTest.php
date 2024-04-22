@@ -82,6 +82,7 @@ class AuthenticatorStatusValidatorTest extends TestCase
             'invalid UPDATE_AVAILABLE' => [[$this->createReport(AuthenticatorStatus::UPDATE_AVAILABLE)]],
             'invalid REVOKED' => [[$this->createReport(AuthenticatorStatus::REVOKED)]],
             'invalid mixed, all bad' => [[$this->createReport(AuthenticatorStatus::UPDATE_AVAILABLE), $this->createReport(AuthenticatorStatus::NOT_FIDO_CERTIFIED)]],
+            'invalid FIDO_CERTIFIED and REVOKED' => [[$this->createReport(AuthenticatorStatus::REVOKED), $this->createReport(AuthenticatorStatus::FIDO_CERTIFIED)]],
         ];
     }
     final public const USER_VERIFICATION_BYPASS = '';
