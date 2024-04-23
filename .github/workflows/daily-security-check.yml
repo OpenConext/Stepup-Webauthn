@@ -16,7 +16,7 @@ jobs:
       # PHP checks
       - name: Check for php composer project
         id: check_composer
-        uses: andstor/file-existence-action@v2
+        uses: andstor/file-existence-action@v3
         with:
           files: "composer.lock"
       - name: Run php local security checker
@@ -26,14 +26,14 @@ jobs:
       # node-yarn checks
       - name: Check for node-yarn project
         id: check_node_yarn
-        uses: andstor/file-existence-action@v2
+        uses: andstor/file-existence-action@v3
         with:
           files: "yarn.lock"
       - name: Setup node
         if: steps.check_node_yarn.outputs.files_exists == 'true'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 18
       - name: Yarn Audit
         if: steps.check_node_yarn.outputs.files_exists == 'true'
         run: yarn audit --level high --groups dependencies optionalDependencies
@@ -41,14 +41,14 @@ jobs:
       # node-npm checks
       - name: Check for node-npm project
         id: check_node_npm
-        uses: andstor/file-existence-action@v2
+        uses: andstor/file-existence-action@v3
         with:
           files: "package.lock"
       - name: Setup node
         if: steps.check_node_npm.outputs.files_exists == 'true'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 14
+          node-version: 18
       - name: npm audit
         if: steps.check_node_npm.outputs.files_exists == 'true'
         run: npm audit --audit-level=high
@@ -56,7 +56,7 @@ jobs:
       # python checks
       - name: Check for python project
         id: check_python
-        uses: andstor/file-existence-action@v2
+        uses: andstor/file-existence-action@v3
         with:
           files: "requirements.txt"
       - name: Safety checks Python dependencies
@@ -66,7 +66,7 @@ jobs:
       # java checks
       - name: Check for java maven project
         id: check_maven
-        uses: andstor/file-existence-action@v2
+        uses: andstor/file-existence-action@v3
         with:
           files: "pom.xml"
       - name: Setup java if needed
