@@ -34,6 +34,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+      - name: Composer install
+        if: steps.check_node_yarn.outputs.files_exists == 'true'
+        run: composer install --no-interaction 
       - name: Yarn Audit
         if: steps.check_node_yarn.outputs.files_exists == 'true'
         run: yarn audit --level high --groups dependencies optionalDependencies
