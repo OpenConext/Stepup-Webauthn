@@ -56,11 +56,6 @@ parameters:
 			path: ../../src/Entity/PublicKeyCredentialSource.php
 
 		-
-			message: "#^Class Surfnet\\\\Webauthn\\\\Entity\\\\User has an uninitialized readonly property \\$displayName\\. Assign it in the constructor\\.$#"
-			count: 1
-			path: ../../src/Entity/User.php
-
-		-
 			message: "#^Class Surfnet\\\\Webauthn\\\\Entity\\\\User has an uninitialized readonly property \\$id\\. Assign it in the constructor\\.$#"
 			count: 1
 			path: ../../src/Entity/User.php
