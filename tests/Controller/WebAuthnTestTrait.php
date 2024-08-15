@@ -62,7 +62,8 @@ trait WebAuthnTestTrait
         $content = 'The http content with AuthenticatorAssertionResponse';
 
         $this->request = Request::create('https://webauthn.dev.openconext.local', 'POST', [], [] , [], [], $content);
-        $publicKeyCredential = new PublicKeyCredential('fictional', 'public-key', 'Public key credential raw id 1234', $response);
+        $publicKeyCredential = new PublicKeyCredential(null, 'public-key', 'Public key credential raw id 1234', $response);
+
         $this->publicKeyCredentialLoader
             ->shouldReceive('load')
             ->with($content)
