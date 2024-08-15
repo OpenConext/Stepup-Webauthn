@@ -48,9 +48,7 @@ future modifications do not introduce unintended side effects.
 You can run these tools manually with composer:
 
 ```bash
-composer phpunit
-
-composer jest
+composer check
 ``` 
 
 ## Acceptance testing

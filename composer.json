@@ -89,8 +89,7 @@
       "@phpcpd",
       "@phpmd",
       "@phpstan",
-      "@unit-tests",
-      "@jest"
+      "@unit-tests"
     ],
     "composer-validate": "./ci/qa/validate",
     "docheader": "./ci/qa/docheader",
@@ -141,7 +140,6 @@
       "/tslint.json",
       "/Vagrantfile",
       "/webpack.config.js",
-      "/jest.config.js",
       "/.docheader",
       "/.env.ci",
       "/.env.test",
