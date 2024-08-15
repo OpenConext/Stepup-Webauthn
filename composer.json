@@ -34,7 +34,7 @@
     "openconext/monitor-bundle": "^4.0",
     "ramsey/uuid": "^4.7",
     "spomky-labs/cbor-bundle": "^3.0",
-    "spomky-labs/cbor-php": "^3.0",
+    "spomky-labs/cbor-php": "^3.1",
     "surfnet/stepup-bundle": "^6.0",
     "surfnet/stepup-gssp-bundle": "^5.0",
     "surfnet/stepup-saml-bundle": "^6.0",
@@ -56,11 +56,11 @@
     "symfony/webpack-encore-bundle": "^2.1",
     "symfony/yaml": "^6.4",
     "twig/twig": "^3.8",
-    "web-auth/cose-lib": "^4.3",
-    "web-auth/webauthn-lib": "^4.8",
-    "web-auth/webauthn-stimulus": "^4.8",
-    "web-auth/webauthn-symfony-bundle": "^4.8",
-    "web-token/jwt-signature-algorithm-rsa": "^3.3"
+    "web-auth/cose-lib": "^4.4",
+    "web-auth/webauthn-lib": "^4.9",
+    "web-auth/webauthn-stimulus": "^4.9",
+    "web-auth/webauthn-symfony-bundle": "^4.9",
+    "web-token/jwt-signature-algorithm-rsa": "^3.4"
   },
   "require-dev": {
     "malukenho/docheader": "^1",
@@ -165,7 +165,8 @@
     "allow-plugins": {
       "symfony/flex": true,
       "symfony/runtime": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "endroid/installer": false
     }
   },
   "extra": {
