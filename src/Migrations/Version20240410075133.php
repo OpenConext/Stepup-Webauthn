@@ -36,7 +36,7 @@ final class Version20240410075133 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE migration_versions');
+        $this->addSql('DROP TABLE IF EXISTS migration_versions');
         $this->addSql('ALTER TABLE public_key_credential_sources ADD other_ui LONGTEXT DEFAULT NULL COMMENT \'(DC2Type:array)\'');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E95E237E06 ON users (name)');
     }
