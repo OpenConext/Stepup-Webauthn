@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- Doctrine Migration fixes #130 #131
+
 ## 2.0.1
 
 - Check for revocation in metadata service
