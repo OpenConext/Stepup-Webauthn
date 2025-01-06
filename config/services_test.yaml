@@ -1,6 +1,5 @@
 parameters:
     locale: nl_NL
-    database_url: sqlite:///%kernel.project_dir%/var/webauthn.db
 
 services:
     # default configuration for services in *this* file
@@ -14,6 +13,9 @@ services:
             $supportEmail: '%support_email%'
             $locales: '%locales%'
             $userDisplayName: '%user_display_name%'
+            $jwtMdsBlobFileName: '%fido2_jwt_mds_blob_file_name%'
+            $jwtMdsRootCertFileName: '%fido2_jwt_mds_root_certificate_file_name%'
+            $mdsCacheDir: '%fido2_mds_cache_dir%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

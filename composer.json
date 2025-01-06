@@ -89,7 +89,8 @@
       "@phpcpd",
       "@phpmd",
       "@phpstan",
-      "@unit-tests"
+      "@unit-tests",
+      "@doctrine-schema-validate"
     ],
     "composer-validate": "./ci/qa/validate",
     "docheader": "./ci/qa/docheader",
@@ -101,6 +102,7 @@
     "phpstan": "./ci/qa/phpstan",
     "phpstan-baseline": "./ci/qa/phpstan-update-baseline",
     "unit-tests": "ci/qa/phpunit",
+    "doctrine-schema-validate": "ci/qa/doctrine-schema-validate",
     "frontend-install": [
       "yarn install"
     ],
