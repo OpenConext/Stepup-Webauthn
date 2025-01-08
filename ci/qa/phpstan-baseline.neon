@@ -164,8 +164,3 @@ parameters:
 			message: "#^Method Surfnet\\\\Webauthn\\\\WithContextLogger\\:\\:from\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../src/WithContextLogger.php
-
-		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\WithContextLogger\\:\\:log\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: ../../src/WithContextLogger.php
