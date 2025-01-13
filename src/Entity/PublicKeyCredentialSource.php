@@ -38,12 +38,14 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
      #[ORM\Id]
      #[ORM\GeneratedValue]
      #[ORM\Column(type:"integer")]
-    private string $id;
+    private int $id;
 
     /**
-     * Override the $uvInitialized field which we do not use, but needs
+     * Override the $backupEligible, $backupStatus and $uvInitialized fields which we do not use, but needs
      * to be initialized. Needed to prevent read before written errors.
      */
+    public ?bool $backupEligible = null;
+    public ?bool $backupStatus = null;
     public ?bool $uvInitialized = false;
 
     public function __construct(

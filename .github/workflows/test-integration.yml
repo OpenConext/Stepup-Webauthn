@@ -4,23 +4,17 @@ on: [pull_request]
 jobs:
   run-qa-tests:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: /var/www/html/
-    container:
-      image:  ghcr.io/openconext/openconext-basecontainers/php82-apache2-node20-composer2:latest
-      volumes:
-        - .:/var/www/html
-
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Composer install
-        run: composer install
+      - name: Init environment
+        run: cd ci/docker && ./init.sh
 
       - name: Build frontend assets
         run: yarn && yarn encore production
 
       - name: Run QA tests
-        run: composer check
+        run: |
+            cd ci/docker && docker compose exec -T webauthn bash -c 'composer check'

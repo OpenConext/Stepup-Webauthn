@@ -1,7 +1,5 @@
 ---
 
-version: '3.7'
-
 services:
   haproxy:
     image: ghcr.io/openconext/openconext-basecontainers/haproxy26:latest
@@ -14,7 +12,7 @@ services:
           - "webauthn.dev.openconext.local"
   webauthn:
     stdin_open: true
-    image: ghcr.io/openconext/stepup-webauthn/stepup-webauthn:dev
+    image: ghcr.io/openconext/openconext-basecontainers/php82-apache2-node20-composer2:latest
     volumes:
       - ../../:/var/www/html
       - ${PWD}/webauthn:/config
