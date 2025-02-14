@@ -20,15 +20,11 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Repository;
 
-use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
-use Surfnet\Webauthn\Entity\User;
-use Assert\Assertion;
 use Doctrine\Persistence\ManagerRegistry;
-use Webauthn\AttestationStatement\AttestationObject;
-use Webauthn\AuthenticatorAttestationResponse;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
 use Webauthn\Bundle\Repository\DoctrineCredentialSourceRepository;
-use Webauthn\PublicKeyCredential;
-use Webauthn\PublicKeyCredentialDescriptor;
+use Webauthn\PublicKeyCredentialSource as WebauthnPublicKeyCredentialSource;
+use Webauthn\PublicKeyCredentialUserEntity;
 
 /**
  * @extends DoctrineCredentialSourceRepository<PublicKeyCredentialSource>
@@ -40,50 +36,33 @@ class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceReposi
         parent::__construct($registry, PublicKeyCredentialSource::class);
     }
 
-    public function create(PublicKeyCredential $publicKeyCredential, string $userHandle): PublicKeyCredentialSource
+    public function saveCredentialSource(WebauthnPublicKeyCredentialSource $publicKeyCredentialSource): void
     {
-        $response = $publicKeyCredential->getResponse();
-        Assertion::isInstanceOf(
-            $response,
-            AuthenticatorAttestationResponse::class,
-            'This method is only available with public key credential containing an authenticator attestation response.'
-        );
-        $publicKeyCredentialDescriptor = $publicKeyCredential->getPublicKeyCredentialDescriptor([
-            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_INTERNAL,
-            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_USB,
-            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_BLE,
-            PublicKeyCredentialDescriptor::AUTHENTICATOR_TRANSPORT_NFC
-        ]);
-        /** @var AttestationObject $attestationObject */
-        $attestationObject = $response->attestationObject;
-        $attestationStatement = $attestationObject->attStmt;
-        $authenticatorData = $attestationObject->authData;
-        $attestedCredentialData = $authenticatorData->attestedCredentialData;
-        Assertion::notNull($attestedCredentialData, 'No attested credential data available');
-        return new PublicKeyCredentialSource(
-            $publicKeyCredentialDescriptor->id,
-            $publicKeyCredentialDescriptor->type,
-            $publicKeyCredentialDescriptor->transports,
-            $attestationStatement->type,
-            $attestationStatement->trustPath,
-            $attestedCredentialData->aaguid,
-            $attestedCredentialData->credentialPublicKey,
-            $userHandle,
-            $authenticatorData->signCount,
-            $attestationStatement->fmt
-        );
+        if (!$publicKeyCredentialSource instanceof PublicKeyCredentialSource) {
+            $publicKeyCredentialSource = new PublicKeyCredentialSource(
+                $publicKeyCredentialSource->publicKeyCredentialId,
+                $publicKeyCredentialSource->type,
+                $publicKeyCredentialSource->transports,
+                $publicKeyCredentialSource->attestationType,
+                $publicKeyCredentialSource->trustPath,
+                $publicKeyCredentialSource->aaguid,
+                $publicKeyCredentialSource->credentialPublicKey,
+                $publicKeyCredentialSource->userHandle,
+                $publicKeyCredentialSource->counter,
+                'fmt',
+            );
+        }
+        parent::saveCredentialSource($publicKeyCredentialSource);
     }
 
-    /**
-     * @return PublicKeyCredentialSource[]
-     */
-    public function allForUser(User $user): array
+    public function findAllForUserEntity(PublicKeyCredentialUserEntity $publicKeyCredentialUserEntity): array
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        return $qb->select('c')
+        return $this->getEntityManager()
+            ->createQueryBuilder()
             ->from($this->class, 'c')
-            ->where('c.userHandle = :user_handle')
-            ->setParameter(':user_handle', $user->id)
+            ->select('c')
+            ->where('c.userHandle = :userHandle')
+            ->setParameter(':userHandle', $publicKeyCredentialUserEntity->id)
             ->getQuery()
             ->execute();
     }

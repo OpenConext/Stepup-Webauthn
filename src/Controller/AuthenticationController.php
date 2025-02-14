@@ -74,7 +74,7 @@ class AuthenticationController extends AbstractController
         }
 
         try {
-            $user = $this->userRepository->getByUserId($nameId);
+            $user = $this->userRepository->findOneByUserHandle($nameId);
         } catch (Throwable $exception) {
             $logger->error(sprintf(
                 'User with nameId "%s" not found, error "%s"',
@@ -86,7 +86,7 @@ class AuthenticationController extends AbstractController
 
         $this->logger->info('Registration is not finalized create public key credential creation options');
 
-        $allowedCredentials = $this->publicKeyCredentialSourceRepository->allForUser($user);
+        $allowedCredentials = $this->publicKeyCredentialSourceRepository->findAllForUserEntity($user);
 
         if (count($allowedCredentials) !== 1) {
             $logger->error('One credential source allowed');

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "049e4ef9ddb55685851600e950709f18",
+    "content-hash": "31a065716fef803ea297fbf5c3ef1086",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2040,70 +2040,6 @@
                 "source": "https://github.com/Incenteev/ParameterHandler/tree/v2.2.0"
             },
             "time": "2023-12-09T10:31:14+00:00"
-        },
-        {
-            "name": "lcobucci/clock",
-            "version": "3.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lcobucci/clock.git",
-                "reference": "db3713a61addfffd615b79bf0bc22f0ccc61b86b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/clock/zipball/db3713a61addfffd615b79bf0bc22f0ccc61b86b",
-                "reference": "db3713a61addfffd615b79bf0bc22f0ccc61b86b",
-                "shasum": ""
-            },
-            "require": {
-                "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
-                "psr/clock": "^1.0"
-            },
-            "provide": {
-                "psr/clock-implementation": "1.0"
-            },
-            "require-dev": {
-                "infection/infection": "^0.29",
-                "lcobucci/coding-standard": "^11.1.0",
-                "phpstan/extension-installer": "^1.3.1",
-                "phpstan/phpstan": "^1.10.25",
-                "phpstan/phpstan-deprecation-rules": "^1.1.3",
-                "phpstan/phpstan-phpunit": "^1.3.13",
-                "phpstan/phpstan-strict-rules": "^1.5.1",
-                "phpunit/phpunit": "^11.3.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Lcobucci\\Clock\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Luís Cobucci",
-                    "email": "lcobucci@gmail.com"
-                }
-            ],
-            "description": "Yet another clock abstraction",
-            "support": {
-                "issues": "https://github.com/lcobucci/clock/issues",
-                "source": "https://github.com/lcobucci/clock/tree/3.3.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/lcobucci",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/lcobucci",
-                    "type": "patreon"
-                }
-            ],
-            "time": "2024-09-24T20:45:14+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -6872,89 +6808,6 @@
             "time": "2024-12-26T19:01:29+00:00"
         },
         {
-            "name": "symfony/psr-http-message-bridge",
-            "version": "v6.4.13",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/psr-http-message-bridge.git",
-                "reference": "c9cf83326a1074f83a738fc5320945abf7fb7fec"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/psr-http-message-bridge/zipball/c9cf83326a1074f83a738fc5320945abf7fb7fec",
-                "reference": "c9cf83326a1074f83a738fc5320945abf7fb7fec",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "psr/http-message": "^1.0|^2.0",
-                "symfony/http-foundation": "^5.4|^6.0|^7.0"
-            },
-            "conflict": {
-                "php-http/discovery": "<1.15",
-                "symfony/http-kernel": "<6.2"
-            },
-            "require-dev": {
-                "nyholm/psr7": "^1.1",
-                "php-http/discovery": "^1.15",
-                "psr/log": "^1.1.4|^2|^3",
-                "symfony/browser-kit": "^5.4|^6.0|^7.0",
-                "symfony/config": "^5.4|^6.0|^7.0",
-                "symfony/event-dispatcher": "^5.4|^6.0|^7.0",
-                "symfony/framework-bundle": "^6.2|^7.0",
-                "symfony/http-kernel": "^6.2|^7.0"
-            },
-            "type": "symfony-bridge",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Bridge\\PsrHttpMessage\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "PSR HTTP message bridge",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "http",
-                "http-message",
-                "psr-17",
-                "psr-7"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/psr-http-message-bridge/tree/v6.4.13"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-09-25T14:18:03+00:00"
-        },
-        {
             "name": "symfony/routing",
             "version": "v7.2.3",
             "source": {
@@ -8936,44 +8789,40 @@
         },
         {
             "name": "web-auth/webauthn-lib",
-            "version": "4.9.2",
+            "version": "5.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-auth/webauthn-lib.git",
-                "reference": "008b25171c27cf4813420d0de31cc059bcc71f1a"
+                "reference": "7aa58ea290c421066d068b031f3f653dab20430c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/008b25171c27cf4813420d0de31cc059bcc71f1a",
-                "reference": "008b25171c27cf4813420d0de31cc059bcc71f1a",
+                "url": "https://api.github.com/repos/web-auth/webauthn-lib/zipball/7aa58ea290c421066d068b031f3f653dab20430c",
+                "reference": "7aa58ea290c421066d068b031f3f653dab20430c",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "ext-mbstring": "*",
                 "ext-openssl": "*",
-                "lcobucci/clock": "^2.2|^3.0",
                 "paragonie/constant_time_encoding": "^2.6|^3.0",
-                "php": ">=8.1",
+                "php": ">=8.2",
+                "phpdocumentor/reflection-docblock": "^5.3",
                 "psr/clock": "^1.0",
                 "psr/event-dispatcher": "^1.0",
-                "psr/http-client": "^1.0",
-                "psr/http-factory": "^1.0",
                 "psr/log": "^1.0|^2.0|^3.0",
                 "spomky-labs/cbor-php": "^3.0",
                 "spomky-labs/pki-framework": "^1.0",
+                "symfony/clock": "^6.4|^7.0",
                 "symfony/deprecation-contracts": "^3.2",
-                "symfony/uid": "^6.1|^7.0",
+                "symfony/property-access": "^6.4|^7.0",
+                "symfony/property-info": "^6.4|^7.0",
+                "symfony/serializer": "^6.4|^7.0",
+                "symfony/uid": "^6.4|^7.0",
                 "web-auth/cose-lib": "^4.2.3"
             },
             "suggest": {
-                "phpdocumentor/reflection-docblock": "As of 4.5.x, the phpdocumentor/reflection-docblock component will become mandatory for converting objects such as the Metadata Statement",
-                "psr/clock-implementation": "As of 4.5.x, the PSR Clock implementation will replace lcobucci/clock",
                 "psr/log-implementation": "Recommended to receive logs from the library",
                 "symfony/event-dispatcher": "Recommended to use dispatched events",
-                "symfony/property-access": "As of 4.5.x, the symfony/serializer component will become mandatory for converting objects such as the Metadata Statement",
-                "symfony/property-info": "As of 4.5.x, the symfony/serializer component will become mandatory for converting objects such as the Metadata Statement",
-                "symfony/serializer": "As of 4.5.x, the symfony/serializer component will become mandatory for converting objects such as the Metadata Statement",
                 "web-token/jwt-library": "Mandatory for fetching Metadata Statement from distant sources"
             },
             "type": "library",
@@ -9010,7 +8859,7 @@
                 "webauthn"
             ],
             "support": {
-                "source": "https://github.com/web-auth/webauthn-lib/tree/4.9.2"
+                "source": "https://github.com/web-auth/webauthn-lib/tree/5.1.2"
             },
             "funding": [
                 {
@@ -9022,20 +8871,20 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-01-04T09:47:58+00:00"
+            "time": "2025-02-16T10:15:04+00:00"
         },
         {
             "name": "web-auth/webauthn-stimulus",
-            "version": "4.9.2",
+            "version": "5.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-auth/ux.git",
-                "reference": "32b40b8a00298fad8fe2a1adbfe6ce240fbd94b1"
+                "reference": "2c8f8d33f7675b7915f2d55b733cf7ef219c737b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-auth/ux/zipball/32b40b8a00298fad8fe2a1adbfe6ce240fbd94b1",
-                "reference": "32b40b8a00298fad8fe2a1adbfe6ce240fbd94b1",
+                "url": "https://api.github.com/repos/web-auth/ux/zipball/2c8f8d33f7675b7915f2d55b733cf7ef219c737b",
+                "reference": "2c8f8d33f7675b7915f2d55b733cf7ef219c737b",
                 "shasum": ""
             },
             "conflict": {
@@ -9077,7 +8926,7 @@
                 "webauthn"
             ],
             "support": {
-                "source": "https://github.com/web-auth/ux/tree/4.9.2"
+                "source": "https://github.com/web-auth/ux/tree/5.1.2"
             },
             "funding": [
                 {
@@ -9089,41 +8938,38 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2024-06-30T09:37:10+00:00"
+            "time": "2025-02-01T21:57:01+00:00"
         },
         {
             "name": "web-auth/webauthn-symfony-bundle",
-            "version": "4.9.2",
+            "version": "5.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/web-auth/webauthn-symfony-bundle.git",
-                "reference": "80aa16fa6f16ab8f017a4108ffcd2ecc12264c07"
+                "reference": "20582697d824b7fc4cef3fc7cb51d8ec36bc205e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/web-auth/webauthn-symfony-bundle/zipball/80aa16fa6f16ab8f017a4108ffcd2ecc12264c07",
-                "reference": "80aa16fa6f16ab8f017a4108ffcd2ecc12264c07",
+                "url": "https://api.github.com/repos/web-auth/webauthn-symfony-bundle/zipball/20582697d824b7fc4cef3fc7cb51d8ec36bc205e",
+                "reference": "20582697d824b7fc4cef3fc7cb51d8ec36bc205e",
                 "shasum": ""
             },
             "require": {
-                "nyholm/psr7": "^1.5",
-                "php": ">=8.1",
-                "phpdocumentor/reflection-docblock": "^5.3",
+                "php": ">=8.2",
                 "psr/event-dispatcher": "^1.0",
-                "symfony/config": "^6.1|^7.0",
-                "symfony/dependency-injection": "^6.1|^7.0",
-                "symfony/framework-bundle": "^6.1|^7.0",
-                "symfony/http-client": "^6.1|^7.0",
-                "symfony/property-access": "^6.1|^7.0",
-                "symfony/property-info": "^6.1|^7.0",
-                "symfony/psr-http-message-bridge": "^2.1|^6.1|^7.0",
-                "symfony/security-bundle": "^6.1|^7.0",
-                "symfony/security-core": "^6.1|^7.0",
-                "symfony/security-http": "^6.1|^7.0",
-                "symfony/serializer": "^6.1|^7.0",
-                "symfony/validator": "^6.1|^7.0",
-                "web-auth/webauthn-lib": "self.version",
-                "web-token/jwt-library": "^3.3|^4.0"
+                "symfony/config": "^6.4|^7.0",
+                "symfony/dependency-injection": "^6.4|^7.0",
+                "symfony/framework-bundle": "^6.4|^7.0",
+                "symfony/http-client": "^6.4|^7.0",
+                "symfony/security-bundle": "^6.4|^7.0",
+                "symfony/security-core": "^6.4|^7.0",
+                "symfony/security-http": "^6.4|^7.0",
+                "symfony/serializer": "^6.4|^7.0",
+                "symfony/validator": "^6.4|^7.0",
+                "web-auth/webauthn-lib": "self.version"
+            },
+            "suggest": {
+                "symfony/security-bundle": "Symfony firewall using a JSON API (perfect for script applications)"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -9162,7 +9008,7 @@
                 "webauthn"
             ],
             "support": {
-                "source": "https://github.com/web-auth/webauthn-symfony-bundle/tree/4.9.2"
+                "source": "https://github.com/web-auth/webauthn-symfony-bundle/tree/5.1.2"
             },
             "funding": [
                 {
@@ -9174,7 +9020,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-01-04T09:38:56+00:00"
+            "time": "2025-02-16T10:09:45+00:00"
         },
         {
             "name": "web-token/jwt-library",
