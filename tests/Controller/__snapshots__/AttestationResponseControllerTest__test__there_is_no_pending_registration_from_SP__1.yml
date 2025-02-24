@@ -1,8 +1,0 @@
--
-    - info
-    - 'Verifying if there is a pending registration from SP'
-    - {  }
--
-    - warning
-    - 'Registration is not required'
-    - {  }

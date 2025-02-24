@@ -57,9 +57,9 @@
     "symfony/yaml": "^6.4",
     "twig/twig": "^3.8",
     "web-auth/cose-lib": "^4.4",
-    "web-auth/webauthn-lib": "^4.9",
-    "web-auth/webauthn-stimulus": "^4.9",
-    "web-auth/webauthn-symfony-bundle": "^4.9",
+    "web-auth/webauthn-lib": "^5.1",
+    "web-auth/webauthn-stimulus": "^5.1",
+    "web-auth/webauthn-symfony-bundle": "^5.1",
     "web-token/jwt-signature-algorithm-rsa": "^3.4"
   },
   "require-dev": {
