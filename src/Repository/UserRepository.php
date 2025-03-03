@@ -22,15 +22,17 @@ namespace Surfnet\Webauthn\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Ramsey\Uuid\Uuid;
 use Surfnet\Webauthn\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use LogicException;
+use Webauthn\Bundle\Repository\CanGenerateUserEntity;
 use Webauthn\Bundle\Repository\CanRegisterUserEntity;
 use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepositoryInterface;
 use Webauthn\PublicKeyCredentialUserEntity;
 
-final readonly class UserRepository implements ServiceEntityRepositoryInterface, CanRegisterUserEntity, PublicKeyCredentialUserEntityRepositoryInterface
+final class UserRepository extends ServiceEntityRepository implements ServiceEntityRepositoryInterface, CanGenerateUserEntity, PublicKeyCredentialUserEntityRepositoryInterface, CanRegisterUserEntity
 {
     private EntityManagerInterface $manager;
 
@@ -46,6 +48,8 @@ final readonly class UserRepository implements ServiceEntityRepositoryInterface,
             ));
         }
         $this->manager = $manager;
+
+        parent::__construct($registry, User::class);
     }
 
     public function save(User $user): void
@@ -54,23 +58,17 @@ final readonly class UserRepository implements ServiceEntityRepositoryInterface,
         $this->manager->flush();
     }
 
-    public function getByUserId(string $id): User
-    {
-        return $this->manager->find(User::class, $id);
-    }
-
     public function findOneByUsername(string $username): ?PublicKeyCredentialUserEntity
     {
         $qb = $this->manager->createQueryBuilder();
 
         return $qb->select('u')
             ->from(User::class, 'u')
-            ->where('u.name = :name')
-            ->setParameter(':name', $username)
+            ->where('u.id = :id')
+            ->setParameter(':id', $username)
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
     public function findOneByUserHandle(string $userHandle): ?PublicKeyCredentialUserEntity
@@ -79,33 +77,26 @@ final readonly class UserRepository implements ServiceEntityRepositoryInterface,
 
         return $qb->select('u')
             ->from(User::class, 'u')
-            ->where('u.user_handle = :user_handle')
-            ->setParameter(':user_handle', $userHandle)
+            ->where('u.id = :id')
+            ->setParameter(':id', $userHandle)
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
-    public function createUser(string $displayName) : PublicKeyCredentialUserEntity
-    {
-        $id = Uuid::uuid4()->toString();
-        return new User($id, $id, $displayName);
-    }
-
-    public function createUserEntity(string $username, string $displayName, ?string $icon) : PublicKeyCredentialUserEntity
-    {
-        $id = Uuid::uuid4()->toString();
-        return new User($id, $id, $displayName);
-    }
-
-    public function saveUserEntity(PublicKeyCredentialUserEntity $userEntity) : void
+    public function saveUserEntity(PublicKeyCredentialUserEntity $userEntity): void
     {
         $this->manager->persist($userEntity);
         $this->manager->flush();
     }
 
-    public function generateNextUserEntityId(): string
+    public function generateUserEntity(?string $username, ?string $displayName): PublicKeyCredentialUserEntity
+    {
+        $id = Uuid::uuid4()->toString();
+        return new User($username, $id, $displayName);
+    }
+
+    public function generateUserName(): string
     {
         return Uuid::uuid4()->toString();
     }

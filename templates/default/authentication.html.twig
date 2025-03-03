@@ -6,9 +6,10 @@
     <form id="form"
         {{ stimulus_controller('@web-auth/webauthn-stimulus',
                 {
-                    requestResultUrl: path('verify-assertion'),
-                    requestOptionsUrl: path('request-options'),
-                    requestSuccessRedirectUri: path('app_identity_authentication')
+                    useBrowserAutofill: false,
+                    requestSuccessRedirectUri: path('app_identity_authentication'),
+                    requestResultUrl: path('webauthn.controller.security.main.request.result'),
+                    requestOptionsUrl: path('webauthn.controller.security.main.request.options')
                 }
             ) }}
     >
@@ -21,9 +22,10 @@
                 id="inputUsername"
                 value="{{ nameId }}"
                 class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                autocomplete="username webauthn"
         />
 
-        <button id="authenticationButton" {{ stimulus_controller('authentication') }}
+        <button id="authenticationButton"
                 {{ stimulus_action('@web-auth/webauthn-stimulus', 'signin') }}
                 hidden>
         </button>

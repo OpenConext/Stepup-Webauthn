@@ -36,7 +36,8 @@ use Webauthn\PublicKeyCredentialUserEntity;
 class User extends PublicKeyCredentialUserEntity implements UserInterface
 {
      #[ORM\Id]
-     #[ORM\Column(type:"string", length:36)]
+     #[ORM\Column(type:"string", length:36, unique: true)]
+     #[ORM\GeneratedValue(strategy: "NONE")]
     public readonly string $id;
 
     #[Assert\Length(max: 100)]
@@ -44,23 +45,6 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
 
     #[Assert\Length(max: 100)]
     public readonly string $displayName;
-
-    /**
-     * @var Collection<PublicKeyCredentialSourceEntity>
-     */
-    #[ORM\ManyToMany(targetEntity: PublicKeyCredentialSourceEntity::class)]
-    #[ORM\JoinTable(
-        name: "users_user_handles",
-        joinColumns:[new JoinColumn(name: "user_id", referencedColumnName: "id")],
-        inverseJoinColumns:[new JoinColumn(name:"user_handle", referencedColumnName: "id", unique: true)]
-    )]
-    protected Collection $publicKeyCredentialSources;
-
-    public function __construct(string $id, string $name, string $displayName)
-    {
-        parent::__construct($name, $id, $displayName);
-        $this->publicKeyCredentialSources = new ArrayCollection();
-    }
 
     /**
      * WebAuthn project does not care about roles of any user.
@@ -74,26 +58,10 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
     {
     }
 
-    public function getSalt(): void
-    {
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->name;
-    }
-
     public function eraseCredentials(): void
     {
     }
 
-    /**
-     * @return PublicKeyCredentialSource[]
-     */
-    public function getPublicKeyCredentialSources(): array
-    {
-        return $this->publicKeyCredentialSources->getValues();
-    }
 
     public function getUserIdentifier(): string
     {

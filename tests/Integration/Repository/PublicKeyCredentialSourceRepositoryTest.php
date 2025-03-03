@@ -21,10 +21,11 @@ use Doctrine\ORM\EntityManager;
 use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
 use Surfnet\Webauthn\Entity\User;
 use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
+use Surfnet\Webauthn\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV4;
 use Webauthn\TrustPath\EmptyTrustPath;
+use Webauthn\PublicKeyCredentialSource as WebauthnPublicKeyCredentialSource;
 
 class PublicKeyCredentialSourceRepositoryTest extends KernelTestCase
 {
@@ -51,9 +52,30 @@ class PublicKeyCredentialSourceRepositoryTest extends KernelTestCase
     public function testRepo()
     {
         /** @var PublicKeyCredentialSourceRepository $repo */
-        $repo = $this->entityManager->getRepository(PublicKeyCredentialSource::class);
+        $credentialRepo = $this->entityManager->getRepository(PublicKeyCredentialSource::class);
 
-        $item = new PublicKeyCredentialSource(
+        /** @var UserRepository $repo */
+        $userRepo = $this->entityManager->getRepository(User::class);
+
+        $id = '8e501762-7cd6-4229-a2e6-c1daed8fd4ac';
+        $nameId = '9e501762-7cd6-4229-a2e6-c1daed8fd4ac';
+        $user = $userRepo->findOneByUsername($nameId);
+        if (!$user) {
+            $user = new User($id, $nameId, 'name');
+            $userRepo->save($user);
+        }
+
+        $credentials = $credentialRepo->findAllForUserEntity($user);
+        foreach ($credentials as $credential) {
+            $credentialRepo->createQueryBuilder('c')
+                ->delete()
+                ->where('c.id = :id')
+                ->setParameter('id', $credential->getId())
+                ->getQuery()
+                ->execute();
+        }
+
+        $credential = new WebauthnPublicKeyCredentialSource(
             'id',
             'type',
             ['transports'],
@@ -61,16 +83,24 @@ class PublicKeyCredentialSourceRepositoryTest extends KernelTestCase
             new EmptyTrustPath(),
             new Uuid('580c810d-d82f-43ce-9796-6fd000be454a'),
             'credentialPublicKey',
-            'userHandle',
+            $user->id,
             1,
-            'fmt'
+            ['fmt'],
+            1,
+            1,
+            1,
         );
 
-        $repo->saveCredentialSource($item);
+        $credentialRepo->saveCredentialSource($credential);
 
-        $result = $repo->allForUser(new User('userHandle', 'foo', 'bar'));
+        $result = $credentialRepo->findAllForUserEntity($user);
 
         $this->assertNotEmpty($result);
+        $this->assertSame($user->id, $result[0]->userHandle);
+    }
+
+    public function testRepoIdempotent() {
+        $this->testRepo();
     }
 
 }

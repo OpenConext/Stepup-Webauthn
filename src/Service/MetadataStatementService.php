@@ -20,19 +20,16 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Service;
 
-use Surfnet\Webauthn\Exception\AuthenticatorStatusNotSupportedException;
-use Webauthn\MetadataService\Exception\MissingMetadataStatementException;
+use Webauthn\Exception\MissingMetadataStatementException;
 use Webauthn\MetadataService\MetadataStatementRepository;
 use Webauthn\MetadataService\Statement\MetadataStatement;
 use Webauthn\MetadataService\StatusReportRepository;
 use Surfnet\Webauthn\Repository\MetadataStatementRepository as SurfMetadataStatementRepository;
-use Webauthn\PublicKeyCredentialSource;
 
 class MetadataStatementService implements MetadataStatementRepository, StatusReportRepository
 {
     public function __construct(
         private readonly SurfMetadataStatementRepository $repository,
-        private readonly AuthenticatorStatusValidator $statusValidator
     ) {
     }
 
@@ -51,14 +48,5 @@ class MetadataStatementService implements MetadataStatementRepository, StatusRep
     public function findStatusReportsByAAGUID(string $aaguid): array
     {
         return (array) $this->repository->getStatusReports($aaguid);
-    }
-
-    /**
-     * @throws AuthenticatorStatusNotSupportedException
-     */
-    public function verifyMeetsRequiredAuthenticatorStatus(PublicKeyCredentialSource $pkco): void
-    {
-        $statusReports = $this->findStatusReportsByAAGUID((string) $pkco->aaguid);
-        $this->statusValidator->validate($statusReports);
     }
 }

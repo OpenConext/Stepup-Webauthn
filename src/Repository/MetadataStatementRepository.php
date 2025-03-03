@@ -27,11 +27,13 @@ use Jose\Component\Signature\Algorithm\RS256;
 use Jose\Component\Signature\JWSVerifier;
 use Jose\Component\Signature\Serializer\CompactSerializer;
 use Surfnet\Webauthn\Exception\RuntimeException;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
+use Webauthn\Exception\MetadataStatementLoadingException;
+use Webauthn\Exception\MissingMetadataStatementException;
 use Webauthn\MetadataService\CertificateChain\CertificateChainValidator;
 use Webauthn\MetadataService\CertificateChain\CertificateToolbox;
-use Webauthn\MetadataService\Exception\MetadataStatementLoadingException;
-use Webauthn\MetadataService\Exception\MissingMetadataStatementException;
-use Webauthn\MetadataService\Service\MetadataBLOBPayloadEntry;
+use Webauthn\MetadataService\Service\MetadataBLOBPayload;
 use Webauthn\MetadataService\Statement\MetadataStatement;
 use Webauthn\MetadataService\Statement\StatusReport;
 
@@ -68,18 +70,12 @@ class MetadataStatementRepository
         private readonly string $jwtMdsRootCertFileName,
         private readonly string $mdsCacheDir,
         private readonly CertificateChainValidator $certificateChainValidator,
+        private readonly SerializerInterface $serializer,
     ) {
         $payload = $this->warmCache();
-        $data = json_decode($payload, true, flags: JSON_THROW_ON_ERROR);
 
-        if (!is_array($data)) {
-            throw new RuntimeException('Unable to read the contents from the JWT metadata statement service file');
-        }
-
-        /** @var array<string, mixed> $datum */
-        foreach ($data['entries'] as $datum) {
-            $entry = MetadataBLOBPayloadEntry::createFromArray($datum);
-
+        $blob = $this->serializer->deserialize($payload, MetadataBLOBPayload::class, JsonEncoder::FORMAT);
+        foreach ($blob->entries as $entry) {
             $mds = $entry->metadataStatement;
             if ($mds !== null && $entry->aaguid !== null) {
                 $this->statements[$entry->aaguid] = $mds;

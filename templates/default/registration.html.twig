@@ -7,8 +7,8 @@
     <form id="form"
             {{ stimulus_controller('@web-auth/webauthn-stimulus',
                 {
-                    creationResultUrl: path('attestation-verification'),
-                    creationOptionsUrl: path('attestation-options'),
+                    creationResultUrl: path('webauthn.controller.security.main.creation.result'),
+                    creationOptionsUrl: path('webauthn.controller.security.main.creation.options'),
                     creationSuccessRedirectUri: path('app_identity_registration')
                 }
             ) }}
@@ -19,16 +19,16 @@
                 type="hidden"
                 name="username"
                 id="username"
-                value="{{ userEntity.name() }}"
+                value="{{ name }}"
         >
         <input
                 type="hidden"
                 name="displayName"
                 id="inputDisplayName"
-                value="{{ userEntity.displayName() }}"
+                value="{{ displayName }}"
         >
         <button
-                id="registerButton" {{ stimulus_controller('registration') }}
+                id="registerButton"
                 {{ stimulus_action('@web-auth/webauthn-stimulus', 'signup') }}
                 hidden
         >

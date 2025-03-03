@@ -1,8 +1,0 @@
--
-    - info
-    - 'Verifying if there is a pending authentication from SP'
-    - {  }
--
-    - warning
-    - 'No authentication required'
-    - {  }

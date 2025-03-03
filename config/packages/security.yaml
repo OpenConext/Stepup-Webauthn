@@ -1,13 +1,18 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: null }
+        users:
+            entity:
+                class: 'Surfnet\Webauthn\Entity\User'
+                property: 'name'
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            provider: in_memory
+            webauthn:
+                registration:
+                    enabled: true
         monitor:
             pattern: ^/(internal/)?(info|health)$
             security: false
