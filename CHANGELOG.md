@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.4
+- Upgrade Spomky webauthn dependencies
+- Upgrade javascript and php dependencies
+- Fix doctrine mapping & add integration test that fails on invalid schema
+- Update SSP lib
+- Change migrations to ignore existing tables on creation
+
 ## 2.0.2
 
 - Doctrine Migration fixes #130 #131
