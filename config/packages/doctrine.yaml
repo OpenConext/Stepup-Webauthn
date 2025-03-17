@@ -1,14 +1,25 @@
 doctrine:
     dbal:
-        # configure these for your database server
-        driver: 'pdo_mysql'
-        server_version: '10.6.19-MariaDB'
-        charset: utf8mb4
-        default_table_options:
-            charset: utf8mb4
-            collate: utf8mb4_unicode_ci
-
-        url: '%database_url%'
+        default_connection:       default
+        connections:
+            default:
+                # configure these for your database server
+                driver: 'pdo_mysql'
+                server_version: '10.6.19-MariaDB'
+                charset: utf8mb4
+                default_table_options:
+                    charset: utf8mb4
+                    collate: utf8mb4_unicode_ci
+                url: '%database_url%'
+            migration:
+                # used for doctrine database modifications
+                driver: 'pdo_mysql'
+                server_version: '10.6.19-MariaDB'
+                charset: utf8mb4
+                default_table_options:
+                    charset: utf8mb4
+                    collate: utf8mb4_unicode_ci
+                url: '%database_migration_url%'
     orm:
         report_fields_where_declared: true
         auto_generate_proxy_classes: false

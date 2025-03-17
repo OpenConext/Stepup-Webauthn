@@ -8,6 +8,8 @@ parameters:
     # The Symfony app secret. For more details see:
     # https://symfony.com/doc/current/reference/configuration/framework.html#secret
     database_url: 'mysql://webauthn_user:webauthn_secret@mariadb:3306/webauthn'
+    # if different credentials are needed for database modifications, specify them here
+    database_migration_url: 'mysql://webauthn_user:webauthn_secret@mariadb:3306/webauthn'
     support_url:
         en_GB: "https://support.example.org/faq-strong-authentication"
         nl_NL: "https://support.example.org/faq-sterke-authenticatie"
