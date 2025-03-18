@@ -64,10 +64,15 @@ SQL;
             $otherUi = $row['other_ui'];
 
             $this->write("<info>Migating: {$id}</info>");
-
-            $transports = json_encode(unserialize($transports), JSON_THROW_ON_ERROR);
-            $otherUi = json_encode(unserialize($otherUi), JSON_THROW_ON_ERROR);
-
+            
+            if ($transports !== null) {
+                $transports = json_encode(unserialize($transports), JSON_THROW_ON_ERROR);
+            }
+            
+            if ($otherUi !== null) {
+                $otherUi = json_encode(unserialize($otherUi), JSON_THROW_ON_ERROR);
+            }
+            
             $this->connection->executeUpdate(
                 self::$update,
                 [
