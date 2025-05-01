@@ -1,8 +1,8 @@
 {
   "browserslist": "last 2 versions, ie 11, > 1%",
   "devDependencies": {
-    "@babel/core": "^7.26.10",
-    "@babel/preset-env": "^7.20.2",
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.1",
     "@hotwired/stimulus": "^3.2.2",
     "@simplewebauthn/browser": "^13.0.0",
     "@symfony/stimulus-bridge": "^3.2.2",
@@ -12,10 +12,10 @@
     "compass-mixins": "^0",
     "file-loader": "^6.0.0",
     "query-string": "^6.8.3",
-    "sass": "^1.43",
+    "sass": "^1.87",
     "sass-loader": "^13.0",
     "stylelint": "^15.10",
-    "webpack": "^5.94.0",
+    "webpack": "^5.99.7",
     "webpack-cli": "^5.0.0",
     "webpack-dev-server": "^4.11",
     "webpack-import-glob-loader": "^1.6.3"
