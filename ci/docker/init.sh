@@ -10,5 +10,6 @@ docker compose exec -T webauthn bash -c '
   ./bin/console assets:install --verbose && \
   ./bin/console cache:clear && \
   chown -R www-data:www-data /var/www/html/var/ && \
+  git config --global --add safe.directory /var/www/html && \
   ./bin/console doctrine:migrations:migrate --no-interaction
 '
