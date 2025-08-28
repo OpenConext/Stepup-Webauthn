@@ -29,7 +29,6 @@ updates:
       - "/"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 25
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
@@ -46,13 +45,14 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    # Security updates only
+    open-pull-requests-limit: 0
   # Maintain dependencies for npm
   - package-ecosystem: "composer"
     directories:
       - "/"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 25
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
@@ -70,3 +70,5 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    # Security updates only
+    open-pull-requests-limit: 0
