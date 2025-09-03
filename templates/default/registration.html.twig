@@ -50,6 +50,34 @@
 
     <script>
         window.onload = function(){
+            const form = document.getElementById('form');
+            const setText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value ?? '';
+            };
+
+            const showErrors = () => {
+                const el = document.getElementById('errorData');
+                el.classList.remove('hidden');
+            };
+
+            const handleFailure = (evt) => {
+                const detail = evt.detail || {};
+                const exception = detail.exception;
+                const serverData = detail.data || {};
+                const msg =
+                    (exception && (exception.message || String(exception))) ||
+                    serverData.errorMessage ||
+                    'Registration failed';
+
+                setText('errorMessage', msg);
+                setText('timestamp', new Date().toISOString());
+
+                showErrors();
+            }
+
+            window.addEventListener('webauthn:attestation:failure', handleFailure, true);
+
             document.getElementById("registerButton").click();
         }
     </script>
