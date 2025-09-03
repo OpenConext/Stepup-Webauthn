@@ -3,35 +3,35 @@
     <table class="table table-bordered">
         <tr>
             <th>{{ 'stepup.error.timestamp'|trans }}</th>
-            <td data-content-for="timestamp">{{ timestamp }}</td>
+            <td data-content-for="timestamp" id="timestamp">{{ global_view_parameters.requestInformation.timestamp }}</td>
         </tr>
         <tr>
             <th>{{ 'stepup.error.hostname'|trans }}</th>
-            <td data-content-for="hostname">{{ hostname }}</td>
+            <td data-content-for="hostname">{{ global_view_parameters.requestInformation.hostname }}</td>
         </tr>
         <tr>
             <th>{{ 'stepup.error.request_id'|trans }}</th>
-            <td data-content-for="requestId">{{ requestId }}</td>
+            <td data-content-for="requestId">{{ global_view_parameters.requestInformation.requestId }}</td>
         </tr>
         <tr>
             <th>{{ 'stepup.error.error_code'|trans }}</th>
-            <td data-content-for="errorMessage">{{ errorMessage }}</td>
+            <td data-content-for="errorMessage" id="errorMessage">{{ errorMessage }}</td>
         </tr>
         {% if sari %}
             <tr>
                 <th>{{ 'stepup.error.sari'|trans }}</th>
-                <td data-content-for="sari">{{ sari }}</td>
+                <td data-content-for="sari">{{ global_view_parameters.requestInformation.sari }}</td>
             </tr>
         {% endif %}
         {% if userAgent %}
             <tr>
                 <th>{{ 'stepup.error.user_agent'|trans }}</th>
-                <td data-content-for="userAgent">{{ userAgent }}</td>
+                <td data-content-for="userAgent">{{ global_view_parameters.requestInformation.userAgent }}</td>
             </tr>
         {% endif %}
         <tr>
             <th>{{ 'stepup.error.ip_address'|trans }}</th>
-            <td data-content-for="ipAddress">{{ ipAddress }}</td>
+            <td data-content-for="ipAddress">{{ global_view_parameters.requestInformation.ipAddress }}</td>
         </tr>
     </table>
     {{ 'stepup.error.support_page.text'|trans({'%support_url%': global_view_parameters.supportUrl })|striptags('<a>')|raw }}
