@@ -23,7 +23,7 @@ status.general_error: Oeps! Er is iets fout gegaan, probeer het opnieuw.
 status.webauthn_not_supported: FIDO2 wordt niet ondersteund door jouw browser.
 status.no_active_request: Geen actieve aanvraag, keer terug naar jouw service provider.
 status.authenticator_not_supported: Dit token wordt niet ondersteund, probeer een andere.
-
+status.webauthn_not_supported_or_failed: Dit token of deze browser wordt niet ondersteund.
 # General
 
 ## Buttons
