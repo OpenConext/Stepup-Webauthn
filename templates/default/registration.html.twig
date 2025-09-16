@@ -70,7 +70,7 @@
                     serverData.errorMessage ||
                     'Registration failed';
 
-                setText('title', '{{ "status.webauthn_not_supported"|trans }}');
+                setText('title', '{{ "status.webauthn_not_supported_or_failed"|trans }}');
                 setText('errorMessage', msg);
                 setText('timestamp', new Date().toISOString());
 
