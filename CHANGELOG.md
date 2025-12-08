@@ -1,5 +1,13 @@
 # Changelog
 
+## 2,0.2.1
+
+- Update xmlseclibs to 3.1.4 to fix canonicalization bypass error (security)
+
+## 2.0.2
+
+- Update SAML2 to 4.16.14
+
 ## 2.0.1
 
 - Check for revocation in metadata service
