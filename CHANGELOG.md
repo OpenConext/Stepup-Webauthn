@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.8
+- Update node-forge and js-yaml
+
 ## 2.0.7
 - Update xmlseclibs to 3.1.4 to fix canonicalization bypass error (security)
 
