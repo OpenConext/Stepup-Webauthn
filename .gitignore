@@ -32,6 +32,9 @@
 /web/build
 .env
 
+# phplint cache #
+.phplint.cache
+
 # Code coverage reports #
 #################
 /coverage/*
