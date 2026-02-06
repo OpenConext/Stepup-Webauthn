@@ -51,10 +51,8 @@ class PublicKeyCredentialSourceRepositoryTest extends KernelTestCase
 
     public function testRepo()
     {
-        /** @var PublicKeyCredentialSourceRepository $repo */
         $credentialRepo = $this->entityManager->getRepository(PublicKeyCredentialSource::class);
 
-        /** @var UserRepository $repo */
         $userRepo = $this->entityManager->getRepository(User::class);
 
         $id = '8e501762-7cd6-4229-a2e6-c1daed8fd4ac';

@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -36,7 +37,7 @@ use Webauthn\PublicKeyCredentialUserEntity;
 class User extends PublicKeyCredentialUserEntity implements UserInterface
 {
      #[ORM\Id]
-     #[ORM\Column(type:"string", length:36, unique: true)]
+     #[ORM\Column(type:Types::STRING, length:36, unique: true)]
      #[ORM\GeneratedValue(strategy: "NONE")]
     public readonly string $id;
 

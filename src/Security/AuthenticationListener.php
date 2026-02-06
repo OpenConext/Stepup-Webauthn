@@ -30,9 +30,8 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 #[AsEventListener]
-final class AuthenticationListener
+final readonly class AuthenticationListener
 {
-
     public function __construct(
         private PublicKeyCredentialCreationOptionsStore $store,
         private AuthenticationService $authenticationService,
@@ -40,7 +39,6 @@ final class AuthenticationListener
         private LoggerInterface $logger
     ) {
     }
-
     public function __invoke(LoginSuccessEvent $event): void
     {
         $request = $event->getRequest();
