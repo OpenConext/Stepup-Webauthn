@@ -55,7 +55,6 @@ final class SPController extends AbstractController
     }
 
     #[Route(path: '/demo/sp', name: 'sp_demo', methods: ['GET', 'POST'])]
-    #[Route(path: '/', name: 'homepage', methods: ['GET', 'POST'])]
     public function demoSp(Request $request): Response
     {
         if (!$request->isMethod(Request::METHOD_POST)) {
