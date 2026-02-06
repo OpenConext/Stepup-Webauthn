@@ -34,7 +34,7 @@ use Webauthn\PublicKeyCredentialUserEntity;
 
 final class UserRepository extends ServiceEntityRepository implements ServiceEntityRepositoryInterface, CanGenerateUserEntity, PublicKeyCredentialUserEntityRepositoryInterface, CanRegisterUserEntity
 {
-    private EntityManagerInterface $manager;
+    private readonly EntityManagerInterface $manager;
 
     public function __construct(ManagerRegistry $registry)
     {

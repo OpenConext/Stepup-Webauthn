@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
 use Symfony\Component\Uid\Uuid;
@@ -35,7 +36,7 @@ use Webauthn\TrustPath\TrustPath;
 class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
 {
     #[ORM\Id]
-    #[ORM\Column(type:"string", length:36, unique: true)]
+    #[ORM\Column(type:Types::STRING, length:36, unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
     private string $id;
 
@@ -57,7 +58,7 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
         string $credentialPublicKey,
         string $userHandle,
         int $counter,
-        #[ORM\Column(type: "string")]
+        #[ORM\Column(type: Types::STRING)]
         private string $fmt
     ) {
         $this->id = Uuid::v4()->toRfc4122();
