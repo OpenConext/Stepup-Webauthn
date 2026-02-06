@@ -166,11 +166,6 @@ parameters:
 			path: ../../src/Twig/GsspExtension.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function urlencode expects string, string\\|null given\\.$#"
-			count: 1
-			path: ../../src/Twig/GsspExtension.php
-
-		-
 			message: "#^Method Surfnet\\\\Webauthn\\\\WithContextLogger\\:\\:__construct\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: ../../src/WithContextLogger.php
