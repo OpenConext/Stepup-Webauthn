@@ -48,7 +48,7 @@ use Webauthn\MetadataService\Statement\StatusReport;
  * See: https://fidoalliance.org/metadata/
  * See: https://mds3.fidoalliance.org/
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - Could be lowered by extracting the FS interactions
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  */
 class MetadataStatementRepository
 {
@@ -63,7 +63,7 @@ class MetadataStatementRepository
     private array $statusReports;
 
     /**
-     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @SuppressWarnings("PHPMD.ElseExpression")
      */
     public function __construct(
         private readonly string $jwtMdsBlobFileName,
@@ -115,7 +115,8 @@ class MetadataStatementRepository
     }
 
     /**
-     * @param array<mixed> $rootCertificates
+     * @param array<string> $rootCertificates
+     * @param-out array<string> $rootCertificates
      */
     private function getJwsPayload(string $token, array &$rootCertificates): string
     {

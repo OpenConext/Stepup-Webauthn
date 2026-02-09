@@ -36,9 +36,9 @@ use Webauthn\PublicKeyCredentialUserEntity;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User extends PublicKeyCredentialUserEntity implements UserInterface
 {
-     #[ORM\Id]
-     #[ORM\Column(type:Types::STRING, length:36, unique: true)]
-     #[ORM\GeneratedValue(strategy: "NONE")]
+    #[ORM\Id]
+    #[ORM\Column(type: Types::STRING, length: 36, unique: true)]
+    #[ORM\GeneratedValue(strategy: "NONE")]
     public readonly string $id;
 
     #[Assert\Length(max: 100)]

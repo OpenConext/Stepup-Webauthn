@@ -28,8 +28,8 @@ use Webauthn\PublicKeyCredentialSource as BasePublicKeyCredentialSource;
 use Webauthn\TrustPath\TrustPath;
 
 /**
- * @SuppressWarnings(PHPMD.UnusedPrivateField)
- * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings("PHPMD.UnusedPrivateField")
+ * @SuppressWarnings("PHPMD.ExcessiveParameterList")
  */
 #[ORM\Table(name:"public_key_credential_sources")]
 #[ORM\Entity(repositoryClass: PublicKeyCredentialSourceRepository::class)]

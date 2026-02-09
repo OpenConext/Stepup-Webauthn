@@ -38,7 +38,7 @@ use Throwable;
 use Webauthn\Bundle\Service\PublicKeyCredentialRequestOptionsFactory;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  */
 class AuthenticationController extends AbstractController
 {

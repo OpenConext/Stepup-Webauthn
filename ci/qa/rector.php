@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 
+// Modern Fluent Config - All sets combined for future use
+// After completing all upgrade tasks
 return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/../../src',
