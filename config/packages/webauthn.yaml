@@ -10,7 +10,6 @@ webauthn:
                 - !php/const Cose\Algorithms::COSE_ALGORITHM_RS256
             rp:
                 name: '%webauthn_name%'
-                icon: '%webauthn_logo%'
             challenge_length: 64
             timeout: 60000
             authenticator_selection_criteria:

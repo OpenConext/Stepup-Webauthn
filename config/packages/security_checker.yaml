@@ -3,6 +3,8 @@ services:
         autowire: true
         autoconfigure: true
 
-    SensioLabs\Security\SecurityChecker: null
+    sensiolabs.security_checker:
+        synthetic: true
 
-    SensioLabs\Security\Command\SecurityCheckerCommand: null
+    sensiolabs.security_checker_command:
+        synthetic: true

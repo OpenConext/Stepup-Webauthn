@@ -32,6 +32,9 @@ use Webauthn\Bundle\Repository\CanRegisterUserEntity;
 use Webauthn\Bundle\Repository\PublicKeyCredentialUserEntityRepositoryInterface;
 use Webauthn\PublicKeyCredentialUserEntity;
 
+/**
+ * @extends ServiceEntityRepository<User>
+ */
 final class UserRepository extends ServiceEntityRepository implements ServiceEntityRepositoryInterface, CanGenerateUserEntity, PublicKeyCredentialUserEntityRepositoryInterface, CanRegisterUserEntity
 {
     private readonly EntityManagerInterface $manager;

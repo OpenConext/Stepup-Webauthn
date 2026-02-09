@@ -1,0 +1,7 @@
+# PropertyInfo component configuration
+# Explicitly set with_constructor_extractor to suppress deprecation warning
+# This setting determines whether PropertyInfo should extract information from constructor arguments
+
+framework:
+    property_info:
+        with_constructor_extractor: true

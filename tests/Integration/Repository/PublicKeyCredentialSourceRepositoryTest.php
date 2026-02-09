@@ -20,8 +20,6 @@ namespace Test\Integration\Repository;
 use Doctrine\ORM\EntityManager;
 use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
 use Surfnet\Webauthn\Entity\User;
-use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
-use Surfnet\Webauthn\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Uid\Uuid;
 use Webauthn\TrustPath\EmptyTrustPath;
@@ -100,5 +98,4 @@ class PublicKeyCredentialSourceRepositoryTest extends KernelTestCase
     public function testRepoIdempotent() {
         $this->testRepo();
     }
-
 }
