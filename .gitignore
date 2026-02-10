@@ -75,4 +75,10 @@ ci/qa/.phpcs-cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
+### AI agents ###
+CLAUDE.md
+.claude
+.entire
+### AI agents ###
+
 *~
