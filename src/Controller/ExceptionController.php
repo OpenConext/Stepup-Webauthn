@@ -48,7 +48,7 @@ final class ExceptionController extends BaseExceptionController
         $statusCode = $this->getStatusCode($exception);
 
         $template = 'Exception\error.html.twig';
-        if ($statusCode == 404) {
+        if ($statusCode === 404) {
             $template = 'Exception\error404.html.twig';
         }
 
