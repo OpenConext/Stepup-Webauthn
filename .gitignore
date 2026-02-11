@@ -32,9 +32,6 @@
 /web/build
 .env
 
-# phplint cache #
-.phplint.cache
-
 # Code coverage reports #
 #################
 /coverage/*
@@ -74,11 +71,5 @@ ci/qa/.phpcs-cache
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
-
-### AI agents ###
-CLAUDE.md
-.claude
-.entire
-### AI agents ###
 
 *~

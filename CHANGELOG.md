@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+- Upgrade to Symfony 7.4 LTS
+- Remove EOL sensiolabs/security-checker configuration
+- Update dev tooling and dependencies
+
 ## 2.0.8
 - Update node-forge and js-yaml
 

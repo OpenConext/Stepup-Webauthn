@@ -342,9 +342,6 @@
     "spomky-labs/base64url": {
         "version": "v2.0.1"
     },
-    "spomky-labs/cbor-bundle": {
-        "version": "v1.0.1"
-    },
     "spomky-labs/cbor-php": {
         "version": "v1.0.4"
     },

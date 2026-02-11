@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48d64a90e35ab69f5ebf01e72636a981",
+    "content-hash": "e8a68776ec27762fe9b74674c3b50c45",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3134,87 +3134,6 @@
                 "source": "https://github.com/simplesamlphp/saml2/tree/v4.19.1"
             },
             "time": "2025-12-08T12:04:12+00:00"
-        },
-        {
-            "name": "spomky-labs/cbor-bundle",
-            "version": "3.0.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Spomky-Labs/cbor-bundle.git",
-                "reference": "7c13898fd5b1d92ff7503f37fc52614fced80a0d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Spomky-Labs/cbor-bundle/zipball/7c13898fd5b1d92ff7503f37fc52614fced80a0d",
-                "reference": "7c13898fd5b1d92ff7503f37fc52614fced80a0d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0",
-                "spomky-labs/cbor-php": "^3.0",
-                "symfony/config": "^5.3|^6.0|^7.0",
-                "symfony/dependency-injection": "^5.3|^6.0|^7.0",
-                "symfony/http-kernel": "^5.3|^6.0|^7.0"
-            },
-            "require-dev": {
-                "infection/infection": "^0.27|^0.28|^0.29",
-                "php-parallel-lint/php-parallel-lint": "^1.3",
-                "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan": "^1.0",
-                "phpstan/phpstan-beberlei-assert": "^1.0",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpstan/phpstan-strict-rules": "^1.0",
-                "phpunit/phpunit": "^10.1|^11.0",
-                "rector/rector": "^1.0",
-                "symfony/framework-bundle": "^5.3|^6.0|^7.0",
-                "symfony/phpunit-bridge": "^5.3|^6.0|^7.0",
-                "symplify/easy-coding-standard": "^12.0"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "SpomkyLabs\\CborBundle\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Florent Morselli",
-                    "homepage": "https://github.com/Spomky"
-                },
-                {
-                    "name": "All contributors",
-                    "homepage": "https://github.com/spomky-labs/cbor-bundle/contributors"
-                }
-            ],
-            "description": "CBOR Encoder/Decoder Bundle for Symfony.",
-            "homepage": "https://github.com/spomky-labs",
-            "keywords": [
-                "Concise Binary Object Representation",
-                "RFC7049",
-                "bundle",
-                "cbor",
-                "symfony"
-            ],
-            "support": {
-                "issues": "https://github.com/Spomky-Labs/cbor-bundle/issues",
-                "source": "https://github.com/Spomky-Labs/cbor-bundle/tree/3.0.x"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/Spomky",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/FlorentMorselli",
-                    "type": "patreon"
-                }
-            ],
-            "time": "2025-11-07T11:20:25+00:00"
         },
         {
             "name": "spomky-labs/cbor-php",
@@ -12684,10 +12603,8 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
-    "stability-flags": {
-        "spomky-labs/cbor-bundle": 20
-    },
+    "minimum-stability": "stable",
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

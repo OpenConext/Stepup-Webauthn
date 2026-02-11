@@ -26,7 +26,7 @@ use SAML2\Response as SamlResponse;
 use SAML2\StatusResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use DOMDocument;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Assertion;

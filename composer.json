@@ -3,7 +3,7 @@
   "license": "Apache-2.0",
   "description": "WebAuthn Generic SAML Stepup Provider.",
   "type": "project",
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true,
   "autoload": {
     "psr-4": {
@@ -31,11 +31,10 @@
     "nyholm/psr7": "^1.8",
     "openconext/monitor-bundle": "^4.0",
     "ramsey/uuid": "^4.7",
-    "spomky-labs/cbor-bundle": "^3.0 || ^4.0@dev",
     "spomky-labs/cbor-php": "^3.1",
-    "surfnet/stepup-bundle": "^6.0 || ^7.0",
-    "surfnet/stepup-gssp-bundle": "^5.0 || ^6.0",
-    "surfnet/stepup-saml-bundle": "^6.0 || ^7.0",
+    "surfnet/stepup-bundle": "^7.0",
+    "surfnet/stepup-gssp-bundle": "^6.0",
+    "surfnet/stepup-saml-bundle": "^7.0",
     "symfony/asset": "7.4.*",
     "symfony/cache": "7.4.*",
     "symfony/config": "7.4.*",
@@ -43,7 +42,7 @@
     "symfony/flex": "^2.4",
     "symfony/form": "7.4.*",
     "symfony/http-client": "7.4.*",
-    "symfony/monolog-bundle": "^3.8 || ^4.0",
+    "symfony/monolog-bundle": "^4.0",
     "symfony/runtime": "7.4.*",
     "symfony/security-bundle": "7.4.*",
     "symfony/stimulus-bundle": "^2.15",
@@ -149,7 +148,8 @@
       "/config/packages/test",
       "/node_modules",
       "/build",
-      "/docker"
+      "/docker",
+      "/bin/dev"
     ]
   },
   "config": {
@@ -163,9 +163,6 @@
       "symfony/runtime": true,
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "endroid/installer": false
-    },
-    "audit": {
-      "block-insecure": false
     }
   },
   "extra": {

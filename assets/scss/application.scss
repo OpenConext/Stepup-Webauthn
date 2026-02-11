@@ -56,6 +56,10 @@ table.sp-table {
 
 }
 
+.td-break {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
 
 body {
   background-color: $gray-lighter;
