@@ -1,0 +1,29 @@
+hey can you help me look for deprications in the project and show them to me? look at code if needed i upgraded to symfony 7.4 is use the tool in the docker container by using bin/dev/docker and look for posible deprications
+
+---
+
+ok just list a simple index of what deprications i have
+
+---
+
+so we can safely remove doctrine/annotations
+
+---
+
+can oyu fix the code deprications with rector? if so do and what you cant tell me
+
+---
+
+what do we have left?
+
+---
+
+let go
+
+---
+
+do update for alle ther packages dont migrate the webtoke one yet
+
+---
+
+give me a commit messsages
