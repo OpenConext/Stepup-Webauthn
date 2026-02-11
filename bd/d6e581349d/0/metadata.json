@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.4.2",
+  "checkpoint_id": "bdd6e581349d",
+  "session_id": "dee0defd-4b6a-4703-8329-1bfeb21dc1a5",
+  "strategy": "manual-commit",
+  "created_at": "2026-02-11T08:43:31.480027Z",
+  "branch": "feature/upgrade-symfony-lts",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/Migrations/Version20200210123511.php",
+    "src/Migrations/Version20250213135649.php"
+  ],
+  "agent": "Claude Code",
+  "transcript_identifier_at_start": "ada80b48-23ef-48b2-ac84-eab32ed008f6",
+  "checkpoint_transcript_start": 266,
+  "transcript_lines_at_start": 266,
+  "token_usage": {
+    "input_tokens": 240,
+    "cache_creation_tokens": 27096,
+    "cache_read_tokens": 2010452,
+    "output_tokens": 1430,
+    "api_call_count": 29
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-02-11T08:43:31.445864Z",
+    "agent_lines": 0,
+    "human_added": 0,
+    "human_modified": 38,
+    "human_removed": 150,
+    "total_committed": 0,
+    "agent_percentage": 0
+  }
+}
