@@ -1,0 +1,118 @@
+Implement the following plan:
+
+# Plan: Address PR #232 Review Comments
+
+## Context
+PR #232 upgrades this app to Symfony 7.4 LTS. Reviewer `johanib` left 7 actionable comments. This plan addresses each one.
+
+---
+
+## Changes
+
+### 1. Remove useless comment in `property_info.yaml`
+**File:** `config/packages/property_info.yaml`
+**Comment:** "Useless comment"
+**Action:** Remove lines 2–3 (the two comment lines explaining the setting). Keep only the YAML config.
+
+```yaml
+# Before:
+# PropertyInfo component configuration
+# Explicitly set with_constructor_extractor to suppress deprecation warning
+# This setting determines whether PropertyInfo should extract information from constructor arguments
+
+# After: (remove the comment block entirely)
+```
+
+---
+
+### 2. Remove EOL security_checker config
+**File:** `config/packages/security_checker.yaml`
+**Comment:** "sensiolabs security checker has been eol for a while — can we remove it?"
+**Action:** Delete the entire file. `sensiolabs/security-checker` is not in `composer.json`, so these synthetic service declarations serve no purpose.
+
+---
+
+### 3. Address `"block-insecure": false` in composer.json
+**File:** `composer.json` line 168
+**Comment:** "Is this intended?"
+**Action:** Remove the `"audit": { "block-insecure": false }` block. This was added to suppress `composer audit` blocking behavior, but it reduces security visibility. Removing it restores default behavior (blocking on known insecure packages). If specific packages are triggering this, they should be explicitly whitelisted instead.
+
+---
+
+### 4. Update CHANGELOG.md
+**File:** `CHANGELOG.md`
+**Comment:** "Don't forget to update changelog.md"
+**Action:** Add a new entry at the top documenting the Symfony 7.4 LTS upgrade, e.g.:
+
+```markdown
+## Unreleased / next version
+- Upgrade to Symfony 7.4 LTS
+- Remove EOL sensiolabs/security-checker
+- Update dev tooling and dependencies
+```
+
+---
+
+### 5. Move phplint cache to `var/cache/phplint`
+**Files:** `.gitignore` (line 36) and `ci/qa/phplint.yaml`
+**Comment:** "Better would be to write it to var/cache/phplint, so it does not pollute the phpstorm tree view. This is how every other SURF project does it."
+**Action:**
+- Update `ci/qa/phplint.yaml`: change `cache: /var/qa/phplint.cache` → `cache: var/cache/phplint`
+- Update `.gitignore`: remove the `.phplint.cache` line. `var/cache/phplint` is already covered by the existing `/var/cache/*` ignore rule, so no new entry is needed.
+
+---
+
+### 6. `templates/dev/acs.html.twig` — explanation only, no code change
+**File:** `templates/dev/acs.html.twig` line 24
+**Comment:** "Why was this needed? Was it the nested sass issue?"
+**Action:** No code change. The `class="td-break"` was added because SAML issuer EntityIDs (long URLs) overflow the table cell without word-break styling. The `.td-break` class in `assets/scss/application.scss` applies `word-break: break-all; overflow-wrap: break-word;`. Should respond to the review comment with this explanation.
+
+---
+
+### 7. Update Route import from Annotation to Attribute
+**File:** `dev/Controller/SPController.php` line 29
+**Comment:** Suggestion to use `Symfony\Component\Routing\Attribute\Route` instead of `Symfony\Component\Routing\Annotation\Route`
+**Action:** Change the import:
+```php
+// Before:
+use Symfony\Component\Routing\Annotation\Route;
+
+// After:
+use Symfony\Component\Routing\Attribute\Route;
+```
+
+---
+
+### 8. Doctrine ORM upgrade — out of scope for this PR
+**Comment:** "Still possible to upgrade orm: doctrine/orm 2.20.9 → 3.6.2"
+**Action:** Note this as a follow-up. The reviewer themselves acknowledged this needs care (doctrine/dbal would also need upgrading separately). This is a separate PR-worthy task. For now, we can reply to the comment acknowledging it and tracking it separately.
+
+---
+
+## Files to modify
+| File | Change |
+|------|--------|
+| `config/packages/property_info.yaml` | Remove comment lines 2–3 |
+| `config/packages/security_checker.yaml` | Delete entire file |
+| `composer.json` | Remove `"audit": { "block-insecure": false }` block |
+| `CHANGELOG.md` | Add new version entry |
+| `ci/qa/phplint.yaml` | Update cache path |
+| `.gitignore` | Remove `.phplint.cache` line |
+| `dev/Controller/SPController.php` | Update Route import namespace |
+
+## Verification
+```bash
+composer check   # runs phpcs, phpstan, phpmd, unit tests, doctrine validation
+composer lint    # verifies YAML files are valid
+```
+
+
+If you need specific details from before exiting plan mode (like exact code snippets, error messages, or content you generated), read the full transcript at: /Users/kay/.REDACTED.jsonl
+
+---
+
+dont push or commit that should be done by the user
+
+---
+
+did you validate if everything still works???
