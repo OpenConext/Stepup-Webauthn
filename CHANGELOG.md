@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 2.1.0
 - Upgrade to Symfony 7.4 LTS
 - Remove EOL sensiolabs/security-checker configuration
 - Update dev tooling and dependencies
