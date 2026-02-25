@@ -9,7 +9,6 @@ return [
     Surfnet\GsspBundle\SurfnetGsspBundle::class => ['all' => true],
     Surfnet\StepupBundle\SurfnetStepupBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
-    SpomkyLabs\CborBundle\SpomkyLabsCborBundle::class => ['all' => true],
     Webauthn\Bundle\WebauthnBundle::class => ['all' => true],
     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],

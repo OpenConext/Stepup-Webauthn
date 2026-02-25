@@ -20,26 +20,23 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\Twig;
 
+use Twig\Attribute\AsTwigFunction;
 use Surfnet\SamlBundle\Entity\HostedEntities;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
-final class GsspExtension extends AbstractExtension
+final class GsspExtension
 {
     public function __construct(private readonly HostedEntities $hostedEntities)
     {
     }
 
-    public function getFunctions(): array
-    {
-        return [new TwigFunction('demoSpUrl', $this->generateDemoSPUrl(...))];
-    }
-
+    #[AsTwigFunction(name: 'demoSpUrl')]
     public function generateDemoSPUrl(): string
     {
         return sprintf(
             'https://pieter.aai.surfnet.nl/simplesamlphp/sp.php?idp=%s',
-            urlencode($this->hostedEntities->getIdentityProvider()->getEntityId())
+            urlencode((string) $this->hostedEntities->getIdentityProvider()->getEntityId())
         );
     }
 }

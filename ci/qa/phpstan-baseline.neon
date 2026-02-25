@@ -1,181 +1,211 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Cannot cast mixed to string\\.$#"
+			message: '#^Cannot cast mixed to string\.$#'
+			identifier: cast.string
 			count: 1
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Method Dev\\\\Controller\\\\SPController\\:\\:signRequestQuery\\(\\) has parameter \\$queryParams with no value type specified in iterable type array\\.$#"
+			message: '#^Method Dev\\Controller\\SPController\:\:signRequestQuery\(\) has parameter \$queryParams with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Parameter \\#1 \\$key of method SAML2\\\\Certificate\\\\PrivateKeyLoader\\:\\:loadPrivateKey\\(\\) expects SAML2\\\\Configuration\\\\PrivateKey, mixed given\\.$#"
+			message: '#^Parameter \#1 \$key of method SAML2\\Certificate\\PrivateKeyLoader\:\:loadPrivateKey\(\) expects SAML2\\Configuration\\PrivateKey, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Parameter \\#1 \\$nameId of method Surfnet\\\\SamlBundle\\\\SAML2\\\\AuthnRequest\\:\\:setSubject\\(\\) expects string, mixed given\\.$#"
+			message: '#^Parameter \#1 \$nameId of method Surfnet\\SamlBundle\\SAML2\\AuthnRequest\:\:setSubject\(\) expects string, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function base64_decode expects string, bool\\|float\\|int\\|string\\|null given\\.$#"
+			message: '#^Parameter \#1 \$string of function base64_decode expects string, bool\|float\|int\|string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function base64_encode expects string, string\\|false given\\.$#"
+			message: '#^Parameter \#1 \$string of function base64_encode expects string, string\|false given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Parameter \\#1 \\$xml of static method SAML2\\\\Message\\:\\:fromXML\\(\\) expects DOMElement, DOMElement\\|null given\\.$#"
+			message: '#^Parameter \#1 \$xml of static method SAML2\\Message\:\:fromXML\(\) expects DOMElement, DOMElement\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Parameter \\#2 \\$values of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:set\\(\\) expects array\\<string\\>\\|string\\|null, mixed given\\.$#"
+			message: '#^Parameter \#2 \$values of method Symfony\\Component\\HttpFoundation\\ResponseHeaderBag\:\:set\(\) expects array\<string\>\|string\|null, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../dev/Controller/SPController.php
 
 		-
-			message: "#^Parameter \\#1 \\$publicKeyCredentialUserEntity of method Surfnet\\\\Webauthn\\\\Repository\\\\PublicKeyCredentialSourceRepository\\:\\:findAllForUserEntity\\(\\) expects Webauthn\\\\PublicKeyCredentialUserEntity, Webauthn\\\\PublicKeyCredentialUserEntity\\|null given\\.$#"
+			message: '#^Parameter \#1 \$publicKeyCredentialUserEntity of method Surfnet\\Webauthn\\Repository\\PublicKeyCredentialSourceRepository\:\:findAllForUserEntity\(\) expects Webauthn\\PublicKeyCredentialUserEntity, Webauthn\\PublicKeyCredentialUserEntity\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../src/Controller/AuthenticationController.php
 
 		-
-			message: "#^Parameter \\#2 \\$allowCredentials of method Webauthn\\\\Bundle\\\\Service\\\\PublicKeyCredentialRequestOptionsFactory\\:\\:create\\(\\) expects array\\<Webauthn\\\\PublicKeyCredentialDescriptor\\>, array\\<Webauthn\\\\PublicKeyCredentialSource\\> given\\.$#"
+			message: '#^Parameter \#2 \$allowCredentials of method Webauthn\\Bundle\\Service\\PublicKeyCredentialRequestOptionsFactory\:\:create\(\) expects array\<Webauthn\\PublicKeyCredentialDescriptor\>, array\<Webauthn\\PublicKeyCredentialSource\> given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../src/Controller/AuthenticationController.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Controller\\\\ExceptionController\\:\\:getPageTitleAndDescription\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method Surfnet\\Webauthn\\Controller\\ExceptionController\:\:getPageTitleAndDescription\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: ../../src/Controller/ExceptionController.php
 
 		-
-			message: "#^Property Surfnet\\\\Webauthn\\\\Entity\\\\PublicKeyCredentialSource\\:\\:\\$fmt is never read, only written\\.$#"
+			message: '#^Property Surfnet\\Webauthn\\Entity\\PublicKeyCredentialSource\:\:\$fmt is never read, only written\.$#'
+			identifier: property.onlyWritten
 			count: 1
 			path: ../../src/Entity/PublicKeyCredentialSource.php
 
 		-
-			message: "#^Class Surfnet\\\\Webauthn\\\\Entity\\\\User has an uninitialized readonly property \\$displayName\\. Assign it in the constructor\\.$#"
+			message: '#^Class Surfnet\\Webauthn\\Entity\\User has an uninitialized readonly property \$displayName\. Assign it in the constructor\.$#'
+			identifier: property.uninitializedReadonly
 			count: 1
 			path: ../../src/Entity/User.php
 
 		-
-			message: "#^Class Surfnet\\\\Webauthn\\\\Entity\\\\User has an uninitialized readonly property \\$id\\. Assign it in the constructor\\.$#"
+			message: '#^Class Surfnet\\Webauthn\\Entity\\User has an uninitialized readonly property \$id\. Assign it in the constructor\.$#'
+			identifier: property.uninitializedReadonly
 			count: 1
 			path: ../../src/Entity/User.php
 
 		-
-			message: "#^Class Surfnet\\\\Webauthn\\\\Entity\\\\User has an uninitialized readonly property \\$name\\. Assign it in the constructor\\.$#"
+			message: '#^Class Surfnet\\Webauthn\\Entity\\User has an uninitialized readonly property \$name\. Assign it in the constructor\.$#'
+			identifier: property.uninitializedReadonly
 			count: 1
 			path: ../../src/Entity/User.php
 
 		-
-			message: "#^Call to an undefined method Symfony\\\\Contracts\\\\Translation\\\\TranslatorInterface\\:\\:setLocale\\(\\)\\.$#"
+			message: '#^Call to an undefined method Symfony\\Contracts\\Translation\\TranslatorInterface\:\:setLocale\(\)\.$#'
+			identifier: method.notFound
 			count: 1
 			path: ../../src/EventSubscriber/LocaleResponseListener.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\GlobalViewParameters\\:\\:__construct\\(\\) has parameter \\$supportUrl with no value type specified in iterable type array\\.$#"
+			message: '#^Method Surfnet\\Webauthn\\GlobalViewParameters\:\:__construct\(\) has parameter \$supportUrl with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: ../../src/GlobalViewParameters.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\GlobalViewParameters\\:\\:getRequestInformation\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method Surfnet\\Webauthn\\GlobalViewParameters\:\:getRequestInformation\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: ../../src/GlobalViewParameters.php
 
 		-
-			message: "#^Parameter \\#1 \\$request of method Surfnet\\\\Webauthn\\\\Service\\\\ClientMetadataService\\:\\:generateMetadata\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\Request, Symfony\\\\Component\\\\HttpFoundation\\\\Request\\|null given\\.$#"
+			message: '#^Parameter \#1 \$request of method Surfnet\\Webauthn\\Service\\ClientMetadataService\:\:generateMetadata\(\) expects Symfony\\Component\\HttpFoundation\\Request, Symfony\\Component\\HttpFoundation\\Request\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../src/GlobalViewParameters.php
 
 		-
-			message: "#^Parameter \\#1 \\$data of function unserialize expects string, mixed given\\.$#"
+			message: '#^Parameter \#1 \$data of function unserialize expects string, mixed given\.$#'
+			identifier: argument.type
 			count: 2
 			path: ../../src/Migrations/Version20250213135649.php
 
 		-
-			message: "#^Part \\$id \\(mixed\\) of encapsed string cannot be cast to string\\.$#"
+			message: '#^Part \$id \(mixed\) of encapsed string cannot be cast to string\.$#'
+			identifier: encapsedStringPart.nonString
 			count: 1
 			path: ../../src/Migrations/Version20250213135649.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\PublicKeyCredentialCreationOptionsStore\\:\\:get\\(\\) should return Webauthn\\\\PublicKeyCredentialCreationOptions but returns mixed\\.$#"
+			message: '#^Method Surfnet\\Webauthn\\PublicKeyCredentialCreationOptionsStore\:\:get\(\) should return Webauthn\\PublicKeyCredentialCreationOptions but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: ../../src/PublicKeyCredentialCreationOptionsStore.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\PublicKeyCredentialRequestOptionsStore\\:\\:get\\(\\) should return Webauthn\\\\PublicKeyCredentialRequestOptions but returns mixed\\.$#"
+			message: '#^Method Surfnet\\Webauthn\\PublicKeyCredentialRequestOptionsStore\:\:get\(\) should return Webauthn\\PublicKeyCredentialRequestOptions but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: ../../src/PublicKeyCredentialRequestOptionsStore.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Repository\\\\PublicKeyCredentialSourceRepository\\:\\:findAllForUserEntity\\(\\) should return array\\<Webauthn\\\\PublicKeyCredentialSource\\> but returns mixed\\.$#"
+			message: '#^Parameter &\$rootCertificates @param\-out type of method Surfnet\\Webauthn\\Repository\\MetadataStatementRepository\:\:getJwsPayload\(\) expects array\<string\>, array\<mixed, mixed\> given\.$#'
+			identifier: paramOut.type
+			count: 1
+			path: ../../src/Repository/MetadataStatementRepository.php
+
+		-
+			message: '#^Method Surfnet\\Webauthn\\Repository\\PublicKeyCredentialSourceRepository\:\:findAllForUserEntity\(\) should return array\<Webauthn\\PublicKeyCredentialSource\> but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: ../../src/Repository/PublicKeyCredentialSourceRepository.php
 
 		-
-			message: "#^Call to function is_null\\(\\) with Doctrine\\\\ORM\\\\EntityManagerInterface will always evaluate to false\\.$#"
+			message: '#^Call to function is_null\(\) with Doctrine\\ORM\\EntityManagerInterface will always evaluate to false\.$#'
+			identifier: function.impossibleType
 			count: 1
 			path: ../../src/Repository/UserRepository.php
 
 		-
-			message: "#^Class Surfnet\\\\Webauthn\\\\Repository\\\\UserRepository extends generic class Doctrine\\\\Bundle\\\\DoctrineBundle\\\\Repository\\\\ServiceEntityRepository but does not specify its types\\: T$#"
+			message: '#^Method Surfnet\\Webauthn\\Repository\\UserRepository\:\:findOneByUserHandle\(\) should return Webauthn\\PublicKeyCredentialUserEntity\|null but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: ../../src/Repository/UserRepository.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Repository\\\\UserRepository\\:\\:findOneByUserHandle\\(\\) should return Webauthn\\\\PublicKeyCredentialUserEntity\\|null but returns mixed\\.$#"
+			message: '#^Method Surfnet\\Webauthn\\Repository\\UserRepository\:\:findOneByUsername\(\) should return Webauthn\\PublicKeyCredentialUserEntity\|null but returns mixed\.$#'
+			identifier: return.type
 			count: 1
 			path: ../../src/Repository/UserRepository.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Repository\\\\UserRepository\\:\\:findOneByUsername\\(\\) should return Webauthn\\\\PublicKeyCredentialUserEntity\\|null but returns mixed\\.$#"
+			message: '#^Parameter \#1 \$name of class Surfnet\\Webauthn\\Entity\\User constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../src/Repository/UserRepository.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class Surfnet\\\\Webauthn\\\\Entity\\\\User constructor expects string, string\\|null given\\.$#"
+			message: '#^Parameter \#3 \$displayName of class Surfnet\\Webauthn\\Entity\\User constructor expects string, string\|null given\.$#'
+			identifier: argument.type
 			count: 1
 			path: ../../src/Repository/UserRepository.php
 
 		-
-			message: "#^Parameter \\#3 \\$displayName of class Surfnet\\\\Webauthn\\\\Entity\\\\User constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: ../../src/Repository/UserRepository.php
-
-		-
-			message: "#^Access to an undefined property Symfony\\\\Component\\\\Security\\\\Core\\\\User\\\\UserInterface\\:\\:\\$id\\.$#"
+			message: '#^Access to an undefined property Symfony\\Component\\Security\\Core\\User\\UserInterface\:\:\$id\.$#'
+			identifier: property.notFound
 			count: 1
 			path: ../../src/Security/AuthenticationListener.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\Service\\\\ClientMetadataService\\:\\:generateMetadata\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: '#^Method Surfnet\\Webauthn\\Service\\ClientMetadataService\:\:generateMetadata\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: ../../src/Service/ClientMetadataService.php
 
 		-
-			message: "#^Cannot call method getEntityId\\(\\) on Surfnet\\\\SamlBundle\\\\Entity\\\\IdentityProvider\\|null\\.$#"
+			message: '#^Cannot call method getEntityId\(\) on Surfnet\\SamlBundle\\Entity\\IdentityProvider\|null\.$#'
+			identifier: method.nonObject
 			count: 1
 			path: ../../src/Twig/GsspExtension.php
 
 		-
-			message: "#^Parameter \\#1 \\$string of function urlencode expects string, string\\|null given\\.$#"
-			count: 1
-			path: ../../src/Twig/GsspExtension.php
-
-		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\WithContextLogger\\:\\:__construct\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			message: '#^Method Surfnet\\Webauthn\\WithContextLogger\:\:__construct\(\) has parameter \$context with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: ../../src/WithContextLogger.php
 
 		-
-			message: "#^Method Surfnet\\\\Webauthn\\\\WithContextLogger\\:\\:from\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
+			message: '#^Method Surfnet\\Webauthn\\WithContextLogger\:\:from\(\) has parameter \$context with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
 			count: 1
 			path: ../../src/WithContextLogger.php

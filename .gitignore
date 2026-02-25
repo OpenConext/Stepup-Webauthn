@@ -2,6 +2,10 @@
 #############
 .idea
 
+# Auto-generated files #
+########################
+/config/reference.php
+
 # Web application ignores #
 ###########################
 

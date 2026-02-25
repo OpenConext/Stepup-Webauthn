@@ -73,7 +73,7 @@ SQL;
                 $otherUi = json_encode(unserialize($otherUi), JSON_THROW_ON_ERROR);
             }
             
-            $this->connection->executeUpdate(
+            $this->connection->executeStatement(
                 self::$update,
                 [
                     'id' => $id,

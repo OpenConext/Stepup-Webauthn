@@ -48,7 +48,7 @@ use Webauthn\MetadataService\Statement\StatusReport;
  * See: https://fidoalliance.org/metadata/
  * See: https://mds3.fidoalliance.org/
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects) - Could be lowered by extracting the FS interactions
+ * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  */
 class MetadataStatementRepository
 {
@@ -63,7 +63,7 @@ class MetadataStatementRepository
     private array $statusReports;
 
     /**
-     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @SuppressWarnings("PHPMD.ElseExpression")
      */
     public function __construct(
         private readonly string $jwtMdsBlobFileName,
@@ -91,7 +91,9 @@ class MetadataStatementRepository
 
     public function get(string $aaguid): MetadataStatement
     {
-        array_key_exists($aaguid, $this->statements) || throw MissingMetadataStatementException::create($aaguid);
+        if (!array_key_exists($aaguid, $this->statements)) {
+            throw MissingMetadataStatementException::create($aaguid);
+        }
         return $this->statements[$aaguid];
     }
 
@@ -115,41 +117,56 @@ class MetadataStatementRepository
     }
 
     /**
-     * @param array<mixed> $rootCertificates
+     * @param array<string> $rootCertificates
+     * @param-out array<string> $rootCertificates
      */
     private function getJwsPayload(string $token, array &$rootCertificates): string
     {
         $jws = (new CompactSerializer())->unserialize($token);
-        $jws->countSignatures() === 1 || throw MetadataStatementLoadingException::create(
-            'Invalid response from the metadata service. Only one signature shall be present.',
-        );
+        if ($jws->countSignatures() !== 1) {
+            throw MetadataStatementLoadingException::create(
+                'Invalid response from the metadata service. Only one signature shall be present.',
+            );
+        }
         $signature = $jws->getSignature(0);
         $payload = $jws->getPayload();
-        $payload !== '' || throw MetadataStatementLoadingException::create(
-            'Invalid response from the metadata service. The token payload is empty.',
-        );
+        if ($payload === '') {
+            throw MetadataStatementLoadingException::create(
+                'Invalid response from the metadata service. The token payload is empty.',
+            );
+        }
         $header = $signature->getProtectedHeader();
-        array_key_exists('alg', $header) || throw MetadataStatementLoadingException::create(
-            'The "alg" parameter is missing.',
-        );
-        array_key_exists('x5c', $header) || throw MetadataStatementLoadingException::create(
-            'The "x5c" parameter is missing.',
-        );
-        is_array($header['x5c']) || throw MetadataStatementLoadingException::create(
-            'The "x5c" parameter should be an array.',
-        );
+        if (!array_key_exists('alg', $header)) {
+            throw MetadataStatementLoadingException::create(
+                'The "alg" parameter is missing.',
+            );
+        }
+        if (!array_key_exists('x5c', $header)) {
+            throw MetadataStatementLoadingException::create(
+                'The "x5c" parameter is missing.',
+            );
+        }
+        if (!is_array($header['x5c'])) {
+            throw MetadataStatementLoadingException::create(
+                'The "x5c" parameter should be an array.',
+            );
+        }
         $key = JWKFactory::createFromX5C($header['x5c']);
         $rootCertificates = $header['x5c'];
 
         $verifier = new JWSVerifier(new AlgorithmManager([new ES256(), new RS256()]));
         $isValid = $verifier->verifyWithKey($jws, $key, 0);
-        $isValid || throw MetadataStatementLoadingException::create(
-            'Invalid response from the metadata service. The token signature is invalid.',
-        );
+        if (!$isValid) {
+            throw MetadataStatementLoadingException::create(
+                'Invalid response from the metadata service. The token signature is invalid.',
+            );
+        }
         $payload = $jws->getPayload();
-        $payload !== null || throw MetadataStatementLoadingException::create(
-            'Invalid response from the metadata service. The payload is missing.',
-        );
+        if ($payload === null) {
+            throw MetadataStatementLoadingException::create(
+                'Invalid response from the metadata service. The payload is missing.',
+            );
+        }
 
         return $payload;
     }

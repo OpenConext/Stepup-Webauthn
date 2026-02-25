@@ -45,8 +45,6 @@ final readonly class GlobalViewParameters
 
     /**
      * Matches RequestInformation type interface.
-     *
-     * @return array
      */
     public function getRequestInformation(): array
     {

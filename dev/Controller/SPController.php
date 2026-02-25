@@ -26,7 +26,7 @@ use SAML2\Response as SamlResponse;
 use SAML2\StatusResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use DOMDocument;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Assertion;
@@ -54,8 +54,13 @@ final class SPController extends AbstractController
     ) {
     }
 
+    #[Route(path: '/', name: 'homepage', methods: ['GET'])]
+    public function homepage(): Response
+    {
+        return $this->redirectToRoute('sp_demo');
+    }
+
     #[Route(path: '/demo/sp', name: 'sp_demo', methods: ['GET', 'POST'])]
-    #[Route(path: '/', name: 'homepage', methods: ['GET', 'POST'])]
     public function demoSp(Request $request): Response
     {
         if (!$request->isMethod(Request::METHOD_POST)) {
