@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+- Override CeremonyStepManagerFactory with explicit, controlled ceremony step lists for both registration and authentication
+- Enforce attestation quality during registration: reject TYPE_NONE attestation, require hardware key protection, require FIDO certification, and reject backup-eligible (multi-device/passkey) credentials
+
 ## 2.1.0
 - Upgrade to Symfony 7.4 LTS
 - Remove EOL sensiolabs/security-checker configuration
