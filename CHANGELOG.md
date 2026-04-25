@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+- Restrict registration to cross-platform (hardware-bound) authenticators only
+- Make authenticator_attachment, user_verification, and attestation_conveyance configurable via parameters.yaml
+
 ## 2.1.0
 - Upgrade to Symfony 7.4 LTS
 - Remove EOL sensiolabs/security-checker configuration
