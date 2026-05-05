@@ -156,11 +156,16 @@ final class SurfnetCeremonyStepManagerFactory
     // and requestCeremony() against these lists and port any new or reordered steps.
     public function creationCeremony(): CeremonyStepManager
     {
+        if ($this->metadataStatementRepository === null || $this->statusReportRepository === null) {
+            throw new \LogicException(
+                'MDS must be configured before calling creationCeremony(). ' .
+                'Call enableMetadataStatementSupport() first.'
+            );
+        }
+
         $metadataStatementChecker = new CheckMetadataStatement();
         if ($this->certificateChainValidator !== null) {
             $metadataStatementChecker->enableCertificateChainValidator($this->certificateChainValidator);
-        }
-        if ($this->metadataStatementRepository !== null && $this->statusReportRepository !== null && $this->certificateChainValidator !== null) {
             $metadataStatementChecker->enableMetadataStatementSupport(
                 $this->metadataStatementRepository,
                 $this->statusReportRepository,
@@ -172,7 +177,7 @@ final class SurfnetCeremonyStepManagerFactory
             ? new CheckOrigin($this->securedRelyingPartyId ?? [])
             : new CheckAllowedOrigins($this->allowedOrigins, $this->allowSubdomains);
 
-        $steps = [
+        return new CeremonyStepManager([
             new CheckClientDataCollectorType(),
             new CheckChallenge(),
             $originStep,
@@ -188,16 +193,9 @@ final class SurfnetCeremonyStepManagerFactory
             $metadataStatementChecker,
             new CheckCredentialId(),
             new CheckAttestationIsNotNone(),
-        ];
-
-        if ($this->metadataStatementRepository !== null) {
-            $steps[] = new CheckHardwareKeyProtection($this->metadataStatementRepository);
-        }
-        if ($this->statusReportRepository !== null) {
-            $steps[] = new CheckFidoCertified($this->statusReportRepository);
-        }
-
-        return new CeremonyStepManager($steps);
+            new CheckHardwareKeyProtection($this->metadataStatementRepository),
+            new CheckFidoCertified($this->statusReportRepository),
+        ]);
     }
 
     public function requestCeremony(): CeremonyStepManager

@@ -59,28 +59,12 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
         $this->factory = new SurfnetCeremonyStepManagerFactory();
     }
 
-    public function test_creation_ceremony_without_mds_has_expected_steps(): void
+    public function test_creation_ceremony_throws_without_mds(): void
     {
-        $manager = $this->factory->creationCeremony();
-        $stepClasses = $this->getStepClasses($manager);
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('MDS must be configured');
 
-        $this->assertSame([
-            CheckClientDataCollectorType::class,
-            CheckChallenge::class,
-            CheckOrigin::class,
-            CheckTopOrigin::class,
-            CheckRelyingPartyIdIdHash::class,
-            CheckUserWasPresent::class,
-            CheckUserVerification::class,
-            CheckNoBackupEligibility::class,
-            CheckAlgorithm::class,
-            CheckExtensions::class,
-            CheckAttestationFormatIsKnownAndValid::class,
-            CheckHasAttestedCredentialData::class,
-            CheckMetadataStatement::class,
-            CheckCredentialId::class,
-            CheckAttestationIsNotNone::class,
-        ], $stepClasses);
+        $this->factory->creationCeremony();
     }
 
     public function test_creation_ceremony_with_mds_has_exact_expected_steps(): void
@@ -117,6 +101,12 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
 
     public function test_creation_ceremony_does_not_include_backup_bits_consistent(): void
     {
+        $this->factory->enableMetadataStatementSupport(
+            $this->createMock(\Webauthn\MetadataService\MetadataStatementRepository::class),
+            $this->createMock(\Webauthn\MetadataService\StatusReportRepository::class),
+            $this->createMock(\Webauthn\MetadataService\CertificateChain\CertificateChainValidator::class)
+        );
+
         $manager = $this->factory->creationCeremony();
         $stepClasses = $this->getStepClasses($manager);
 
