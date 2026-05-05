@@ -70,6 +70,8 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
 
     public function test_skips_when_no_metadata_statement(): void
     {
+        // Authenticators absent from the MDS cannot have their key protection verified here.
+        // CheckFidoCertified is the safety net: it throws when no status reports exist for the AAGUID.
         $this->repository->method('findOneByAAGUID')->willReturn(null);
 
         $this->step->process(

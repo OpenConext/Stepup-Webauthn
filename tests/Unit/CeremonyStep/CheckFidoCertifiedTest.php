@@ -84,6 +84,28 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         );
     }
 
+    public function test_rejects_ctap1_u2f_authenticators_with_null_aaguid(): void
+    {
+        // CTAP1/U2F authenticators advertise the null UUID (00000000-...) as their AAGUID.
+        // They have no FIDO MDS status reports, so they are always rejected here.
+        // This is the primary safety net for authenticators absent from the MDS.
+        $this->repository
+            ->expects($this->once())
+            ->method('findStatusReportsByAAGUID')
+            ->with('00000000-0000-0000-0000-000000000000')
+            ->willReturn([]);
+
+        $this->expectException(AuthenticatorResponseVerificationException::class);
+
+        $this->step->process(
+            $this->credentialSource,
+            $this->buildAttestationResponse($this->makeAttestedCredentialData()),
+            $this->options,
+            null,
+            'example.com'
+        );
+    }
+
     /** @dataProvider fidoCertifiedStatusProvider */
     public function test_passes_for_all_fido_certified_levels(string $status): void
     {
