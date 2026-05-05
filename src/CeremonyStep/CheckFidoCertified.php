@@ -92,7 +92,9 @@ final class CheckFidoCertified implements CeremonyStep
      */
     private function mostRecentReport(array $reports): StatusReport
     {
-        assert($reports !== []);
+        if ($reports === []) {
+            throw new \LogicException('mostRecentReport() called with empty reports array.');
+        }
         // Tie-break: equal dates keep the later array index (stable for FIDO MDS, one report per event).
         return array_reduce(
             $reports,

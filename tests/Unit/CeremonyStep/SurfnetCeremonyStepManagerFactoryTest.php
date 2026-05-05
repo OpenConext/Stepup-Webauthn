@@ -89,11 +89,11 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
             CheckNoBackupEligibility::class,
             CheckAlgorithm::class,
             CheckExtensions::class,
+            CheckAttestationIsNotNone::class,
             CheckAttestationFormatIsKnownAndValid::class,
             CheckHasAttestedCredentialData::class,
             CheckMetadataStatement::class,
             CheckCredentialId::class,
-            CheckAttestationIsNotNone::class,
             CheckHardwareKeyProtection::class,
             CheckFidoCertified::class,
         ], $stepClasses);

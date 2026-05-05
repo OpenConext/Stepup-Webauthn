@@ -188,11 +188,11 @@ final class SurfnetCeremonyStepManagerFactory
             new CheckNoBackupEligibility(),
             new CheckAlgorithm(),
             new CheckExtensions($this->extensionOutputCheckerHandler),
+            new CheckAttestationIsNotNone(),
             new CheckAttestationFormatIsKnownAndValid($this->attestationStatementSupportManager),
             new CheckHasAttestedCredentialData(),
             $metadataStatementChecker,
             new CheckCredentialId(),
-            new CheckAttestationIsNotNone(),
             new CheckHardwareKeyProtection($this->metadataStatementRepository),
             new CheckFidoCertified($this->statusReportRepository),
         ]);
