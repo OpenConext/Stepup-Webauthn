@@ -23,6 +23,7 @@ namespace Surfnet\Webauthn\CeremonyStep;
 use Cose\Algorithm\Manager;
 use Cose\Algorithm\Signature\ECDSA\ES256;
 use Cose\Algorithm\Signature\RSA\RS256;
+use Psr\Log\LoggerInterface;
 use Webauthn\AttestationStatement\AttestationStatementSupportManager;
 use Webauthn\AttestationStatement\NoneAttestationStatementSupport;
 use Webauthn\AuthenticationExtensions\ExtensionOutputCheckerHandler;
@@ -81,6 +82,7 @@ final class SurfnetCeremonyStepManagerFactory
     private ExtensionOutputCheckerHandler $extensionOutputCheckerHandler;
 
     public function __construct(
+        private readonly LoggerInterface $logger,
         private readonly MetadataStatementRepository $metadataStatementRepository,
         private readonly StatusReportRepository $statusReportRepository,
         private readonly CertificateChainValidator $certificateChainValidator,
@@ -171,6 +173,7 @@ final class SurfnetCeremonyStepManagerFactory
             : new CheckAllowedOrigins($this->allowedOrigins, $this->allowSubdomains);
 
         return new CeremonyStepManager([
+            new LogRegistrationData($this->logger),
             new CheckClientDataCollectorType(),
             new CheckChallenge(),
             $originStep,
@@ -178,16 +181,16 @@ final class SurfnetCeremonyStepManagerFactory
             new CheckRelyingPartyIdIdHash(),
             new CheckUserWasPresent(),
             new CheckUserVerification(),
-            new CheckNoBackupEligibility(),
+            new CheckNoBackupEligibility($this->logger),
             new CheckAlgorithm(),
             new CheckExtensions($this->extensionOutputCheckerHandler),
-            new CheckAttestationIsNotNone(),
+            new CheckAttestationIsNotNone($this->logger),
             new CheckAttestationFormatIsKnownAndValid($this->attestationStatementSupportManager),
             new CheckHasAttestedCredentialData(),
             $metadataStatementChecker,
             new CheckCredentialId(),
-            new CheckHardwareKeyProtection($this->metadataStatementRepository),
-            new CheckFidoCertified($this->statusReportRepository),
+            new CheckHardwareKeyProtection($this->metadataStatementRepository, $this->logger),
+            new CheckFidoCertified($this->statusReportRepository, $this->logger),
         ]);
     }
 
@@ -198,6 +201,7 @@ final class SurfnetCeremonyStepManagerFactory
             : new CheckAllowedOrigins($this->allowedOrigins, $this->allowSubdomains);
 
         return new CeremonyStepManager([
+            new LogAuthenticationData($this->logger),
             new CheckAllowedCredentialList(),
             new CheckUserHandle(),
             new CheckClientDataCollectorType(),

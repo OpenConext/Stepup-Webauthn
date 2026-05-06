@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\CeremonyStep;
 
 use LogicException;
+use Psr\Log\LoggerInterface;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\CeremonyStep\CeremonyStep;
@@ -48,6 +49,7 @@ final class CheckFidoCertified implements CeremonyStep
 
     public function __construct(
         private readonly StatusReportRepository $statusReportRepository,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -67,8 +69,15 @@ final class CheckFidoCertified implements CeremonyStep
             return;
         }
 
+        $registrationId = sodium_bin2base64($publicKeyCredentialOptions->challenge, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
         $aaguid = $attestedCredentialData->aaguid->__toString();
         $reports = $this->statusReportRepository->findStatusReportsByAAGUID($aaguid);
+
+        $this->logger->info('Checking FIDO certification status', [
+            'registrationId' => $registrationId,
+            'aaguid' => $aaguid,
+            'statusReportCount' => count($reports),
+        ]);
 
         if ($reports === []) {
             throw AuthenticatorResponseVerificationException::create(
@@ -78,6 +87,13 @@ final class CheckFidoCertified implements CeremonyStep
 
         $mostRecent = $this->mostRecentReport($reports);
 
+        $this->logger->info('Most recent FIDO status report', [
+            'registrationId' => $registrationId,
+            'aaguid' => $aaguid,
+            'status' => $mostRecent->status,
+            'effectiveDate' => $mostRecent->effectiveDate,
+        ]);
+
         if (!in_array($mostRecent->status, self::FIDO_CERTIFIED_STATUSES, true)) {
             throw AuthenticatorResponseVerificationException::create(
                 sprintf(
@@ -86,6 +102,8 @@ final class CheckFidoCertified implements CeremonyStep
                 )
             );
         }
+
+        $this->logger->info('FIDO certification check passed', ['registrationId' => $registrationId]);
     }
 
     /**

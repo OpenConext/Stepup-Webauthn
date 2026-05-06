@@ -24,17 +24,15 @@ use Psr\Log\LoggerInterface;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\CeremonyStep\CeremonyStep;
-use Webauthn\Exception\AuthenticatorResponseVerificationException;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
 use Webauthn\PublicKeyCredentialSource;
 
 /**
- * Rejects credentials that are backup-eligible (i.e. can be synced across devices / passkeys).
- * This is the runtime proxy for the MDS multiDeviceCredentialSupport field, which is not
- * exposed in webauthn-lib v5.
+ * First step in the creation ceremony. Logs the raw attestation data for audit/debugging purposes.
+ * Never throws — purely observational.
  */
-final class CheckNoBackupEligibility implements CeremonyStep
+final class LogRegistrationData implements CeremonyStep
 {
     public function __construct(private readonly LoggerInterface $logger)
     {
@@ -52,19 +50,25 @@ final class CheckNoBackupEligibility implements CeremonyStep
         }
 
         $registrationId = sodium_bin2base64($publicKeyCredentialOptions->challenge, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
-        $authData = $authenticatorResponse->attestationObject->authData;
 
-        $this->logger->info('Checking backup eligibility', [
+        $attestedCredentialData = $authenticatorResponse->attestationObject->authData->attestedCredentialData;
+        $aaguid = $attestedCredentialData?->aaguid->__toString() ?? '00000000-0000-0000-0000-000000000000';
+
+        $this->logger->info('Registration ceremony started', [
             'registrationId' => $registrationId,
-            'isBackupEligible' => $authData->isBackupEligible(),
+            'aaguid' => $aaguid,
+            'attestationFormat' => $authenticatorResponse->attestationObject->attStmt->fmt,
+            'clientDataType' => $authenticatorResponse->clientDataJSON->type,
+            'origin' => $authenticatorResponse->clientDataJSON->origin,
         ]);
 
-        if ($authData->isBackupEligible()) {
-            throw AuthenticatorResponseVerificationException::create(
-                'Multi-device credentials are not accepted. The authenticator must not be backup-eligible.'
-            );
-        }
-
-        $this->logger->info('Backup eligibility check passed', ['registrationId' => $registrationId]);
+        $this->logger->info('Registration ceremony raw attestation data', [
+            'registrationId' => $registrationId,
+            'clientDataJSON' => $authenticatorResponse->clientDataJSON->rawData,
+            'attestationObject' => sodium_bin2base64(
+                $authenticatorResponse->attestationObject->rawAttestationObject,
+                SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING
+            ),
+        ]);
     }
 }

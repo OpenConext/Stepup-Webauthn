@@ -21,21 +21,23 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\CeremonyStep;
 
 use Psr\Log\LoggerInterface;
+use Surfnet\Webauthn\Entity\PublicKeyCredentialSource as SurfnetPublicKeyCredentialSource;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\CeremonyStep\CeremonyStep;
-use Webauthn\Exception\AuthenticatorResponseVerificationException;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
 use Webauthn\PublicKeyCredentialSource;
 
 /**
- * Rejects credentials that are backup-eligible (i.e. can be synced across devices / passkeys).
- * This is the runtime proxy for the MDS multiDeviceCredentialSupport field, which is not
- * exposed in webauthn-lib v5.
+ * First step in the request ceremony. Logs the AAGUID of the authenticating credential.
+ * Warns when the credential has a null AAGUID (CTAP1/U2F legacy token).
+ * Never throws — purely observational.
  */
-final class CheckNoBackupEligibility implements CeremonyStep
+final class LogAuthenticationData implements CeremonyStep
 {
+    private const NULL_AAGUID = '00000000-0000-0000-0000-000000000000';
+
     public function __construct(private readonly LoggerInterface $logger)
     {
     }
@@ -47,24 +49,28 @@ final class CheckNoBackupEligibility implements CeremonyStep
         ?string $userHandle,
         string $host
     ): void {
-        if (!$authenticatorResponse instanceof AuthenticatorAttestationResponse) {
+        if (!$authenticatorResponse instanceof AuthenticatorAssertionResponse) {
             return;
         }
 
-        $registrationId = sodium_bin2base64($publicKeyCredentialOptions->challenge, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
-        $authData = $authenticatorResponse->attestationObject->authData;
+        $aaguid = $publicKeyCredentialSource->aaguid->__toString();
+        $fmt = $publicKeyCredentialSource instanceof SurfnetPublicKeyCredentialSource
+            ? $publicKeyCredentialSource->getFmt()
+            : null;
 
-        $this->logger->info('Checking backup eligibility', [
-            'registrationId' => $registrationId,
-            'isBackupEligible' => $authData->isBackupEligible(),
-        ]);
-
-        if ($authData->isBackupEligible()) {
-            throw AuthenticatorResponseVerificationException::create(
-                'Multi-device credentials are not accepted. The authenticator must not be backup-eligible.'
-            );
+        if ($aaguid === self::NULL_AAGUID) {
+            $this->logger->warning('Authentication with legacy token: null AAGUID indicates CTAP1/U2F credential registered before FIDO MDS enforcement', [
+                'aaguid' => $aaguid,
+                'fmt' => $fmt,
+                'userHandle' => $userHandle,
+            ]);
+            return;
         }
 
-        $this->logger->info('Backup eligibility check passed', ['registrationId' => $registrationId]);
+        $this->logger->info('Authentication ceremony started', [
+            'aaguid' => $aaguid,
+            'fmt' => $fmt,
+            'userHandle' => $userHandle,
+        ]);
     }
 }

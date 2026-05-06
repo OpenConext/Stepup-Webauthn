@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\CeremonyStep;
 
+use Psr\Log\NullLogger;
 use Surfnet\Webauthn\CeremonyStep\CheckFidoCertified;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\Exception\AuthenticatorResponseVerificationException;
@@ -36,7 +37,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
     {
         parent::setUp();
         $this->repository = $this->createMock(StatusReportRepository::class);
-        $this->step = new CheckFidoCertified($this->repository);
+        $this->step = new CheckFidoCertified($this->repository, new NullLogger());
     }
 
     public function test_skips_assertion_response(): void

@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\CeremonyStep;
 
+use Psr\Log\NullLogger;
 use Surfnet\Webauthn\CeremonyStep\CheckAttestationIsNotNone;
 use Webauthn\AttestationStatement\AttestationStatement;
 use Webauthn\AuthenticatorAssertionResponse;
@@ -32,7 +33,7 @@ class CheckAttestationIsNotNoneTest extends AbstractCeremonyStepTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->step = new CheckAttestationIsNotNone();
+        $this->step = new CheckAttestationIsNotNone(new NullLogger());
     }
 
     public function test_skips_assertion_response(): void

@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\CeremonyStep;
 
+use Psr\Log\NullLogger;
 use Surfnet\Webauthn\CeremonyStep\CheckHardwareKeyProtection;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\Exception\AuthenticatorResponseVerificationException;
@@ -35,7 +36,7 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
     {
         parent::setUp();
         $this->repository = $this->createMock(MetadataStatementRepository::class);
-        $this->step = new CheckHardwareKeyProtection($this->repository);
+        $this->step = new CheckHardwareKeyProtection($this->repository, new NullLogger());
     }
 
     public function test_skips_assertion_response(): void

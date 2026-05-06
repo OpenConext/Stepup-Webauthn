@@ -79,4 +79,9 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
     {
         return $this->id;
     }
+
+    public function getFmt(): string
+    {
+        return $this->fmt;
+    }
 }

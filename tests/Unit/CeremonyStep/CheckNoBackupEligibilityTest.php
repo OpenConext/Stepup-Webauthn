@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\CeremonyStep;
 
+use Psr\Log\NullLogger;
 use Surfnet\Webauthn\CeremonyStep\CheckNoBackupEligibility;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\Exception\AuthenticatorResponseVerificationException;
@@ -31,7 +32,7 @@ class CheckNoBackupEligibilityTest extends AbstractCeremonyStepTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->step = new CheckNoBackupEligibility();
+        $this->step = new CheckNoBackupEligibility(new NullLogger());
     }
 
     public function test_skips_assertion_response(): void

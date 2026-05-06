@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\CeremonyStep;
 
+use Psr\Log\LoggerInterface;
 use Webauthn\AttestationStatement\AttestationStatement;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
@@ -31,6 +32,10 @@ use Webauthn\PublicKeyCredentialSource;
 
 final class CheckAttestationIsNotNone implements CeremonyStep
 {
+    public function __construct(private readonly LoggerInterface $logger)
+    {
+    }
+
     public function process(
         PublicKeyCredentialSource $publicKeyCredentialSource,
         AuthenticatorAssertionResponse|AuthenticatorAttestationResponse $authenticatorResponse,
@@ -42,12 +47,20 @@ final class CheckAttestationIsNotNone implements CeremonyStep
             return;
         }
 
+        $registrationId = sodium_bin2base64($publicKeyCredentialOptions->challenge, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
         $attestationType = $authenticatorResponse->attestationObject->attStmt->type;
+
+        $this->logger->info('Checking attestation type is not none', [
+            'registrationId' => $registrationId,
+            'attestationType' => $attestationType,
+        ]);
 
         if ($attestationType === AttestationStatement::TYPE_NONE) {
             throw AuthenticatorResponseVerificationException::create(
                 'Attestation is required. TYPE_NONE responses are not accepted.'
             );
         }
+
+        $this->logger->info('Attestation type accepted', ['registrationId' => $registrationId]);
     }
 }
