@@ -4,6 +4,15 @@
 - Restrict registration to cross-platform (hardware-bound) authenticators only
 - Make authenticator_attachment, user_verification, and attestation_conveyance configurable via parameters.yaml
 
+### Upgrade instructions
+The following parameters are required and must be added to `parameters.yaml`:
+```yaml
+webauthn_authenticator_attachment: 'cross-platform'
+webauthn_registration_user_verification: 'preferred'
+webauthn_attestation_conveyance: 'direct'
+```
+See `config/openconext/parameters.yaml.dist` for reference values and `\Webauthn\AuthenticatorSelectionCriteria` for available options.
+
 ## 2.1.0
 - Upgrade to Symfony 7.4 LTS
 - Remove EOL sensiolabs/security-checker configuration
