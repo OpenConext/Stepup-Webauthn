@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\CeremonyStep;
 
+use LogicException;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\CeremonyStep\CeremonyStep;
@@ -93,7 +94,7 @@ final class CheckFidoCertified implements CeremonyStep
     private function mostRecentReport(array $reports): StatusReport
     {
         if ($reports === []) {
-            throw new \LogicException('mostRecentReport() called with empty reports array.');
+            throw new LogicException('mostRecentReport() called with empty reports array.');
         }
         // Tie-break: equal dates keep the later array index (stable for FIDO MDS, one report per event).
         return array_reduce(

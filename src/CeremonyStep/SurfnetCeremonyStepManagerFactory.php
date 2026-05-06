@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\CeremonyStep;
 
+use LogicException;
 use Cose\Algorithm\Manager;
 use Cose\Algorithm\Signature\ECDSA\ES256;
 use Cose\Algorithm\Signature\RSA\RS256;
@@ -157,7 +158,7 @@ final class SurfnetCeremonyStepManagerFactory
     public function creationCeremony(): CeremonyStepManager
     {
         if ($this->metadataStatementRepository === null || $this->statusReportRepository === null) {
-            throw new \LogicException(
+            throw new LogicException(
                 'MDS must be configured before calling creationCeremony(). ' .
                 'Call enableMetadataStatementSupport() first.'
             );
