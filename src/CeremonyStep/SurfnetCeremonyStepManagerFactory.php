@@ -98,7 +98,6 @@ final class SurfnetCeremonyStepManagerFactory
         $this->counterChecker = $counterChecker;
     }
 
-    //even uitzoeken waar dit gebruikt wordt en of het verwijderd worden
     /**
      * @deprecated since 5.2.0 and will be removed in 6.0.0. Use setAllowedOrigins instead.
      * @todo Remove this method when upgrading webauthn-lib to 6.0.
