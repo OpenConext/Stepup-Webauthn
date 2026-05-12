@@ -20,14 +20,9 @@ declare(strict_types=1);
 
 namespace Test\Integration\CeremonyStep;
 
-use CBOR\ByteStringObject;
-use CBOR\MapObject;
-use CBOR\NegativeIntegerObject;
-use CBOR\UnsignedIntegerObject;
 use Cose\Algorithm\Manager;
 use Cose\Algorithm\Signature\ECDSA\ES256;
 use Cose\Algorithms;
-use OpenSSLAsymmetricKey;
 use PHPUnit\Framework\TestCase;
 use Surfnet\Webauthn\CeremonyStep\SurfnetCeremonyStepManagerFactory;
 use Symfony\Component\Uid\Uuid;
@@ -66,6 +61,17 @@ class FullRegistrationCeremonyTest extends TestCase
     private const RP_ID = 'example.com';
     private const ORIGIN = 'https://example.com';
     private const TEST_AAGUID = '550e8400-e29b-41d4-a716-446655440000';
+
+    private const TEST_PRIVATE_KEY_PEM = <<<PEM
+    -----BEGIN PRIVATE KEY-----
+    MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgbKkXB055IwqO6IlK
+    IROwqe+eQY6ljMNghk/Oe7tOkDChRANCAATcLAujig+aLAX3qCZu52B9yEYTnHxG
+    YqXiBjNzHVOUMqQpbhYW7DYoZzRH3ByNp/KWay02kv+V6cS/YcKBfxIn
+    -----END PRIVATE KEY-----
+    PEM;
+
+    // Pre-computed COSE public key for TEST_PRIVATE_KEY_PEM (P-256, ES256)
+    private const TEST_COSE_PUBLIC_KEY = 'pQECAyYgASFYINwsC6OKD5osBfeoJm7nYH3IRhOcfEZipeIGM3MdU5QyIlggpCluFhbsNihnNEfcHI2n8pZrLTaS/5XpxL9hwoF/Eic=';
 
     private const FLAGS_NORMAL = AuthenticatorData::FLAG_UP | AuthenticatorData::FLAG_UV | AuthenticatorData::FLAG_AT;
     private const FLAGS_BACKUP_ELIGIBLE = self::FLAGS_NORMAL | AuthenticatorData::FLAG_BE;
@@ -214,7 +220,7 @@ class FullRegistrationCeremonyTest extends TestCase
      */
     private function buildPackedRegistration(int $flags): array
     {
-        [$privateKey, $cosePublicKeyBytes] = $this->generateEcKeypair();
+        [$privateKey, $cosePublicKeyBytes] = $this->getTestKeypair();
         $credentialId = random_bytes(32);
         $challenge = random_bytes(32);
 
@@ -237,7 +243,7 @@ class FullRegistrationCeremonyTest extends TestCase
      */
     private function buildNoneAttestationRegistration(): array
     {
-        [, $cosePublicKeyBytes] = $this->generateEcKeypair();
+        [, $cosePublicKeyBytes] = $this->getTestKeypair();
         $credentialId = random_bytes(32);
         $challenge = random_bytes(32);
 
@@ -252,24 +258,14 @@ class FullRegistrationCeremonyTest extends TestCase
     }
 
     /**
-     * @return array{OpenSSLAsymmetricKey, string}
+     * @return array{\OpenSSLAsymmetricKey, string}
      */
-    private function generateEcKeypair(): array
+    private function getTestKeypair(): array
     {
-        $privateKey = openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
-        $details = openssl_pkey_get_details($privateKey);
-
-        $x = str_pad($details['ec']['x'], 32, "\x00", STR_PAD_LEFT);
-        $y = str_pad($details['ec']['y'], 32, "\x00", STR_PAD_LEFT);
-
-        $cosePublicKeyBytes = (string) MapObject::create()
-            ->add(UnsignedIntegerObject::create(1), UnsignedIntegerObject::create(2))
-            ->add(UnsignedIntegerObject::create(3), NegativeIntegerObject::create(-7))
-            ->add(NegativeIntegerObject::create(-1), UnsignedIntegerObject::create(1))
-            ->add(NegativeIntegerObject::create(-2), ByteStringObject::create($x))
-            ->add(NegativeIntegerObject::create(-3), ByteStringObject::create($y));
-
-        return [$privateKey, $cosePublicKeyBytes];
+        return [
+            openssl_pkey_get_private(self::TEST_PRIVATE_KEY_PEM),
+            base64_decode(self::TEST_COSE_PUBLIC_KEY),
+        ];
     }
 
     private function buildAuthData(string $aaguid, int $flags, string $credentialId, string $coseKeyBytes): string
