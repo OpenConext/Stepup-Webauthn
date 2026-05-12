@@ -76,7 +76,7 @@ class FullRegistrationCeremonyTest extends TestCase
     private const FLAGS_NORMAL = AuthenticatorData::FLAG_UP | AuthenticatorData::FLAG_UV | AuthenticatorData::FLAG_AT;
     private const FLAGS_BACKUP_ELIGIBLE = self::FLAGS_NORMAL | AuthenticatorData::FLAG_BE;
 
-    public function test_valid_hardware_token_registration_passes(): void
+    public function testValidHardwareTokenRegistrationPasses(): void
     {
         [$response, $options] = $this->buildPackedRegistration(self::FLAGS_NORMAL);
 
@@ -90,7 +90,7 @@ class FullRegistrationCeremonyTest extends TestCase
         $this->assertInstanceOf(PublicKeyCredentialSource::class, $result);
     }
 
-    public function test_backup_eligible_credential_is_rejected(): void
+    public function testBackupEligibleCredentialIsRejected(): void
     {
         [$response, $options] = $this->buildPackedRegistration(self::FLAGS_BACKUP_ELIGIBLE);
 
@@ -103,7 +103,7 @@ class FullRegistrationCeremonyTest extends TestCase
         $validator->check($response, $options, self::RP_ID);
     }
 
-    public function test_none_attestation_is_rejected(): void
+    public function testNoneAttestationIsRejected(): void
     {
         [$response, $options] = $this->buildNoneAttestationRegistration();
 
@@ -116,67 +116,37 @@ class FullRegistrationCeremonyTest extends TestCase
         $validator->check($response, $options, self::RP_ID);
     }
 
-    public function test_no_fido_status_reports_is_rejected(): void
+    public function testNoFidoStatusReportsIsRejected(): void
     {
         [$response, $options] = $this->buildPackedRegistration(self::FLAGS_NORMAL);
 
-        $aaguid = self::TEST_AAGUID;
-        $emptyStatusRepo = new class ($aaguid) implements StatusReportRepository {
-            public function __construct(private readonly string $aaguid)
-            {
-            }
-
-            /** @return StatusReport[] */
-            public function findStatusReportsByAAGUID(string $aaguid): array
-            {
-                return [];
-            }
-        };
-
         $validator = $this->buildValidator(
             mdsRepo: $this->hardwareMdsRepo(self::TEST_AAGUID),
-            statusRepo: $emptyStatusRepo,
+            statusRepo: $this->emptyStatusRepo(self::TEST_AAGUID),
         );
 
         $this->expectException(AuthenticatorResponseVerificationException::class);
         $validator->check($response, $options, self::RP_ID);
     }
 
-    public function test_not_fido_certified_is_rejected(): void
+    public function testNotFidoCertifiedIsRejected(): void
     {
         [$response, $options] = $this->buildPackedRegistration(self::FLAGS_NORMAL);
 
-        $aaguid = self::TEST_AAGUID;
-        $revokedStatusRepo = new class ($aaguid) implements StatusReportRepository {
-            public function __construct(private readonly string $aaguid)
-            {
-            }
-
-            /** @return StatusReport[] */
-            public function findStatusReportsByAAGUID(string $aaguid): array
-            {
-                if ($aaguid !== $this->aaguid) {
-                    return [];
-                }
-                return [StatusReport::create(AuthenticatorStatus::NOT_FIDO_CERTIFIED, null, null, null, null, null, null, null)];
-            }
-        };
-
         $validator = $this->buildValidator(
             mdsRepo: $this->hardwareMdsRepo(self::TEST_AAGUID),
-            statusRepo: $revokedStatusRepo,
+            statusRepo: $this->notFidoCertifiedStatusRepo(self::TEST_AAGUID),
         );
 
         $this->expectException(AuthenticatorResponseVerificationException::class);
         $validator->check($response, $options, self::RP_ID);
     }
 
-    public function test_software_key_is_rejected(): void
+    public function testSoftwareKeyIsRejected(): void
     {
         [$response, $options] = $this->buildPackedRegistration(self::FLAGS_NORMAL);
 
-        $aaguid = self::TEST_AAGUID;
-        $softwareMdsRepo = new class ($aaguid) implements MetadataStatementRepository {
+        $softwareMdsRepo = new class (self::TEST_AAGUID) implements MetadataStatementRepository {
             public function __construct(private readonly string $aaguid)
             {
             }
@@ -345,6 +315,39 @@ class FullRegistrationCeremonyTest extends TestCase
         );
 
         return new AuthenticatorAttestationResponseValidator($factory->creationCeremony());
+    }
+
+    private function emptyStatusRepo(string $aaguid): StatusReportRepository
+    {
+        return new class ($aaguid) implements StatusReportRepository {
+            public function __construct(private readonly string $aaguid)
+            {
+            }
+
+            /** @return StatusReport[] */
+            public function findStatusReportsByAAGUID(string $aaguid): array
+            {
+                return [];
+            }
+        };
+    }
+
+    private function notFidoCertifiedStatusRepo(string $aaguid): StatusReportRepository
+    {
+        return new class ($aaguid) implements StatusReportRepository {
+            public function __construct(private readonly string $aaguid)
+            {
+            }
+
+            /** @return StatusReport[] */
+            public function findStatusReportsByAAGUID(string $aaguid): array
+            {
+                if ($aaguid !== $this->aaguid) {
+                    return [];
+                }
+                return [StatusReport::create(AuthenticatorStatus::NOT_FIDO_CERTIFIED, null, null, null, null, null, null, null)];
+            }
+        };
     }
 
     private function hardwareMdsRepo(string $aaguid): MetadataStatementRepository
