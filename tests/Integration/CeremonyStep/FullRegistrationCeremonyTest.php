@@ -259,12 +259,15 @@ class FullRegistrationCeremonyTest extends TestCase
         $privateKey = openssl_pkey_new(['curve_name' => 'prime256v1', 'private_key_type' => OPENSSL_KEYTYPE_EC]);
         $details = openssl_pkey_get_details($privateKey);
 
+        $x = str_pad($details['ec']['x'], 32, "\x00", STR_PAD_LEFT);
+        $y = str_pad($details['ec']['y'], 32, "\x00", STR_PAD_LEFT);
+
         $cosePublicKeyBytes = (string) MapObject::create()
             ->add(UnsignedIntegerObject::create(1), UnsignedIntegerObject::create(2))
             ->add(UnsignedIntegerObject::create(3), NegativeIntegerObject::create(-7))
             ->add(NegativeIntegerObject::create(-1), UnsignedIntegerObject::create(1))
-            ->add(NegativeIntegerObject::create(-2), ByteStringObject::create($details['ec']['x']))
-            ->add(NegativeIntegerObject::create(-3), ByteStringObject::create($details['ec']['y']));
+            ->add(NegativeIntegerObject::create(-2), ByteStringObject::create($x))
+            ->add(NegativeIntegerObject::create(-3), ByteStringObject::create($y));
 
         return [$privateKey, $cosePublicKeyBytes];
     }
