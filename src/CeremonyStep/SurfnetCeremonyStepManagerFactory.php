@@ -20,7 +20,6 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\CeremonyStep;
 
-use LogicException;
 use Cose\Algorithm\Manager;
 use Cose\Algorithm\Signature\ECDSA\ES256;
 use Cose\Algorithm\Signature\RSA\RS256;
@@ -55,6 +54,10 @@ use Webauthn\MetadataService\MetadataStatementRepository;
 use Webauthn\MetadataService\StatusReportRepository;
 
 /**
+ * Overrides the webauthn-lib CeremonyStepManagerFactory to enforce authenticator quality
+ * requirements (hardware key protection, FIDO certification, no passkeys) beyond what the
+ * upstream factory provides.
+ *
  * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
  */
 final class SurfnetCeremonyStepManagerFactory
@@ -62,12 +65,6 @@ final class SurfnetCeremonyStepManagerFactory
     private CounterChecker $counterChecker;
 
     private Manager $algorithmManager;
-
-    private null|MetadataStatementRepository $metadataStatementRepository = null;
-
-    private null|StatusReportRepository $statusReportRepository = null;
-
-    private null|CertificateChainValidator $certificateChainValidator = null;
 
     private null|TopOriginValidator $topOriginValidator = null;
 
@@ -83,8 +80,11 @@ final class SurfnetCeremonyStepManagerFactory
 
     private ExtensionOutputCheckerHandler $extensionOutputCheckerHandler;
 
-    public function __construct()
-    {
+    public function __construct(
+        private readonly MetadataStatementRepository $metadataStatementRepository,
+        private readonly StatusReportRepository $statusReportRepository,
+        private readonly CertificateChainValidator $certificateChainValidator,
+    ) {
         $this->counterChecker = new ThrowExceptionIfInvalid();
         $this->algorithmManager = Manager::create()->add(ES256::create(), RS256::create());
         $this->attestationStatementSupportManager = new AttestationStatementSupportManager([
@@ -98,6 +98,7 @@ final class SurfnetCeremonyStepManagerFactory
         $this->counterChecker = $counterChecker;
     }
 
+    //even uitzoeken waar dit gebruikt wordt en of het verwijderd worden
     /**
      * @deprecated since 5.2.0 and will be removed in 6.0.0. Use setAllowedOrigins instead.
      * @todo Remove this method when upgrading webauthn-lib to 6.0.
@@ -133,19 +134,20 @@ final class SurfnetCeremonyStepManagerFactory
         $this->algorithmManager = $algorithmManager;
     }
 
+    /**
+     * Called by the webauthn bundle's CeremonyStepManagerFactoryCompilerPass. The dependencies
+     * are already injected via the constructor; this setter exists only to satisfy the compiler
+     * pass contract and is a no-op.
+     */
     public function enableMetadataStatementSupport(
         MetadataStatementRepository $metadataStatementRepository,
         StatusReportRepository $statusReportRepository,
         CertificateChainValidator $certificateChainValidator
     ): void {
-        $this->metadataStatementRepository = $metadataStatementRepository;
-        $this->statusReportRepository = $statusReportRepository;
-        $this->certificateChainValidator = $certificateChainValidator;
     }
 
     public function enableCertificateChainValidator(CertificateChainValidator $certificateChainValidator): void
     {
-        $this->certificateChainValidator = $certificateChainValidator;
     }
 
     public function enableTopOriginValidator(TopOriginValidator $topOriginValidator): void
@@ -157,22 +159,13 @@ final class SurfnetCeremonyStepManagerFactory
     // and requestCeremony() against these lists and port any new or reordered steps.
     public function creationCeremony(): CeremonyStepManager
     {
-        if ($this->metadataStatementRepository === null || $this->statusReportRepository === null) {
-            throw new LogicException(
-                'MDS must be configured before calling creationCeremony(). ' .
-                'Call enableMetadataStatementSupport() first.'
-            );
-        }
-
         $metadataStatementChecker = new CheckMetadataStatement();
-        if ($this->certificateChainValidator !== null) {
-            $metadataStatementChecker->enableCertificateChainValidator($this->certificateChainValidator);
-            $metadataStatementChecker->enableMetadataStatementSupport(
-                $this->metadataStatementRepository,
-                $this->statusReportRepository,
-                $this->certificateChainValidator,
-            );
-        }
+        $metadataStatementChecker->enableCertificateChainValidator($this->certificateChainValidator);
+        $metadataStatementChecker->enableMetadataStatementSupport(
+            $this->metadataStatementRepository,
+            $this->statusReportRepository,
+            $this->certificateChainValidator,
+        );
 
         $originStep = $this->allowedOrigins === null
             ? new CheckOrigin($this->securedRelyingPartyId ?? [])

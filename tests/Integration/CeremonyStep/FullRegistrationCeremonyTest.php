@@ -335,7 +335,7 @@ class FullRegistrationCeremonyTest extends TestCase
             }
         };
 
-        $factory = new SurfnetCeremonyStepManagerFactory();
+        $factory = new SurfnetCeremonyStepManagerFactory($mdsRepo, $statusRepo, $certChainValidator);
         $factory->setAllowedOrigins([self::ORIGIN]);
         $factory->setAttestationStatementSupportManager(
             new AttestationStatementSupportManager([
@@ -344,7 +344,6 @@ class FullRegistrationCeremonyTest extends TestCase
                 ),
             ])
         );
-        $factory->enableMetadataStatementSupport($mdsRepo, $statusRepo, $certChainValidator);
 
         return new AuthenticatorAttestationResponseValidator($factory->creationCeremony());
     }

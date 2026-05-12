@@ -56,25 +56,15 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->factory = new SurfnetCeremonyStepManagerFactory();
-    }
-
-    public function test_creation_ceremony_throws_without_mds(): void
-    {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('MDS must be configured');
-
-        $this->factory->creationCeremony();
+        $this->factory = new SurfnetCeremonyStepManagerFactory(
+            $this->createMock(MetadataStatementRepository::class),
+            $this->createMock(StatusReportRepository::class),
+            $this->createMock(CertificateChainValidator::class),
+        );
     }
 
     public function test_creation_ceremony_with_mds_has_exact_expected_steps(): void
     {
-        $this->factory->enableMetadataStatementSupport(
-            $this->createMock(MetadataStatementRepository::class),
-            $this->createMock(StatusReportRepository::class),
-            $this->createMock(CertificateChainValidator::class)
-        );
-
         $manager = $this->factory->creationCeremony();
         $stepClasses = $this->getStepClasses($manager);
 
@@ -101,12 +91,6 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
 
     public function test_creation_ceremony_does_not_include_backup_bits_consistent(): void
     {
-        $this->factory->enableMetadataStatementSupport(
-            $this->createMock(\Webauthn\MetadataService\MetadataStatementRepository::class),
-            $this->createMock(\Webauthn\MetadataService\StatusReportRepository::class),
-            $this->createMock(\Webauthn\MetadataService\CertificateChain\CertificateChainValidator::class)
-        );
-
         $manager = $this->factory->creationCeremony();
         $stepClasses = $this->getStepClasses($manager);
 
