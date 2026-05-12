@@ -42,3 +42,9 @@ services:
 
     Surfnet\GsspBundle\Service\ValueStore\SessionValueStore:
         alias: surfnet_gssp.value_store.service
+
+    # MetadataStatementService parses the MDS blob eagerly in its constructor.
+    # blob.jwt is not committed, so we make it lazy in tests — the proxy is injected
+    # but the blob is never parsed unless a method is actually called.
+    Surfnet\Webauthn\Service\MetadataStatementService:
+        lazy: true
