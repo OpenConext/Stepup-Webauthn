@@ -33,6 +33,8 @@ use Webauthn\PublicKeyCredentialSource;
 
 final class CheckHardwareKeyProtection implements CeremonyStep
 {
+    use RegistrationIdFromChallenge;
+
     private const ALLOWED_KEY_PROTECTION = [
         MetadataStatement::KEY_PROTECTION_HARDWARE,
         MetadataStatement::KEY_PROTECTION_SECURE_ELEMENT,
@@ -60,7 +62,7 @@ final class CheckHardwareKeyProtection implements CeremonyStep
             return;
         }
 
-        $registrationId = sodium_bin2base64($publicKeyCredentialOptions->challenge, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+        $registrationId = $this->registrationId($publicKeyCredentialOptions->challenge);
         $aaguid = $attestedCredentialData->aaguid->__toString();
         $metadataStatement = $this->metadataStatementRepository->findOneByAAGUID($aaguid);
 

@@ -34,6 +34,8 @@ use Webauthn\PublicKeyCredentialSource;
  */
 final class LogRegistrationData implements CeremonyStep
 {
+    use RegistrationIdFromChallenge;
+
     public function __construct(private readonly LoggerInterface $logger)
     {
     }
@@ -49,7 +51,7 @@ final class LogRegistrationData implements CeremonyStep
             return;
         }
 
-        $registrationId = sodium_bin2base64($publicKeyCredentialOptions->challenge, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+        $registrationId = $this->registrationId($publicKeyCredentialOptions->challenge);
 
         $attestedCredentialData = $authenticatorResponse->attestationObject->authData->attestedCredentialData;
         $aaguid = $attestedCredentialData?->aaguid->__toString() ?? '00000000-0000-0000-0000-000000000000';

@@ -35,6 +35,8 @@ use Webauthn\PublicKeyCredentialSource;
 
 final class CheckFidoCertified implements CeremonyStep
 {
+    use RegistrationIdFromChallenge;
+
     private const FIDO_CERTIFIED_STATUSES = [
         AuthenticatorStatus::FIDO_CERTIFIED,
         AuthenticatorStatus::FIDO_CERTIFIED_L1,
@@ -69,7 +71,7 @@ final class CheckFidoCertified implements CeremonyStep
             return;
         }
 
-        $registrationId = sodium_bin2base64($publicKeyCredentialOptions->challenge, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+        $registrationId = $this->registrationId($publicKeyCredentialOptions->challenge);
         $aaguid = $attestedCredentialData->aaguid->__toString();
         $reports = $this->statusReportRepository->findStatusReportsByAAGUID($aaguid);
 

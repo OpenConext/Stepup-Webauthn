@@ -32,6 +32,7 @@ use Webauthn\PublicKeyCredentialSource;
 
 final class CheckAttestationIsNotNone implements CeremonyStep
 {
+    use RegistrationIdFromChallenge;
     public function __construct(private readonly LoggerInterface $logger)
     {
     }
@@ -47,7 +48,7 @@ final class CheckAttestationIsNotNone implements CeremonyStep
             return;
         }
 
-        $registrationId = sodium_bin2base64($publicKeyCredentialOptions->challenge, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
+        $registrationId = $this->registrationId($publicKeyCredentialOptions->challenge);
         $attestationType = $authenticatorResponse->attestationObject->attStmt->type;
 
         $this->logger->info('Checking attestation type is not none', [
