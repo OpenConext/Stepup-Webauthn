@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn\CeremonyStep;
 
+use Psr\Log\LoggerInterface;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\CeremonyStep\CeremonyStep;
@@ -32,6 +33,8 @@ use Webauthn\PublicKeyCredentialSource;
 
 final class CheckHardwareKeyProtection implements CeremonyStep
 {
+    use RegistrationIdFromChallenge;
+
     private const ALLOWED_KEY_PROTECTION = [
         MetadataStatement::KEY_PROTECTION_HARDWARE,
         MetadataStatement::KEY_PROTECTION_SECURE_ELEMENT,
@@ -39,6 +42,7 @@ final class CheckHardwareKeyProtection implements CeremonyStep
 
     public function __construct(
         private readonly MetadataStatementRepository $metadataStatementRepository,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -58,6 +62,7 @@ final class CheckHardwareKeyProtection implements CeremonyStep
             return;
         }
 
+        $registrationId = $this->registrationId($publicKeyCredentialOptions->challenge);
         $aaguid = $attestedCredentialData->aaguid->__toString();
         $metadataStatement = $this->metadataStatementRepository->findOneByAAGUID($aaguid);
 
@@ -65,8 +70,19 @@ final class CheckHardwareKeyProtection implements CeremonyStep
         // TYPE_NONE attestation is already rejected by CheckAttestationIsNotNone,
         // so this only affects authenticators that attest but are absent from the FIDO MDS.
         if ($metadataStatement === null) {
+            $this->logger->info('No MDS metadata statement found for AAGUID, skipping key protection check', [
+                'registrationId' => $registrationId,
+                'aaguid' => $aaguid,
+            ]);
             return;
         }
+
+        $this->logger->info('MDS metadata statement found for authenticator', [
+            'registrationId' => $registrationId,
+            'aaguid' => $aaguid,
+            'description' => isset($metadataStatement->description) ? $metadataStatement->description : null,
+            'keyProtection' => $metadataStatement->keyProtection,
+        ]);
 
         if (count(array_intersect($metadataStatement->keyProtection, self::ALLOWED_KEY_PROTECTION)) === 0) {
             throw AuthenticatorResponseVerificationException::create(
@@ -76,5 +92,7 @@ final class CheckHardwareKeyProtection implements CeremonyStep
                 )
             );
         }
+
+        $this->logger->info('Key protection check passed', ['registrationId' => $registrationId]);
     }
 }

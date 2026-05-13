@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\CeremonyStep;
 
 use LogicException;
+use Psr\Log\LoggerInterface;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\CeremonyStep\CeremonyStep;
@@ -34,6 +35,8 @@ use Webauthn\PublicKeyCredentialSource;
 
 final class CheckFidoCertified implements CeremonyStep
 {
+    use RegistrationIdFromChallenge;
+
     private const FIDO_CERTIFIED_STATUSES = [
         AuthenticatorStatus::FIDO_CERTIFIED,
         AuthenticatorStatus::FIDO_CERTIFIED_L1,
@@ -48,6 +51,7 @@ final class CheckFidoCertified implements CeremonyStep
 
     public function __construct(
         private readonly StatusReportRepository $statusReportRepository,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -67,8 +71,15 @@ final class CheckFidoCertified implements CeremonyStep
             return;
         }
 
+        $registrationId = $this->registrationId($publicKeyCredentialOptions->challenge);
         $aaguid = $attestedCredentialData->aaguid->__toString();
         $reports = $this->statusReportRepository->findStatusReportsByAAGUID($aaguid);
+
+        $this->logger->info('Checking FIDO certification status', [
+            'registrationId' => $registrationId,
+            'aaguid' => $aaguid,
+            'statusReportCount' => count($reports),
+        ]);
 
         if ($reports === []) {
             throw AuthenticatorResponseVerificationException::create(
@@ -78,6 +89,13 @@ final class CheckFidoCertified implements CeremonyStep
 
         $mostRecent = $this->mostRecentReport($reports);
 
+        $this->logger->info('Most recent FIDO status report', [
+            'registrationId' => $registrationId,
+            'aaguid' => $aaguid,
+            'status' => $mostRecent->status,
+            'effectiveDate' => $mostRecent->effectiveDate,
+        ]);
+
         if (!in_array($mostRecent->status, self::FIDO_CERTIFIED_STATUSES, true)) {
             throw AuthenticatorResponseVerificationException::create(
                 sprintf(
@@ -86,6 +104,8 @@ final class CheckFidoCertified implements CeremonyStep
                 )
             );
         }
+
+        $this->logger->info('FIDO certification check passed', ['registrationId' => $registrationId]);
     }
 
     /**

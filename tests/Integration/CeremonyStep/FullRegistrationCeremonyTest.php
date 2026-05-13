@@ -42,6 +42,7 @@ use Webauthn\MetadataService\Statement\AuthenticatorStatus;
 use Webauthn\MetadataService\Statement\MetadataStatement;
 use Webauthn\MetadataService\Statement\StatusReport;
 use Webauthn\MetadataService\StatusReportRepository;
+use Psr\Log\NullLogger;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialParameters;
 use Webauthn\PublicKeyCredentialRpEntity;
@@ -304,7 +305,7 @@ class FullRegistrationCeremonyTest extends TestCase
             }
         };
 
-        $factory = new SurfnetCeremonyStepManagerFactory($mdsRepo, $statusRepo, $certChainValidator);
+        $factory = new SurfnetCeremonyStepManagerFactory(new NullLogger(), $mdsRepo, $statusRepo, $certChainValidator);
         $factory->setAllowedOrigins([self::ORIGIN]);
         $factory->setAttestationStatementSupportManager(
             new AttestationStatementSupportManager([

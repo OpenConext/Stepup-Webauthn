@@ -22,10 +22,13 @@ namespace Test\Unit\CeremonyStep;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Psr\Log\NullLogger;
 use Surfnet\Webauthn\CeremonyStep\CheckAttestationIsNotNone;
 use Surfnet\Webauthn\CeremonyStep\CheckFidoCertified;
 use Surfnet\Webauthn\CeremonyStep\CheckHardwareKeyProtection;
 use Surfnet\Webauthn\CeremonyStep\CheckNoBackupEligibility;
+use Surfnet\Webauthn\CeremonyStep\LogAuthenticationData;
+use Surfnet\Webauthn\CeremonyStep\LogRegistrationData;
 use Surfnet\Webauthn\CeremonyStep\SurfnetCeremonyStepManagerFactory;
 use Webauthn\CeremonyStep\CeremonyStepManager;
 use Webauthn\CeremonyStep\CheckAlgorithm;
@@ -57,6 +60,7 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->factory = new SurfnetCeremonyStepManagerFactory(
+            new NullLogger(),
             $this->createMock(MetadataStatementRepository::class),
             $this->createMock(StatusReportRepository::class),
             $this->createMock(CertificateChainValidator::class),
@@ -69,6 +73,7 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
         $stepClasses = $this->getStepClasses($manager);
 
         $this->assertSame([
+            LogRegistrationData::class,
             CheckClientDataCollectorType::class,
             CheckChallenge::class,
             CheckOrigin::class,
@@ -103,6 +108,7 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
         $stepClasses = $this->getStepClasses($manager);
 
         $this->assertSame([
+            LogAuthenticationData::class,
             CheckAllowedCredentialList::class,
             CheckUserHandle::class,
             CheckClientDataCollectorType::class,
