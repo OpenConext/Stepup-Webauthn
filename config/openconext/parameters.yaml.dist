@@ -23,6 +23,12 @@ parameters:
     webauthn_name: OpenConext DEV Environment
     webauthn_logo: 'https://openconext.org/wp-content/uploads/2016/11/openconext_logo-med.png'
 
+    # WebAuthn authenticator selection criteria.
+    # See \Webauthn\AuthenticatorSelectionCriteria for available option values.
+    webauthn_authenticator_attachment: 'cross-platform'
+    webauthn_registration_user_verification: 'preferred'
+    webauthn_attestation_conveyance: 'direct'
+
     fido2_jwt_mds_blob_file_name: '%kernel.project_dir%/config/openconext/mds/blob.jwt'
     fido2_jwt_mds_root_certificate_file_name: '%kernel.project_dir%/config/openconext/mds/root.crt'
     fido2_mds_cache_dir: '%kernel.project_dir%/var/mds/'
