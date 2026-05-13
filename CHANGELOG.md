@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- Override CeremonyStepManagerFactory with explicit, controlled ceremony step lists for both registration and authentication
+- Enforce attestation quality during registration: reject TYPE_NONE attestation, require hardware key protection, require FIDO certification, and reject backup-eligible (multi-device/passkey) credentials
 - Restrict registration to cross-platform (hardware-bound) authenticators only
 - Make authenticator_attachment, user_verification, and attestation_conveyance configurable via parameters.yaml
 

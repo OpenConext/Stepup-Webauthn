@@ -31,3 +31,6 @@ services:
 
     Webauthn\Bundle\Repository\CanRegisterUserEntity:
         alias: Surfnet\Webauthn\Repository\UserRepository
+
+    Webauthn\CeremonyStep\CeremonyStepManagerFactory:
+        class: Surfnet\Webauthn\CeremonyStep\SurfnetCeremonyStepManagerFactory
