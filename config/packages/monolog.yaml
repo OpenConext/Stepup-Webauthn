@@ -26,7 +26,7 @@ when@dev:
             main_syslog:
                 type: stream
                 path: php://stderr
-                level: error
+                level: info
                 channels: ["!event", "!doctrine", "!console"]
             console:
                 type: console
@@ -38,7 +38,7 @@ when@test:
             main_syslog:
                 type: stream
                 path: php://stderr
-                level: error
+                level: info
                 channels: ["!event", "!doctrine", "!deprecation", "!console"]
             console:
                 type: console
