@@ -61,18 +61,26 @@
                 el.classList.remove('hidden');
             };
 
-            const handleFailure = (evt) => {
+            const handleFailure = async (evt) => {
                 const detail = evt.detail || {};
                 const error = detail.error;
                 const response = detail.response;
-                const msg =
-                    (error && (error.message || String(error))) ||
-                    (response && `Registration rejected by server (HTTP ${response.status})`) ||
-                    'Registration failed';
 
-                console.error('[webauthn] failure event:', evt.type, detail);
+                let msg = (error && (error.message || String(error))) || 'Registration failed';
+
                 if (response) {
-                    response.clone().text().then(body => console.error('[webauthn] server response body:', body));
+                    try {
+                        const body = await response.clone().json();
+                        const serverMsg = body.errorMessage || '';
+                        console.error('[webauthn] server error:', serverMsg);
+                        if (serverMsg.includes('backup-eligible') || serverMsg.includes('Multi-device')) {
+                            msg = '{{ "status.passkey_not_accepted"|trans }}';
+                        } else {
+                            msg = serverMsg || `Registration rejected by server (HTTP ${response.status})`;
+                        }
+                    } catch {
+                        msg = `Registration rejected by server (HTTP ${response.status})`;
+                    }
                 }
 
                 setText('title', '{{ "status.webauthn_not_supported_or_failed"|trans }}');
