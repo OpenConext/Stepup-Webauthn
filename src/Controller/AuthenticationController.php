@@ -36,6 +36,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
 use Webauthn\Bundle\Service\PublicKeyCredentialRequestOptionsFactory;
+use Webauthn\CredentialRecord;
 
 /**
  * @SuppressWarnings("PHPMD.CouplingBetweenObjects")
@@ -93,9 +94,14 @@ class AuthenticationController extends AbstractController
             throw new UnrecoverableErrorException('One credential source allowed');
         }
 
+        $allowedDescriptors = array_map(
+            static fn (CredentialRecord $credentialRecord) => $credentialRecord->getPublicKeyCredentialDescriptor(),
+            $allowedCredentials
+        );
+
         $publicKeyCredentialRequestOptions = $this->publicKeyCredentialRequestOptionsFactory->create(
             'default',
-            $allowedCredentials
+            $allowedDescriptors
         );
 
         $this->store->set($publicKeyCredentialRequestOptions);

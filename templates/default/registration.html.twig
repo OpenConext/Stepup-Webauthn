@@ -5,11 +5,11 @@
     <h2>{{ 'registration.sub_title'|trans }}</h2>
 
     <form id="form"
-            {{ stimulus_controller('@web-auth/webauthn-stimulus',
+            {{ stimulus_controller('@web-auth/registration',
                 {
-                    creationResultUrl: path('webauthn.controller.security.main.creation.result'),
-                    creationOptionsUrl: path('webauthn.controller.security.main.creation.options'),
-                    creationSuccessRedirectUri: path('app_identity_registration')
+                    resultUrl: path('webauthn.controller.security.main.creation.result'),
+                    optionsUrl: path('webauthn.controller.security.main.creation.options'),
+                    successRedirectUri: path('app_identity_registration')
                 }
             ) }}
     >
@@ -28,8 +28,9 @@
                 value="{{ displayName }}"
         >
         <button
+                type="button"
                 id="registerButton"
-                {{ stimulus_action('@web-auth/webauthn-stimulus', 'signup') }}
+                {{ stimulus_action('@web-auth/registration', 'register') }}
                 hidden
         >
 
@@ -49,8 +50,7 @@
     %}
 
     <script>
-        window.onload = function(){
-            const form = document.getElementById('form');
+        (function () {
             const setText = (id, value) => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = value ?? '';
@@ -63,24 +63,44 @@
 
             const handleFailure = (evt) => {
                 const detail = evt.detail || {};
-                const exception = detail.exception;
-                const serverData = detail.data || {};
+                const error = detail.error;
+                const response = detail.response;
                 const msg =
-                    (exception && (exception.message || String(exception))) ||
-                    serverData.errorMessage ||
+                    (error && (error.message || String(error))) ||
+                    (response && `Registration rejected by server (HTTP ${response.status})`) ||
                     'Registration failed';
+
+                console.error('[webauthn] failure event:', evt.type, detail);
+                if (response) {
+                    response.clone().text().then(body => console.error('[webauthn] server response body:', body));
+                }
 
                 setText('title', '{{ "status.webauthn_not_supported_or_failed"|trans }}');
                 setText('errorMessage', msg);
                 setText('timestamp', new Date().toISOString());
 
                 showErrors();
-            }
+            };
 
-            window.addEventListener('webauthn:attestation:failure', handleFailure, true);
+            [
+                'webauthn:registration:options:request',
+                'webauthn:registration:options:success',
+                'webauthn:registration:credential',
+                'webauthn:registration:verify:request',
+                'webauthn:registration:verify:success',
+                'webauthn:unsupported',
+            ].forEach(name => window.addEventListener(name, evt => console.log('[webauthn]', evt.type, evt.detail), true));
 
-            document.getElementById("registerButton").click();
-        }
+            window.addEventListener('webauthn:registration:error', handleFailure, true);
+            window.addEventListener('webauthn:registration:verify:error', handleFailure, true);
+            window.addEventListener('webauthn:registration:options:error', handleFailure, true);
+
+            // Trigger registration once the Stimulus controller has connected.
+            // Using the connect event guarantees the action handler is in place.
+            window.addEventListener('webauthn:registration:connect', () => {
+                document.getElementById('registerButton').click();
+            }, { once: true });
+        })();
     </script>
 
     {% include 'default/variables.twig' %}

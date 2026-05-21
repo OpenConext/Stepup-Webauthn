@@ -1,7 +1,11 @@
 {
     "controllers": {
         "@web-auth/webauthn-stimulus": {
-            "webauthn": {
+            "registration": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "authentication": {
                 "enabled": true,
                 "fetch": "eager"
             }

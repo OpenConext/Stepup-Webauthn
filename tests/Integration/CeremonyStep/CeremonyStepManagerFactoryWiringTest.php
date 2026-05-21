@@ -31,7 +31,7 @@ use Webauthn\CeremonyStep\CeremonyStepManagerFactory;
  */
 class CeremonyStepManagerFactoryWiringTest extends KernelTestCase
 {
-    public function test_factory_resolves_to_surfnet_implementation(): void
+    public function testFactoryResolvesToSurfnetImplementation(): void
     {
         self::bootKernel();
 
@@ -40,7 +40,7 @@ class CeremonyStepManagerFactoryWiringTest extends KernelTestCase
         $this->assertInstanceOf(SurfnetCeremonyStepManagerFactory::class, $factory);
     }
 
-    public function test_creation_ceremony_builds_without_error(): void
+    public function testCreationCeremonyBuildsWithoutError(): void
     {
         self::bootKernel();
 
@@ -50,7 +50,7 @@ class CeremonyStepManagerFactoryWiringTest extends KernelTestCase
         $this->assertInstanceOf(CeremonyStepManager::class, $factory->creationCeremony());
     }
 
-    public function test_request_ceremony_builds_without_error(): void
+    public function testRequestCeremonyBuildsWithoutError(): void
     {
         self::bootKernel();
 

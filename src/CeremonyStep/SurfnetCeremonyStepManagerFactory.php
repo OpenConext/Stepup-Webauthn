@@ -40,7 +40,6 @@ use Webauthn\CeremonyStep\CheckCredentialId;
 use Webauthn\CeremonyStep\CheckExtensions;
 use Webauthn\CeremonyStep\CheckHasAttestedCredentialData;
 use Webauthn\CeremonyStep\CheckMetadataStatement;
-use Webauthn\CeremonyStep\CheckOrigin;
 use Webauthn\CeremonyStep\CheckRelyingPartyIdIdHash;
 use Webauthn\CeremonyStep\CheckSignature;
 use Webauthn\CeremonyStep\CheckTopOrigin;
@@ -69,11 +68,8 @@ final class SurfnetCeremonyStepManagerFactory
 
     private null|TopOriginValidator $topOriginValidator = null;
 
-    /** @var string[]|null */
-    private null|array $securedRelyingPartyId = null;
-
-    /** @var string[]|null */
-    private null|array $allowedOrigins = null;
+    /** @var string[] */
+    private array $allowedOrigins = [];
 
     private bool $allowSubdomains = false;
 
@@ -101,13 +97,11 @@ final class SurfnetCeremonyStepManagerFactory
     }
 
     /**
-     * @deprecated since 5.2.0 and will be removed in 6.0.0. Use setAllowedOrigins instead.
-     * @todo Remove this method when upgrading webauthn-lib to 6.0.
+     * @deprecated Removed in our factory; bundle still calls this via DI — kept as no-op.
      * @param string[] $securedRelyingPartyId
      */
     public function setSecuredRelyingPartyId(array $securedRelyingPartyId): void
     {
-        $this->securedRelyingPartyId = $securedRelyingPartyId;
     }
 
     /**
@@ -156,8 +150,14 @@ final class SurfnetCeremonyStepManagerFactory
         $this->topOriginValidator = $topOriginValidator;
     }
 
+    public function conditionalCreateCeremony(): CeremonyStepManager
+    {
+        return $this->creationCeremony();
+    }
+
     // Upgrade note: when bumping webauthn-lib, diff vendor CeremonyStepManagerFactory::creationCeremony()
     // and requestCeremony() against these lists and port any new or reordered steps.
+    // Last synced with vendor: 5.3.3
     public function creationCeremony(): CeremonyStepManager
     {
         $metadataStatementChecker = new CheckMetadataStatement();
@@ -168,19 +168,16 @@ final class SurfnetCeremonyStepManagerFactory
             $this->certificateChainValidator,
         );
 
-        $originStep = $this->allowedOrigins === null
-            ? new CheckOrigin($this->securedRelyingPartyId ?? [])
-            : new CheckAllowedOrigins($this->allowedOrigins, $this->allowSubdomains);
-
         return new CeremonyStepManager([
             new LogRegistrationData($this->logger),
             new CheckClientDataCollectorType(),
             new CheckChallenge(),
-            $originStep,
+            new CheckAllowedOrigins($this->allowedOrigins, $this->allowSubdomains),
             new CheckTopOrigin($this->topOriginValidator),
             new CheckRelyingPartyIdIdHash(),
             new CheckUserWasPresent(),
             new CheckUserVerification(),
+            new CheckBackupBitsAreConsistent(),
             new CheckNoBackupEligibility($this->logger),
             new CheckAlgorithm(),
             new CheckExtensions($this->extensionOutputCheckerHandler),
@@ -196,18 +193,14 @@ final class SurfnetCeremonyStepManagerFactory
 
     public function requestCeremony(): CeremonyStepManager
     {
-        $originStep = $this->allowedOrigins === null
-            ? new CheckOrigin($this->securedRelyingPartyId ?? [])
-            : new CheckAllowedOrigins($this->allowedOrigins, $this->allowSubdomains);
-
         return new CeremonyStepManager([
             new LogAuthenticationData($this->logger),
             new CheckAllowedCredentialList(),
             new CheckUserHandle(),
             new CheckClientDataCollectorType(),
             new CheckChallenge(),
-            $originStep,
-            new CheckTopOrigin(),
+            new CheckAllowedOrigins($this->allowedOrigins, $this->allowSubdomains),
+            new CheckTopOrigin($this->topOriginValidator),
             new CheckRelyingPartyIdIdHash(),
             new CheckUserWasPresent(),
             new CheckUserVerification(),

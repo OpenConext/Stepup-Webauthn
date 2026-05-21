@@ -23,17 +23,26 @@ namespace Surfnet\Webauthn\Repository;
 use Doctrine\Persistence\ManagerRegistry;
 use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
 use Webauthn\Bundle\Repository\DoctrineCredentialSourceRepository;
+use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialSource as WebauthnPublicKeyCredentialSource;
 use Webauthn\PublicKeyCredentialUserEntity;
 
 /**
- * @extends DoctrineCredentialSourceRepository<PublicKeyCredentialSource>
+ * @extends DoctrineCredentialSourceRepository<\Surfnet\Webauthn\Entity\PublicKeyCredentialSource>
  */
 class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, PublicKeyCredentialSource::class);
+    }
+
+    public function saveCredentialRecord(CredentialRecord $credentialRecord): void
+    {
+        if (!$credentialRecord instanceof WebauthnPublicKeyCredentialSource) {
+            $credentialRecord = WebauthnPublicKeyCredentialSource::fromCredentialRecord($credentialRecord);
+        }
+        $this->saveCredentialSource($credentialRecord);
     }
 
     public function saveCredentialSource(WebauthnPublicKeyCredentialSource $publicKeyCredentialSource): void
@@ -57,6 +66,7 @@ class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceReposi
 
     public function findAllForUserEntity(PublicKeyCredentialUserEntity $publicKeyCredentialUserEntity): array
     {
+        /** @var array<\Surfnet\Webauthn\Entity\PublicKeyCredentialSource> */
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->from($this->class, 'c')

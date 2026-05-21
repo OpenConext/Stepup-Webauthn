@@ -25,9 +25,9 @@ use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\CeremonyStep\CeremonyStep;
 use Webauthn\Exception\AuthenticatorResponseVerificationException;
+use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
-use Webauthn\PublicKeyCredentialSource;
 
 /**
  * Rejects credentials that are backup-eligible (i.e. can be synced across devices / passkeys).
@@ -43,7 +43,7 @@ final class CheckNoBackupEligibility implements CeremonyStep
     }
 
     public function process(
-        PublicKeyCredentialSource $publicKeyCredentialSource,
+        CredentialRecord $publicKeyCredentialSource,
         AuthenticatorAssertionResponse|AuthenticatorAttestationResponse $authenticatorResponse,
         PublicKeyCredentialRequestOptions|PublicKeyCredentialCreationOptions $publicKeyCredentialOptions,
         ?string $userHandle,

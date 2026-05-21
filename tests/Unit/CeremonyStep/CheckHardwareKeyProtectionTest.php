@@ -39,7 +39,7 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
         $this->step = new CheckHardwareKeyProtection($this->repository, new NullLogger());
     }
 
-    public function test_skips_assertion_response(): void
+    public function testSkipsAssertionResponse(): void
     {
         $this->repository->expects($this->never())->method('findOneByAAGUID');
 
@@ -54,7 +54,7 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function test_skips_when_no_attested_credential_data(): void
+    public function testSkipsWhenNoAttestedCredentialData(): void
     {
         $this->repository->expects($this->never())->method('findOneByAAGUID');
 
@@ -69,7 +69,7 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function test_skips_when_no_metadata_statement(): void
+    public function testSkipsWhenNoMetadataStatement(): void
     {
         // Authenticators absent from the MDS cannot have their key protection verified here.
         // CheckFidoCertified is the safety net: it throws when no status reports exist for the AAGUID.
@@ -86,11 +86,11 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function test_passes_for_hardware_key_protection(): void
+    public function testPassesForHardwareKeyProtection(): void
     {
-        $metadata = $this->createMock(MetadataStatement::class);
-        $metadata->keyProtection = [MetadataStatement::KEY_PROTECTION_HARDWARE];
-        $this->repository->method('findOneByAAGUID')->willReturn($metadata);
+        $this->repository->method('findOneByAAGUID')->willReturn(
+            $this->makeMetadata([MetadataStatement::KEY_PROTECTION_HARDWARE])
+        );
 
         $this->step->process(
             $this->credentialSource,
@@ -103,11 +103,11 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function test_passes_for_secure_element_key_protection(): void
+    public function testPassesForSecureElementKeyProtection(): void
     {
-        $metadata = $this->createMock(MetadataStatement::class);
-        $metadata->keyProtection = [MetadataStatement::KEY_PROTECTION_SECURE_ELEMENT];
-        $this->repository->method('findOneByAAGUID')->willReturn($metadata);
+        $this->repository->method('findOneByAAGUID')->willReturn(
+            $this->makeMetadata([MetadataStatement::KEY_PROTECTION_SECURE_ELEMENT])
+        );
 
         $this->step->process(
             $this->credentialSource,
@@ -120,11 +120,11 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function test_throws_for_software_key_protection(): void
+    public function testThrowsForSoftwareKeyProtection(): void
     {
-        $metadata = $this->createMock(MetadataStatement::class);
-        $metadata->keyProtection = [MetadataStatement::KEY_PROTECTION_SOFTWARE];
-        $this->repository->method('findOneByAAGUID')->willReturn($metadata);
+        $this->repository->method('findOneByAAGUID')->willReturn(
+            $this->makeMetadata([MetadataStatement::KEY_PROTECTION_SOFTWARE])
+        );
 
         $this->expectException(AuthenticatorResponseVerificationException::class);
 
@@ -137,11 +137,11 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_throws_for_tee_key_protection(): void
+    public function testThrowsForTeeKeyProtection(): void
     {
-        $metadata = $this->createMock(MetadataStatement::class);
-        $metadata->keyProtection = [MetadataStatement::KEY_PROTECTION_TEE];
-        $this->repository->method('findOneByAAGUID')->willReturn($metadata);
+        $this->repository->method('findOneByAAGUID')->willReturn(
+            $this->makeMetadata([MetadataStatement::KEY_PROTECTION_TEE])
+        );
 
         $this->expectException(AuthenticatorResponseVerificationException::class);
 
@@ -154,11 +154,11 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_throws_for_empty_key_protection(): void
+    public function testThrowsForEmptyKeyProtection(): void
     {
-        $metadata = $this->createMock(MetadataStatement::class);
-        $metadata->keyProtection = [];
-        $this->repository->method('findOneByAAGUID')->willReturn($metadata);
+        $this->repository->method('findOneByAAGUID')->willReturn(
+            $this->makeMetadata([])
+        );
 
         $this->expectException(AuthenticatorResponseVerificationException::class);
 
@@ -168,6 +168,26 @@ class CheckHardwareKeyProtectionTest extends AbstractCeremonyStepTestCase
             $this->options,
             null,
             'example.com'
+        );
+    }
+
+    /** @param string[] $keyProtection */
+    private function makeMetadata(array $keyProtection): MetadataStatement
+    {
+        return MetadataStatement::create(
+            'Test Authenticator',
+            1,
+            'fido2',
+            3,
+            [],
+            [],
+            [],
+            ['basic_full'],
+            [],
+            [],
+            [],
+            [],
+            keyProtection: $keyProtection,
         );
     }
 }

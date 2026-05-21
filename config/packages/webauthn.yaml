@@ -30,3 +30,15 @@ webauthn:
         mds_repository: 'Surfnet\Webauthn\Service\MetadataStatementService'
         status_report_repository: 'Surfnet\Webauthn\Service\MetadataStatementService'
 
+    client_override_policy:
+        authenticator_attachment:
+            enabled: false
+        user_verification:
+            enabled: false
+        resident_key:
+            enabled: false
+        attestation_conveyance:
+            enabled: false
+        extensions:
+            enabled: false
+

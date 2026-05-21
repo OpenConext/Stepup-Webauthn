@@ -29,9 +29,9 @@ use Webauthn\Exception\AuthenticatorResponseVerificationException;
 use Webauthn\MetadataService\Statement\AuthenticatorStatus;
 use Webauthn\MetadataService\Statement\StatusReport;
 use Webauthn\MetadataService\StatusReportRepository;
+use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
-use Webauthn\PublicKeyCredentialSource;
 
 final class CheckFidoCertified implements CeremonyStep
 {
@@ -56,7 +56,7 @@ final class CheckFidoCertified implements CeremonyStep
     }
 
     public function process(
-        PublicKeyCredentialSource $publicKeyCredentialSource,
+        CredentialRecord $publicKeyCredentialSource,
         AuthenticatorAssertionResponse|AuthenticatorAttestationResponse $authenticatorResponse,
         PublicKeyCredentialRequestOptions|PublicKeyCredentialCreationOptions $publicKeyCredentialOptions,
         ?string $userHandle,

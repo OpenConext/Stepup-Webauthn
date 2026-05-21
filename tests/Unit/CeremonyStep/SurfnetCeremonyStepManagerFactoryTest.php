@@ -33,6 +33,7 @@ use Surfnet\Webauthn\CeremonyStep\SurfnetCeremonyStepManagerFactory;
 use Webauthn\CeremonyStep\CeremonyStepManager;
 use Webauthn\CeremonyStep\CheckAlgorithm;
 use Webauthn\CeremonyStep\CheckAllowedCredentialList;
+use Webauthn\CeremonyStep\CheckAllowedOrigins;
 use Webauthn\CeremonyStep\CheckAttestationFormatIsKnownAndValid;
 use Webauthn\CeremonyStep\CheckBackupBitsAreConsistent;
 use Webauthn\CeremonyStep\CheckChallenge;
@@ -42,7 +43,6 @@ use Webauthn\CeremonyStep\CheckCredentialId;
 use Webauthn\CeremonyStep\CheckExtensions;
 use Webauthn\CeremonyStep\CheckHasAttestedCredentialData;
 use Webauthn\CeremonyStep\CheckMetadataStatement;
-use Webauthn\CeremonyStep\CheckOrigin;
 use Webauthn\CeremonyStep\CheckRelyingPartyIdIdHash;
 use Webauthn\CeremonyStep\CheckSignature;
 use Webauthn\CeremonyStep\CheckTopOrigin;
@@ -67,7 +67,7 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
         );
     }
 
-    public function test_creation_ceremony_with_mds_has_exact_expected_steps(): void
+    public function testCreationCeremonyWithMdsHasExactExpectedSteps(): void
     {
         $manager = $this->factory->creationCeremony();
         $stepClasses = $this->getStepClasses($manager);
@@ -76,11 +76,12 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
             LogRegistrationData::class,
             CheckClientDataCollectorType::class,
             CheckChallenge::class,
-            CheckOrigin::class,
+            CheckAllowedOrigins::class,
             CheckTopOrigin::class,
             CheckRelyingPartyIdIdHash::class,
             CheckUserWasPresent::class,
             CheckUserVerification::class,
+            CheckBackupBitsAreConsistent::class,
             CheckNoBackupEligibility::class,
             CheckAlgorithm::class,
             CheckExtensions::class,
@@ -94,15 +95,15 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
         ], $stepClasses);
     }
 
-    public function test_creation_ceremony_does_not_include_backup_bits_consistent(): void
+    public function testCreationCeremonyIncludesBackupBitsConsistent(): void
     {
         $manager = $this->factory->creationCeremony();
         $stepClasses = $this->getStepClasses($manager);
 
-        $this->assertNotContains(CheckBackupBitsAreConsistent::class, $stepClasses);
+        $this->assertContains(CheckBackupBitsAreConsistent::class, $stepClasses);
     }
 
-    public function test_request_ceremony_has_expected_steps(): void
+    public function testRequestCeremonyHasExpectedSteps(): void
     {
         $manager = $this->factory->requestCeremony();
         $stepClasses = $this->getStepClasses($manager);
@@ -113,7 +114,7 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
             CheckUserHandle::class,
             CheckClientDataCollectorType::class,
             CheckChallenge::class,
-            CheckOrigin::class,
+            CheckAllowedOrigins::class,
             CheckTopOrigin::class,
             CheckRelyingPartyIdIdHash::class,
             CheckUserWasPresent::class,
@@ -125,7 +126,7 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
         ], $stepClasses);
     }
 
-    public function test_request_ceremony_does_not_include_registration_steps(): void
+    public function testRequestCeremonyDoesNotIncludeRegistrationSteps(): void
     {
         $manager = $this->factory->requestCeremony();
         $stepClasses = $this->getStepClasses($manager);

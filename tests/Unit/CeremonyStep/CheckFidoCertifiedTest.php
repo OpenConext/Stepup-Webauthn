@@ -40,7 +40,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         $this->step = new CheckFidoCertified($this->repository, new NullLogger());
     }
 
-    public function test_skips_assertion_response(): void
+    public function testSkipsAssertionResponse(): void
     {
         $this->repository->expects($this->never())->method('findStatusReportsByAAGUID');
 
@@ -55,7 +55,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function test_skips_when_no_attested_credential_data(): void
+    public function testSkipsWhenNoAttestedCredentialData(): void
     {
         $this->repository->expects($this->never())->method('findStatusReportsByAAGUID');
 
@@ -70,7 +70,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function test_throws_when_no_status_reports(): void
+    public function testThrowsWhenNoStatusReports(): void
     {
         $this->repository->method('findStatusReportsByAAGUID')->willReturn([]);
 
@@ -85,7 +85,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_rejects_ctap1_u2f_authenticators_with_null_aaguid(): void
+    public function testRejectsCtap1_u2f_authenticators_with_null_aaguid(): void
     {
         // CTAP1/U2F authenticators advertise the null UUID (00000000-...) as their AAGUID.
         // They have no FIDO MDS status reports, so they are always rejected here.
@@ -108,7 +108,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
     }
 
     /** @dataProvider fidoCertifiedStatusProvider */
-    public function test_passes_for_all_fido_certified_levels(string $status): void
+    public function testPassesForAllFidoCertifiedLevels(string $status): void
     {
         $this->repository->method('findStatusReportsByAAGUID')->willReturn([
             $this->makeStatusReport($status),
@@ -141,7 +141,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         ];
     }
 
-    public function test_throws_when_not_fido_certified(): void
+    public function testThrowsWhenNotFidoCertified(): void
     {
         $this->repository->method('findStatusReportsByAAGUID')->willReturn([
             $this->makeStatusReport(AuthenticatorStatus::NOT_FIDO_CERTIFIED),
@@ -158,7 +158,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_uses_most_recent_report_by_effective_date(): void
+    public function testUsesMostRecentReportByEffectiveDate(): void
     {
         // Newest-first order from the repository — sorting must pick the right one
         $this->repository->method('findStatusReportsByAAGUID')->willReturn([
@@ -177,7 +177,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_throws_for_revoked_status(): void
+    public function testThrowsForRevokedStatus(): void
     {
         $this->repository->method('findStatusReportsByAAGUID')->willReturn([
             $this->makeStatusReport(AuthenticatorStatus::REVOKED),
@@ -194,7 +194,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_null_effective_date_is_treated_as_older_than_dated_report(): void
+    public function testNullEffectiveDateIsTreatedAsOlderThanDatedReport(): void
     {
         // Null-dated report (initial/undated) must sort before a dated newer report
         $this->repository->method('findStatusReportsByAAGUID')->willReturn([

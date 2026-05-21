@@ -36,7 +36,7 @@ class CheckAttestationIsNotNoneTest extends AbstractCeremonyStepTestCase
         $this->step = new CheckAttestationIsNotNone(new NullLogger());
     }
 
-    public function test_skips_assertion_response(): void
+    public function testSkipsAssertionResponse(): void
     {
         $this->step->process(
             $this->credentialSource,
@@ -49,7 +49,7 @@ class CheckAttestationIsNotNoneTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function test_throws_for_type_none(): void
+    public function testThrowsForTypeNone(): void
     {
         $this->expectException(AuthenticatorResponseVerificationException::class);
 
@@ -62,7 +62,7 @@ class CheckAttestationIsNotNoneTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_passes_for_type_basic(): void
+    public function testPassesForTypeBasic(): void
     {
         $this->step->process(
             $this->credentialSource,

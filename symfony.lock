@@ -733,9 +733,6 @@
     "web-auth/webauthn-lib": {
         "version": "v2.0.3"
     },
-    "web-auth/webauthn-stimulus": {
-        "version": "4.7.9"
-    },
     "web-auth/webauthn-symfony-bundle": {
         "version": "4.9",
         "recipe": {
