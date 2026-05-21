@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\CeremonyStep\CeremonyStep;
+use Surfnet\Webauthn\Exception\BackupEligibleRejectedException;
 use Webauthn\Exception\AuthenticatorResponseVerificationException;
 use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialCreationOptions;
@@ -62,7 +63,7 @@ final class CheckNoBackupEligibility implements CeremonyStep
         ]);
 
         if ($authData->isBackupEligible()) {
-            throw AuthenticatorResponseVerificationException::create(
+            throw new BackupEligibleRejectedException(
                 'Multi-device credentials are not accepted. The authenticator must not be backup-eligible.'
             );
         }

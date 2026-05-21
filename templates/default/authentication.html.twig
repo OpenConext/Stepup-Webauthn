@@ -74,10 +74,13 @@
             window.addEventListener('webauthn:authentication:verify:error', handleFailure, true);
             window.addEventListener('webauthn:authentication:options:error', handleFailure, true);
 
-            // Trigger authentication once the Stimulus controller has connected.
-            window.addEventListener('webauthn:authentication:connect', () => {
-                document.getElementById('authenticationButton').click();
-            }, { once: true });
+            // Guard against Stimulus connecting before this script runs, then fall back to the connect event.
+            const authBtn = document.getElementById('authenticationButton');
+            if (!authBtn.hidden) {
+                authBtn.click();
+            } else {
+                window.addEventListener('webauthn:authentication:connect', () => authBtn.click(), { once: true });
+            }
         })();
     </script>
 

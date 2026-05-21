@@ -35,7 +35,7 @@ class LogRegistrationDataTest extends AbstractCeremonyStepTestCase
         $this->step = new LogRegistrationData(new NullLogger());
     }
 
-    public function testuskips_assertion_response_without_logging(): void
+    public function testSkipsAssertionResponseWithoutLogging(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->never())->method('info');
@@ -51,7 +51,7 @@ class LogRegistrationDataTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function testulogs_info_for_attestation_response(): void
+    public function testLogsInfoForAttestationResponse(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->atLeastOnce())->method('info');
@@ -66,7 +66,7 @@ class LogRegistrationDataTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function testulogs_raw_attestation_data_at_info(): void
+    public function testLogsRawAttestationDataAtInfo(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->exactly(2))->method('info');
@@ -81,7 +81,7 @@ class LogRegistrationDataTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function testunever_throws(): void
+    public function testNeverThrows(): void
     {
         $this->step->process(
             $this->credentialSource,
@@ -94,7 +94,7 @@ class LogRegistrationDataTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    public function testunever_throws_without_attested_credential_data(): void
+    public function testNeverThrowsWithoutAttestedCredentialData(): void
     {
         $this->step->process(
             $this->credentialSource,

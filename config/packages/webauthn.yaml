@@ -30,6 +30,9 @@ webauthn:
         mds_repository: 'Surfnet\Webauthn\Service\MetadataStatementService'
         status_report_repository: 'Surfnet\Webauthn\Service\MetadataStatementService'
 
+    # client_override_policy: controls whether clients (browsers/apps) are allowed to override the server's
+    # configured values for each parameter. enabled: false means the server's value is authoritative and
+    # clients cannot change it. This is intentional — it prevents clients from weakening security requirements.
     client_override_policy:
         authenticator_attachment:
             enabled: false

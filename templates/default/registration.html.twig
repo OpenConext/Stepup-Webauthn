@@ -71,12 +71,10 @@
                 if (response) {
                     try {
                         const body = await response.clone().json();
-                        const serverMsg = body.errorMessage || '';
-                        console.error('[webauthn] server error:', serverMsg);
-                        if (serverMsg.includes('backup-eligible') || serverMsg.includes('Multi-device')) {
+                        if (body.errorCode === 'backup_eligible_rejected') {
                             msg = '{{ "status.passkey_not_accepted"|trans }}';
                         } else {
-                            msg = serverMsg || `Registration rejected by server (HTTP ${response.status})`;
+                            msg = body.errorMessage || `Registration rejected by server (HTTP ${response.status})`;
                         }
                     } catch {
                         msg = `Registration rejected by server (HTTP ${response.status})`;
@@ -90,24 +88,17 @@
                 showErrors();
             };
 
-            [
-                'webauthn:registration:options:request',
-                'webauthn:registration:options:success',
-                'webauthn:registration:credential',
-                'webauthn:registration:verify:request',
-                'webauthn:registration:verify:success',
-                'webauthn:unsupported',
-            ].forEach(name => window.addEventListener(name, evt => console.log('[webauthn]', evt.type, evt.detail), true));
-
             window.addEventListener('webauthn:registration:error', handleFailure, true);
             window.addEventListener('webauthn:registration:verify:error', handleFailure, true);
             window.addEventListener('webauthn:registration:options:error', handleFailure, true);
 
-            // Trigger registration once the Stimulus controller has connected.
-            // Using the connect event guarantees the action handler is in place.
-            window.addEventListener('webauthn:registration:connect', () => {
-                document.getElementById('registerButton').click();
-            }, { once: true });
+            // Guard against Stimulus connecting before this script runs, then fall back to the connect event.
+            const registerBtn = document.getElementById('registerButton');
+            if (!registerBtn.hidden) {
+                registerBtn.click();
+            } else {
+                window.addEventListener('webauthn:registration:connect', () => registerBtn.click(), { once: true });
+            }
         })();
     </script>
 
