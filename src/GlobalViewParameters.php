@@ -51,6 +51,7 @@ final readonly class GlobalViewParameters
         $metadata = $this->clientMetadataService->generateMetadata($this->request->getCurrentRequest());
         return [
             'supportEmail' => $this->supportEmail,
+            'timestamp' => $metadata['timestamp'],
             'hostname' => $metadata['hostname'],
             'ipAddress' => $metadata['ip_address'],
             'requestId' => $metadata['request_id'],
