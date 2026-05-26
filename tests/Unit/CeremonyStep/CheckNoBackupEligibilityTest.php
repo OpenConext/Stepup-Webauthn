@@ -23,7 +23,7 @@ namespace Test\Unit\CeremonyStep;
 use Psr\Log\NullLogger;
 use Surfnet\Webauthn\CeremonyStep\CheckNoBackupEligibility;
 use Webauthn\AuthenticatorAssertionResponse;
-use Webauthn\Exception\AuthenticatorResponseVerificationException;
+use Surfnet\Webauthn\Exception\BackupEligibleRejectedException;
 
 class CheckNoBackupEligibilityTest extends AbstractCeremonyStepTestCase
 {
@@ -50,7 +50,7 @@ class CheckNoBackupEligibilityTest extends AbstractCeremonyStepTestCase
 
     public function testThrowsWhenBackupEligible(): void
     {
-        $this->expectException(AuthenticatorResponseVerificationException::class);
+        $this->expectException(BackupEligibleRejectedException::class);
 
         $this->step->process(
             $this->credentialSource,
