@@ -26,7 +26,9 @@ use Surfnet\Webauthn\CeremonyStep\LogAuthenticationData;
 use Symfony\Component\Uid\Uuid;
 use Webauthn\AttestedCredentialData;
 use Webauthn\AuthenticatorAssertionResponse;
+use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialSource;
+use Webauthn\TrustPath\EmptyTrustPath;
 
 class LogAuthenticationDataTest extends AbstractCeremonyStepTestCase
 {
@@ -38,7 +40,7 @@ class LogAuthenticationDataTest extends AbstractCeremonyStepTestCase
         $this->step = new LogAuthenticationData(new NullLogger());
     }
 
-    public function test_skips_attestation_response_without_logging(): void
+    public function testSkipsAttestationResponseWithoutLogging(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->never())->method('info');
@@ -54,7 +56,7 @@ class LogAuthenticationDataTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_logs_info_for_known_aaguid(): void
+    public function testLogsInfoForKnownAaguid(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())->method('info');
@@ -72,7 +74,7 @@ class LogAuthenticationDataTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_logs_warning_for_null_aaguid(): void
+    public function testLogsWarningForNullAaguid(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->never())->method('info');
@@ -90,7 +92,7 @@ class LogAuthenticationDataTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    public function test_never_throws(): void
+    public function testNeverThrows(): void
     {
         $credentialSource = $this->credentialSourceWithAaguid('00000000-0000-0000-0000-000000000000');
 
@@ -105,14 +107,14 @@ class LogAuthenticationDataTest extends AbstractCeremonyStepTestCase
         $this->addToAssertionCount(1);
     }
 
-    private function credentialSourceWithAaguid(string $uuid): PublicKeyCredentialSource
+    private function credentialSourceWithAaguid(string $uuid): CredentialRecord
     {
         return PublicKeyCredentialSource::create(
             'credential-id',
             'public-key',
             [],
             'basic',
-            new \Webauthn\TrustPath\EmptyTrustPath(),
+            new EmptyTrustPath(),
             Uuid::fromString($uuid),
             'public-key-bytes',
             'user-handle',

@@ -96,7 +96,7 @@ final class UserRepository extends ServiceEntityRepository implements ServiceEnt
     public function generateUserEntity(?string $username, ?string $displayName): PublicKeyCredentialUserEntity
     {
         $id = Uuid::uuid4()->toString();
-        return new User($username, $id, $displayName);
+        return new User($username ?? '', $id, $displayName ?? '');
     }
 
     public function generateUserName(): string

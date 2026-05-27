@@ -4,12 +4,11 @@
     <h2>{{ 'authentication.sub_title'|trans }}</h2>
 
     <form id="form"
-        {{ stimulus_controller('@web-auth/webauthn-stimulus',
+        {{ stimulus_controller('@web-auth/authentication',
                 {
-                    useBrowserAutofill: false,
-                    requestSuccessRedirectUri: path('app_identity_authentication'),
-                    requestResultUrl: path('webauthn.controller.security.main.request.result'),
-                    requestOptionsUrl: path('webauthn.controller.security.main.request.options')
+                    successRedirectUri: path('app_identity_authentication'),
+                    resultUrl: path('webauthn.controller.security.main.request.result'),
+                    optionsUrl: path('webauthn.controller.security.main.request.options')
                 }
             ) }}
     >
@@ -26,7 +25,8 @@
         />
 
         <button id="authenticationButton"
-                {{ stimulus_action('@web-auth/webauthn-stimulus', 'signin') }}
+                type="button"
+                {{ stimulus_action('@web-auth/authentication', 'authenticate') }}
                 hidden>
         </button>
     </form>
@@ -44,8 +44,7 @@
         } %}
 
     <script>
-        window.onload = function(){
-            const form = document.getElementById('form');
+        (function () {
             const setText = (id, value) => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = value ?? '';
@@ -58,23 +57,31 @@
 
             const handleFailure = (evt) => {
                 const detail = evt.detail || {};
-                const exception = detail.exception;
-                const serverData = detail.data || {};
+                const error = detail.error;
+                const response = detail.response;
                 const msg =
-                    (exception && (exception.message || String(exception))) ||
-                    serverData.errorMessage ||
+                    (error && (error.message || String(error))) ||
+                    (response && `Authentication rejected by server (HTTP ${response.status})`) ||
                     'Authentication failed';
 
                 setText('errorMessage', msg);
                 setText('timestamp', new Date().toISOString());
 
                 showErrors();
+            };
+
+            window.addEventListener('webauthn:authentication:error', handleFailure, true);
+            window.addEventListener('webauthn:authentication:verify:error', handleFailure, true);
+            window.addEventListener('webauthn:authentication:options:error', handleFailure, true);
+
+            // Guard against Stimulus connecting before this script runs, then fall back to the connect event.
+            const authBtn = document.getElementById('authenticationButton');
+            if (!authBtn.hidden) {
+                authBtn.click();
+            } else {
+                window.addEventListener('webauthn:authentication:connect', () => authBtn.click(), { once: true });
             }
-
-            window.addEventListener('webauthn:assertion:failure', handleFailure, true);
-
-            document.getElementById("authenticationButton").click();
-        }
+        })();
     </script>
 
     {% include 'default/variables.twig' %}

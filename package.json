@@ -8,7 +8,7 @@
     "@symfony/stimulus-bridge": "^4.0.1",
     "@symfony/webpack-encore": "^5.3.1",
     "@types/query-string": "^6.3.0",
-    "@web-auth/webauthn-stimulus": "file:vendor/web-auth/webauthn-stimulus/assets",
+    "@web-auth/webauthn-stimulus": "^5.3.3",
     "compass-mixins": "^0",
     "file-loader": "^6.0.0",
     "sass": "^1.97.3",

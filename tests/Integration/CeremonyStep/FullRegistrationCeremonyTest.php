@@ -46,7 +46,7 @@ use Psr\Log\NullLogger;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialParameters;
 use Webauthn\PublicKeyCredentialRpEntity;
-use Webauthn\PublicKeyCredentialSource;
+use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialUserEntity;
 use Webauthn\TrustPath\EmptyTrustPath;
 
@@ -88,7 +88,7 @@ class FullRegistrationCeremonyTest extends TestCase
 
         $result = $validator->check($response, $options, self::RP_ID);
 
-        $this->assertInstanceOf(PublicKeyCredentialSource::class, $result);
+        $this->assertInstanceOf(CredentialRecord::class, $result);
     }
 
     public function testBackupEligibleCredentialIsRejected(): void

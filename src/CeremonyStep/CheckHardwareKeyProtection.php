@@ -27,9 +27,9 @@ use Webauthn\CeremonyStep\CeremonyStep;
 use Webauthn\Exception\AuthenticatorResponseVerificationException;
 use Webauthn\MetadataService\MetadataStatementRepository;
 use Webauthn\MetadataService\Statement\MetadataStatement;
+use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
-use Webauthn\PublicKeyCredentialSource;
 
 final class CheckHardwareKeyProtection implements CeremonyStep
 {
@@ -47,7 +47,7 @@ final class CheckHardwareKeyProtection implements CeremonyStep
     }
 
     public function process(
-        PublicKeyCredentialSource $publicKeyCredentialSource,
+        CredentialRecord $publicKeyCredentialSource,
         AuthenticatorAssertionResponse|AuthenticatorAttestationResponse $authenticatorResponse,
         PublicKeyCredentialRequestOptions|PublicKeyCredentialCreationOptions $publicKeyCredentialOptions,
         ?string $userHandle,
@@ -80,7 +80,7 @@ final class CheckHardwareKeyProtection implements CeremonyStep
         $this->logger->info('MDS metadata statement found for authenticator', [
             'registrationId' => $registrationId,
             'aaguid' => $aaguid,
-            'description' => isset($metadataStatement->description) ? $metadataStatement->description : null,
+            'description' => $metadataStatement->description,
             'keyProtection' => $metadataStatement->keyProtection,
         ]);
 
