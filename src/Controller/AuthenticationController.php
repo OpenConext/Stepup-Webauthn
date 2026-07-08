@@ -26,6 +26,7 @@ use Surfnet\Webauthn\PublicKeyCredentialRequestOptionsStore;
 use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
 use Surfnet\Webauthn\Repository\UserRepository;
 use Surfnet\Webauthn\Service\ClientMetadataService;
+use Surfnet\Webauthn\Service\ServiceName\ServiceNameResolver;
 use Surfnet\Webauthn\WithContextLogger;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
@@ -106,13 +107,16 @@ class AuthenticationController extends AbstractController
 
         $this->store->set($publicKeyCredentialRequestOptions);
 
+        $serviceName = ServiceNameResolver::resolve($this->authenticationService->getMdui(), $request->getLocale());
+
         $logger->info('Return authentication page with public key credential request options');
 
         return $this->render(
             'default/authentication.html.twig',
             [
                 'publicKeyOptions' => $publicKeyCredentialRequestOptions,
-                'nameId' => $nameId
+                'nameId' => $nameId,
+                'serviceName' => $serviceName,
             ] +
             $this->clientMetadataService->generateMetadata($request)
         );
