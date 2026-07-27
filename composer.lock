@@ -3405,12 +3405,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/Stepup-gssp-bundle.git",
-                "reference": "f7d9790073f6fb955941e049f1ba573985f40a9a"
+                "reference": "536f69fa5c042a0da3f9b0a982f99d9f4785ca07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/Stepup-gssp-bundle/zipball/f7d9790073f6fb955941e049f1ba573985f40a9a",
-                "reference": "f7d9790073f6fb955941e049f1ba573985f40a9a",
+                "url": "https://api.github.com/repos/OpenConext/Stepup-gssp-bundle/zipball/536f69fa5c042a0da3f9b0a982f99d9f4785ca07",
+                "reference": "536f69fa5c042a0da3f9b0a982f99d9f4785ca07",
                 "shasum": ""
             },
             "require": {
@@ -3508,7 +3508,7 @@
                 "source": "https://github.com/OpenConext/Stepup-gssp-bundle/tree/feature/issue-48-preserve-mdui-uiinfo",
                 "issues": "https://github.com/OpenConext/Stepup-gssp-bundle/issues"
             },
-            "time": "2026-07-10T09:58:13+00:00"
+            "time": "2026-07-27T14:28:26+00:00"
         },
         {
             "name": "surfnet/stepup-saml-bundle",
