@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8a4b2bbee8666b1b287de196da48cf3c",
+    "content-hash": "f396ce7b82619ebb814ba19b2acc40f7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3401,23 +3401,23 @@
         },
         {
             "name": "surfnet/stepup-gssp-bundle",
-            "version": "dev-feature/issue-48-preserve-mdui-uiinfo",
+            "version": "6.1.0-beta1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/OpenConext/Stepup-gssp-bundle.git",
-                "reference": "536f69fa5c042a0da3f9b0a982f99d9f4785ca07"
+                "url": "git@github.com:OpenConext/Stepup-gssp-bundle.git",
+                "reference": "e9cdcae963bc283c5816eac6941d8e27315da7c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/Stepup-gssp-bundle/zipball/536f69fa5c042a0da3f9b0a982f99d9f4785ca07",
-                "reference": "536f69fa5c042a0da3f9b0a982f99d9f4785ca07",
+                "url": "https://api.github.com/repos/OpenConext/Stepup-gssp-bundle/zipball/e9cdcae963bc283c5816eac6941d8e27315da7c4",
+                "reference": "e9cdcae963bc283c5816eac6941d8e27315da7c4",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^3",
                 "ext-openssl": "*",
                 "php": "^8.2",
-                "surfnet/stepup-saml-bundle": "dev-feature/issue-48-mdui-chunk as 7.0.99",
+                "surfnet/stepup-saml-bundle": "7.1.0-beta1",
                 "symfony/dependency-injection": "^7.4",
                 "symfony/framework-bundle": "^7.4",
                 "symfony/monolog-bundle": "^4.0"
@@ -3504,24 +3504,20 @@
                 "Apache-2.0"
             ],
             "description": "A Symfony 6 bundle to aid the creation of GSSP (Generic SAML Step-up Provider) device support.",
-            "support": {
-                "source": "https://github.com/OpenConext/Stepup-gssp-bundle/tree/feature/issue-48-preserve-mdui-uiinfo",
-                "issues": "https://github.com/OpenConext/Stepup-gssp-bundle/issues"
-            },
-            "time": "2026-07-27T14:28:26+00:00"
+            "time": "2026-08-03T11:41:41+00:00"
         },
         {
             "name": "surfnet/stepup-saml-bundle",
-            "version": "dev-feature/issue-48-mdui-chunk",
+            "version": "7.1.0-beta1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/OpenConext/Stepup-saml-bundle.git",
-                "reference": "790eab12fe7aa88e94ade3b172810cd2db220e9e"
+                "url": "git@github.com:OpenConext/Stepup-saml-bundle.git",
+                "reference": "7f67d77102dba170f2d8fe7f7e9a826d7d2aa329"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/Stepup-saml-bundle/zipball/790eab12fe7aa88e94ade3b172810cd2db220e9e",
-                "reference": "790eab12fe7aa88e94ade3b172810cd2db220e9e",
+                "url": "https://api.github.com/repos/OpenConext/Stepup-saml-bundle/zipball/7f67d77102dba170f2d8fe7f7e9a826d7d2aa329",
+                "reference": "7f67d77102dba170f2d8fe7f7e9a826d7d2aa329",
                 "shasum": ""
             },
             "require": {
@@ -3530,7 +3526,7 @@
                 "php": "^8.1",
                 "psr/log": "^3.0",
                 "robrichards/xmlseclibs": "^3.1.4",
-                "simplesamlphp/saml2": ">=4.6 <4.20",
+                "simplesamlphp/saml2": ">=4.16.16 <4.20",
                 "symfony/dependency-injection": "^6.3|^7.0",
                 "symfony/framework-bundle": "^6.4|^7.4",
                 "symfony/security-bundle": "^6.4|^7.4",
@@ -3629,11 +3625,7 @@
                 "simplesamlphp",
                 "surfnet"
             ],
-            "support": {
-                "source": "https://github.com/OpenConext/Stepup-saml-bundle/tree/feature/issue-48-mdui-chunk",
-                "issues": "https://github.com/OpenConext/Stepup-saml-bundle/issues"
-            },
-            "time": "2026-07-06T08:02:35+00:00"
+            "time": "2026-07-30T12:37:17+00:00"
         },
         {
             "name": "symfony/asset",
@@ -12662,25 +12654,9 @@
             "time": "2025-11-17T20:03:58+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "surfnet/stepup-gssp-bundle",
-            "version": "dev-feature/issue-48-preserve-mdui-uiinfo",
-            "alias": "6.0.99",
-            "alias_normalized": "6.0.99.0"
-        },
-        {
-            "package": "surfnet/stepup-saml-bundle",
-            "version": "dev-feature/issue-48-mdui-chunk",
-            "alias": "7.0.99",
-            "alias_normalized": "7.0.99.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "surfnet/stepup-gssp-bundle": 20,
-        "surfnet/stepup-saml-bundle": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
