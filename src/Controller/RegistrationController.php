@@ -25,6 +25,7 @@ use Surfnet\Webauthn\Repository\UserRepository;
 use Surfnet\Webauthn\Service\ClientMetadataService;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Service\RegistrationService;
+use Surfnet\GsspBundle\Service\ServiceName\ServiceNameResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -62,11 +63,14 @@ final class RegistrationController extends AbstractController
 
         $this->logger->info('Return registration page for user attestation');
 
+        $serviceName = ServiceNameResolver::resolve($this->registrationService->getMdui(), $request->getLocale());
+
         return $this->render(
             'default\registration.html.twig',
             [
                 'name' => $this->userRepository->generateUserName(),
                 'displayName' => $this->userDisplayName,
+                'serviceName' => $serviceName,
             ] + $this->clientMetadataService->generateMetadata($request)
         );
     }

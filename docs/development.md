@@ -58,3 +58,16 @@ If everything goes as planned you can go to:
 
 [https://webauthn.dev.openconext.local](https://webauthn.dev.openconext.local)
 
+Adding a language
+-------------------
+
+1. Add `translations/messages.<locale>.yml`, copying the keys from `messages.en.yml`.
+2. Service name locale matching is handled by `Surfnet\GsspBundle\Service\ServiceName\ServiceNameResolver`,
+   which lives in the `surfnet/stepup-gssp-bundle` dependency, not in this repo. It matches
+   locales by their first 2 characters (e.g. `nl_NL` -> `nl`). This assumes a 2-letter ISO 639-1
+   language code. A 3-letter code (ISO 639-2, e.g. `fil`) will not match correctly, changing
+   that behavior requires a change in `surfnet/stepup-gssp-bundle`, not this repo.
+3. The resolver's fallback order is: exact locale match -> `en` -> first available
+   `DisplayName` in the SAML mdui:UIInfo extension. The `en` fallback is hardcoded in
+   gssp-bundle, not config-driven, and not overridable from this repo.
+

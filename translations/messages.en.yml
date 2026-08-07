@@ -7,6 +7,7 @@ page.navigation.route.sp_demo: Demo SP
 
 registration.sub_title: Registration
 registration.start_button: Use your security key
+registration.service_name: Registering a token for %serviceName%
 status.registration_initial: Register your FIDO2 token.
 status.missing_attestation_statement: Try again and grant access to view your FIDO2 token.
 
@@ -14,6 +15,7 @@ status.missing_attestation_statement: Try again and grant access to view your FI
 
 authentication.sub_title: Authentication
 authentication.start_button: Use your security key
+authentication.service_name: Signing in to %serviceName%
 status.authentication_initial: Authenticate with your FIDO2 token.
 
 # General status messages

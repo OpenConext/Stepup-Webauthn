@@ -8,6 +8,7 @@ page.navigation.route.sp_demo: Demo SP
 
 registration.sub_title: Registratie
 registration.start_button: Gebruik je beveiligingssleutel
+registration.service_name: Token registreren voor %serviceName%
 status.registration_initial: Registreer jouw FIDO2 token.
 status.missing_attestation_statement: Probeer het opnieuw en verleen toegang om je FIDO2 token te bekijken.
 
@@ -15,6 +16,7 @@ status.missing_attestation_statement: Probeer het opnieuw en verleen toegang om 
 
 authentication.sub_title: Authenticeren
 authentication.start_button: Gebruik je beveiligingssleutel
+authentication.service_name: Inloggen bij %serviceName%
 status.authentication_initial: Authenticeer met jouw FIDO2 token.
 
 # General status messages
