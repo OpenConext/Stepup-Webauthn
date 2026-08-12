@@ -22,12 +22,14 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
 final class Version20240410075133 extends AbstractMigration
 {
+    #[Override]
     public function getDescription(): string
     {
         return '';
@@ -41,6 +43,7 @@ final class Version20240410075133 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E95E237E06 ON users (name)');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs

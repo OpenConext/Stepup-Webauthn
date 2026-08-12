@@ -44,7 +44,7 @@ class LogRegistrationDataTest extends AbstractCeremonyStepTestCase
         $step = new LogRegistrationData($logger);
         $step->process(
             $this->credentialSource,
-            $this->createMock(AuthenticatorAssertionResponse::class),
+            $this->createStub(AuthenticatorAssertionResponse::class),
             $this->options,
             null,
             'example.com'

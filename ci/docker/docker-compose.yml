@@ -12,7 +12,7 @@ services:
           - "webauthn.dev.openconext.local"
   webauthn:
     stdin_open: true
-    image: ghcr.io/openconext/openconext-basecontainers/php82-apache2-node20-composer2:latest
+    image: ghcr.io/openconext/openconext-basecontainers/php85-apache2-node24:latest
     volumes:
       - ../../:/var/www/html
       - ${PWD}/webauthn:/config

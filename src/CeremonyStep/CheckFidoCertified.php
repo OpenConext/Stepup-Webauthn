@@ -33,11 +33,11 @@ use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
 
-final class CheckFidoCertified implements CeremonyStep
+final readonly class CheckFidoCertified implements CeremonyStep
 {
     use RegistrationIdFromChallenge;
 
-    private const FIDO_CERTIFIED_STATUSES = [
+    private const array FIDO_CERTIFIED_STATUSES = [
         AuthenticatorStatus::FIDO_CERTIFIED,
         AuthenticatorStatus::FIDO_CERTIFIED_L1,
         AuthenticatorStatus::FIDO_CERTIFIED_L1plus,
@@ -50,8 +50,8 @@ final class CheckFidoCertified implements CeremonyStep
     ];
 
     public function __construct(
-        private readonly StatusReportRepository $statusReportRepository,
-        private readonly LoggerInterface $logger,
+        private StatusReportRepository $statusReportRepository,
+        private LoggerInterface $logger,
     ) {
     }
 

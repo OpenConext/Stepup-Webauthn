@@ -26,7 +26,7 @@ use Webauthn\PublicKeyCredentialRequestOptions;
 
 class PublicKeyCredentialRequestOptionsStore
 {
-    final public const KEY = 'PUBLIC_KEY_CREDENTIAL_REQUEST_OPTIONS';
+    final public const string KEY = 'PUBLIC_KEY_CREDENTIAL_REQUEST_OPTIONS';
 
     public function __construct(private readonly SessionValueStore $store)
     {

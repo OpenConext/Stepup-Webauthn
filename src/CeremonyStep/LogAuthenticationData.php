@@ -34,11 +34,11 @@ use Webauthn\PublicKeyCredentialRequestOptions;
  * Warns when the credential has a null AAGUID (CTAP1/U2F legacy token).
  * Never throws — purely observational.
  */
-final class LogAuthenticationData implements CeremonyStep
+final readonly class LogAuthenticationData implements CeremonyStep
 {
-    private const NULL_AAGUID = '00000000-0000-0000-0000-000000000000';
+    private const string NULL_AAGUID = '00000000-0000-0000-0000-000000000000';
 
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger)
     {
     }
 

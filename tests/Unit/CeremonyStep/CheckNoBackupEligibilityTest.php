@@ -39,7 +39,7 @@ class CheckNoBackupEligibilityTest extends AbstractCeremonyStepTestCase
     {
         $this->step->process(
             $this->credentialSource,
-            $this->createMock(AuthenticatorAssertionResponse::class),
+            $this->createStub(AuthenticatorAssertionResponse::class),
             $this->options,
             null,
             'example.com'

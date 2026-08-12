@@ -22,6 +22,7 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -40,6 +41,7 @@ SQL;
         WHERE id = :id
 SQL;
 
+    #[Override]
     public function getDescription(): string
     {
         return '';
@@ -92,6 +94,7 @@ SQL;
         $this->addSql('ALTER TABLE public_key_credential_sources CHANGE id id VARCHAR(36) NOT NULL, CHANGE transports transports JSON NOT NULL COMMENT \'(DC2Type:json)\', CHANGE other_ui other_ui JSON DEFAULT NULL COMMENT \'(DC2Type:json)\'');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('CREATE TABLE users_user_handles (user_id VARCHAR(36) CHARACTER SET utf8mb4 NOT NULL COLLATE `utf8mb4_unicode_ci`, user_handle INT NOT NULL, UNIQUE INDEX UNIQ_EFD91D5DF4D23BE4 (user_handle), INDEX IDX_EFD91D5DA76ED395 (user_id), PRIMARY KEY(user_id, user_handle)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB COMMENT = \'\' ');

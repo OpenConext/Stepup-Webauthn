@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\Repository;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Override;
 use Surfnet\Webauthn\Entity\PublicKeyCredentialSource;
 use Webauthn\Bundle\Repository\DoctrineCredentialSourceRepository;
 use Webauthn\CredentialRecord;
@@ -28,7 +29,7 @@ use Webauthn\PublicKeyCredentialSource as WebauthnPublicKeyCredentialSource;
 use Webauthn\PublicKeyCredentialUserEntity;
 
 /**
- * @extends DoctrineCredentialSourceRepository<\Surfnet\Webauthn\Entity\PublicKeyCredentialSource>
+ * @extends DoctrineCredentialSourceRepository<PublicKeyCredentialSource>
  */
 class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceRepository
 {
@@ -37,6 +38,7 @@ class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceReposi
         parent::__construct($registry, PublicKeyCredentialSource::class);
     }
 
+    #[Override]
     public function saveCredentialRecord(CredentialRecord $credentialRecord): void
     {
         if (!$credentialRecord instanceof WebauthnPublicKeyCredentialSource) {
@@ -45,6 +47,7 @@ class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceReposi
         $this->saveCredentialSource($credentialRecord);
     }
 
+    #[Override]
     public function saveCredentialSource(WebauthnPublicKeyCredentialSource $publicKeyCredentialSource): void
     {
         if (!$publicKeyCredentialSource instanceof PublicKeyCredentialSource) {
@@ -64,9 +67,10 @@ class PublicKeyCredentialSourceRepository extends DoctrineCredentialSourceReposi
         parent::saveCredentialSource($publicKeyCredentialSource);
     }
 
+    #[Override]
     public function findAllForUserEntity(PublicKeyCredentialUserEntity $publicKeyCredentialUserEntity): array
     {
-        /** @var array<\Surfnet\Webauthn\Entity\PublicKeyCredentialSource> */
+        /** @var array<PublicKeyCredentialSource> */
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->from($this->class, 'c')

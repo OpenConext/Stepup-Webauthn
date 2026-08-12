@@ -30,6 +30,7 @@ use Surfnet\StepupBundle\Controller\ExceptionController as BaseExceptionControll
 use Surfnet\StepupBundle\Exception\Art;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Override;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
@@ -43,6 +44,7 @@ final class ExceptionController extends BaseExceptionController
         parent::__construct($translator, $requestId);
     }
 
+    #[Override]
     public function show(Request $request, Throwable $exception): Response
     {
         $statusCode = $this->getStatusCode($exception);
@@ -65,6 +67,7 @@ final class ExceptionController extends BaseExceptionController
         );
     }
 
+    #[Override]
     protected function getPageTitleAndDescription(Throwable $exception): array
     {
         $translator = $this->getTranslator();
@@ -92,6 +95,7 @@ final class ExceptionController extends BaseExceptionController
         return parent::getPageTitleAndDescription($exception);
     }
 
+    #[Override]
     protected function getStatusCode(Throwable $exception): int
     {
         if ($exception instanceof NoAuthnrequestException) {

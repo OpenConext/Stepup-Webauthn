@@ -31,18 +31,18 @@ use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
 
-final class CheckHardwareKeyProtection implements CeremonyStep
+final readonly class CheckHardwareKeyProtection implements CeremonyStep
 {
     use RegistrationIdFromChallenge;
 
-    private const ALLOWED_KEY_PROTECTION = [
+    private const array ALLOWED_KEY_PROTECTION = [
         MetadataStatement::KEY_PROTECTION_HARDWARE,
         MetadataStatement::KEY_PROTECTION_SECURE_ELEMENT,
     ];
 
     public function __construct(
-        private readonly MetadataStatementRepository $metadataStatementRepository,
-        private readonly LoggerInterface $logger,
+        private MetadataStatementRepository $metadataStatementRepository,
+        private LoggerInterface $logger,
     ) {
     }
 
