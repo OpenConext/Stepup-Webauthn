@@ -4,27 +4,17 @@ declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
 
-// Modern Fluent Config - All sets combined for future use
-// After completing all upgrade tasks
 return RectorConfig::configure()
     ->withPaths([
+        __DIR__ . '/../../bin',
+        __DIR__ . '/../../config',
         __DIR__ . '/../../src',
         __DIR__ . '/../../tests',
     ])
-    ->withSymfonyContainerPhp(__DIR__ . '/../../var/cache/prod/Surfnet_Webauthn_KernelProdContainer.php')
-    ->withAttributesSets(symfony: true, doctrine: true)
-    ->withPhpSets(php82: true)
-    ->withComposerBased(
-        symfony: true,
-        doctrine: true,
-        phpunit: true
-    )
-    ->withPreparedSets(
-        deadCode: true,
-        codeQuality: true
-    )
-    ->withImportNames(
-        importNames: true,
-        importShortClasses: false
-    )
-;
+    ->withPhpSets()
+    ->withComposerBased(doctrine: true, phpunit: true)
+    ->withAttributesSets(doctrine: true, phpunit: true)
+    ->withSkip([
+        \Rector\Php84\Rector\MethodCall\NewMethodCallWithoutParenthesesRector::class,
+        \Rector\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector::class,
+    ]);

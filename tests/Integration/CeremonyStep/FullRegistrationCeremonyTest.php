@@ -59,11 +59,11 @@ use Webauthn\TrustPath\EmptyTrustPath;
  */
 class FullRegistrationCeremonyTest extends TestCase
 {
-    private const RP_ID = 'example.com';
-    private const ORIGIN = 'https://example.com';
-    private const TEST_AAGUID = '550e8400-e29b-41d4-a716-446655440000';
+    private const string RP_ID = 'example.com';
+    private const string ORIGIN = 'https://example.com';
+    private const string TEST_AAGUID = '550e8400-e29b-41d4-a716-446655440000';
 
-    private const TEST_PRIVATE_KEY_PEM = <<<PEM
+    private const string TEST_PRIVATE_KEY_PEM = <<<PEM
     -----BEGIN PRIVATE KEY-----
     MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgbKkXB055IwqO6IlK
     IROwqe+eQY6ljMNghk/Oe7tOkDChRANCAATcLAujig+aLAX3qCZu52B9yEYTnHxG
@@ -72,7 +72,7 @@ class FullRegistrationCeremonyTest extends TestCase
     PEM;
 
     // Pre-computed COSE public key for TEST_PRIVATE_KEY_PEM (P-256, ES256)
-    private const TEST_COSE_PUBLIC_KEY = 'pQECAyYgASFYINwsC6OKD5osBfeoJm7nYH3IRhOcfEZipeIGM3MdU5QyIlggpCluFhbsNihnNEfcHI2n8pZrLTaS/5XpxL9hwoF/Eic=';
+    private const string TEST_COSE_PUBLIC_KEY = 'pQECAyYgASFYINwsC6OKD5osBfeoJm7nYH3IRhOcfEZipeIGM3MdU5QyIlggpCluFhbsNihnNEfcHI2n8pZrLTaS/5XpxL9hwoF/Eic=';
 
     private const FLAGS_NORMAL = AuthenticatorData::FLAG_UP | AuthenticatorData::FLAG_UV | AuthenticatorData::FLAG_AT;
     private const FLAGS_BACKUP_ELIGIBLE = self::FLAGS_NORMAL | AuthenticatorData::FLAG_BE;
@@ -147,8 +147,8 @@ class FullRegistrationCeremonyTest extends TestCase
     {
         [$response, $options] = $this->buildPackedRegistration(self::FLAGS_NORMAL);
 
-        $softwareMdsRepo = new class (self::TEST_AAGUID) implements MetadataStatementRepository {
-            public function __construct(private readonly string $aaguid)
+        $softwareMdsRepo = new readonly class (self::TEST_AAGUID) implements MetadataStatementRepository {
+            public function __construct(private string $aaguid)
             {
             }
 
@@ -320,8 +320,8 @@ class FullRegistrationCeremonyTest extends TestCase
 
     private function emptyStatusRepo(string $aaguid): StatusReportRepository
     {
-        return new class ($aaguid) implements StatusReportRepository {
-            public function __construct(private readonly string $aaguid)
+        return new readonly class ($aaguid) implements StatusReportRepository {
+            public function __construct(private string $aaguid)
             {
             }
 
@@ -335,8 +335,8 @@ class FullRegistrationCeremonyTest extends TestCase
 
     private function notFidoCertifiedStatusRepo(string $aaguid): StatusReportRepository
     {
-        return new class ($aaguid) implements StatusReportRepository {
-            public function __construct(private readonly string $aaguid)
+        return new readonly class ($aaguid) implements StatusReportRepository {
+            public function __construct(private string $aaguid)
             {
             }
 
@@ -353,8 +353,8 @@ class FullRegistrationCeremonyTest extends TestCase
 
     private function hardwareMdsRepo(string $aaguid): MetadataStatementRepository
     {
-        return new class ($aaguid) implements MetadataStatementRepository {
-            public function __construct(private readonly string $aaguid)
+        return new readonly class ($aaguid) implements MetadataStatementRepository {
+            public function __construct(private string $aaguid)
             {
             }
 
@@ -384,8 +384,8 @@ class FullRegistrationCeremonyTest extends TestCase
 
     private function fidoCertifiedStatusRepo(string $aaguid): StatusReportRepository
     {
-        return new class ($aaguid) implements StatusReportRepository {
-            public function __construct(private readonly string $aaguid)
+        return new readonly class ($aaguid) implements StatusReportRepository {
+            public function __construct(private string $aaguid)
             {
             }
 

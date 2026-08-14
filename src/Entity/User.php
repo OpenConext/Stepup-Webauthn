@@ -21,15 +21,11 @@ declare(strict_types=1);
 namespace Surfnet\Webauthn\Entity;
 
 use Doctrine\DBAL\Types\Types;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
-use Surfnet\Webauthn\Entity\PublicKeyCredentialSource as PublicKeyCredentialSourceEntity;
+use Override;
 use Surfnet\Webauthn\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Webauthn\PublicKeyCredentialSource;
 use Webauthn\PublicKeyCredentialUserEntity;
 
 #[ORM\Table(name: 'users')]
@@ -39,12 +35,15 @@ class User extends PublicKeyCredentialUserEntity implements UserInterface
     #[ORM\Id]
     #[ORM\Column(type: Types::STRING, length: 36, unique: true)]
     #[ORM\GeneratedValue(strategy: "NONE")]
+    #[Override]
     public readonly string $id;
 
     #[Assert\Length(max: 100)]
+    #[Override]
     public string $name;
 
     #[Assert\Length(max: 100)]
+    #[Override]
     public readonly string $displayName;
 
     /**

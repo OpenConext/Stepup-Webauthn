@@ -30,10 +30,10 @@ use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
 
-final class CheckAttestationIsNotNone implements CeremonyStep
+final readonly class CheckAttestationIsNotNone implements CeremonyStep
 {
     use RegistrationIdFromChallenge;
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger)
     {
     }
 

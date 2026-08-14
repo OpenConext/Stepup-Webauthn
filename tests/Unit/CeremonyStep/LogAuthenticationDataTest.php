@@ -24,7 +24,6 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Surfnet\Webauthn\CeremonyStep\LogAuthenticationData;
 use Symfony\Component\Uid\Uuid;
-use Webauthn\AttestedCredentialData;
 use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialSource;
@@ -67,7 +66,7 @@ class LogAuthenticationDataTest extends AbstractCeremonyStepTestCase
         $step = new LogAuthenticationData($logger);
         $step->process(
             $credentialSource,
-            $this->createMock(AuthenticatorAssertionResponse::class),
+            $this->createStub(AuthenticatorAssertionResponse::class),
             $this->options,
             null,
             'example.com'
@@ -85,7 +84,7 @@ class LogAuthenticationDataTest extends AbstractCeremonyStepTestCase
         $step = new LogAuthenticationData($logger);
         $step->process(
             $credentialSource,
-            $this->createMock(AuthenticatorAssertionResponse::class),
+            $this->createStub(AuthenticatorAssertionResponse::class),
             $this->options,
             null,
             'example.com'
@@ -98,7 +97,7 @@ class LogAuthenticationDataTest extends AbstractCeremonyStepTestCase
 
         $this->step->process(
             $credentialSource,
-            $this->createMock(AuthenticatorAssertionResponse::class),
+            $this->createStub(AuthenticatorAssertionResponse::class),
             $this->options,
             null,
             'example.com'

@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Surfnet\Webauthn;
 
+use Override;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 
@@ -30,6 +31,7 @@ class Kernel extends BaseKernel
     /**
      * see https://symfony.com/doc/current/reference/configuration/kernel.html#kernel-project-dir
      */
+    #[Override]
     public function getProjectDir(): string
     {
         return dirname(__DIR__);

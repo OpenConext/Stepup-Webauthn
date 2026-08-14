@@ -22,6 +22,7 @@ namespace Surfnet\Webauthn\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Override;
 use Surfnet\Webauthn\Repository\PublicKeyCredentialSourceRepository;
 use Symfony\Component\Uid\Uuid;
 use Webauthn\PublicKeyCredentialSource as BasePublicKeyCredentialSource;
@@ -44,8 +45,11 @@ class PublicKeyCredentialSource extends BasePublicKeyCredentialSource
      * Override the $backupEligible, $backupStatus and $uvInitialized fields which we do not use, but needs
      * to be initialized. Needed to prevent read before written errors.
      */
+    #[Override]
     public ?bool $backupEligible = null;
+    #[Override]
     public ?bool $backupStatus = null;
+    #[Override]
     public ?bool $uvInitialized = false;
 
     public function __construct(
