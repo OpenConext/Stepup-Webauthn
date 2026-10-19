@@ -24,6 +24,10 @@ If everything goes as planned you can develop inside the virtual machine
 
 ``` docker exec -it stepup-webauthn-1 bash ```
 
+Note: Registering tokens on a .local domain (e.g. https://webauthn.dev.openconext.local) does not work in Firefox with
+a self-signed certificate. `navigator.credentials.create()` throws `CredentialsContainer request is not allowed.`
+      
+
 ### 2. Prepare the MetadataStatementService
 We use the Fido JWS MDS Blob file to verify if Webauthn tokens are trustworthy. Here we follow the principle. If a 
 token is verified by Fido and has at least a level 1 score. The token is good enough for us.
@@ -31,14 +35,16 @@ token is verified by Fido and has at least a level 1 score. The token is good en
 2 files need to be present in the `config/openconext/mds` folder. They are:
 
 ```config/openconext/mds/blob.jwt```
-```config/openconext/mds/fido2-mds.cer```
+```config/openconext/mds/root.crt```
 
-The blob containing the registry of metadata statements can be found here: https://fidoalliance.org/metadata/ (see the Obtaining blob section)
+The `blob.jwt` file is signed by the FIDO Alliance by an certificate that is issued under the GlobalSign R46 root 
+certificate `root.crt`.
+The FIDO metadata blob (`blob.jwt`) containing the registry of metadata statements and the CA root certificate can be found here: https://fidoalliance.org/metadata/
 
-The Blob file is signed by the FIDO Alliance. To verify the signature we need the appropriate certificate. This certificate is not downloaded on demand, but we
-also track it. This is the location the cert can be found on the fido page linked in the paragraph above. Also in the Obtaining blob section. 
-
-The provided dist files should result in a working application. But might not work with brand-new tokens.
+The provided `.dist` files contain the CA certificate and a mds metadata. This result in a working application, but 
+recently produced FIDO tokens may not work, because their metadata or attestation certificate is not present in the 
+included `blob.jwt.dist` file. Download the latest blob from https://fidoalliance.org/metadata/ and replace the 
+`blob.jwt` file with it to get the most recent FIDO metadata.
 
 ### 3. Build frontend assets:
 
