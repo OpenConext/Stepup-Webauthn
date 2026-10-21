@@ -52,6 +52,8 @@ use Webauthn\MetadataService\Statement\StatusReport;
  */
 class MetadataStatementRepository
 {
+    private const CACHE_SUFFIX = '.v2';
+
     /**
      * @var array<string, MetadataStatement>
      */
@@ -154,6 +156,22 @@ class MetadataStatementRepository
         return $payload;
     }
 
+    private function normalizePayload(string $payload): string
+    {
+        $data = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($data) || !is_array($data['entries'] ?? null)) {
+            return $payload;
+        }
+        foreach ($data['entries'] as &$entry) {
+            if (is_array($entry) && is_array($entry['metadataStatement'] ?? null)) {
+                $entry['metadataStatement']['userVerificationDetails'] ??= [];
+            }
+        }
+        unset($entry);
+
+        return json_encode($data, JSON_THROW_ON_ERROR);
+    }
+
     private function warmCache(): string
     {
         $contents = file_get_contents($this->jwtMdsBlobFileName);
@@ -166,11 +184,12 @@ class MetadataStatementRepository
             );
         }
         $contentsSignature = hash('sha256', $contents);
-        $cachePath = $this->mdsCacheDir . $contentsSignature;
+        $cachePath = $this->mdsCacheDir . $contentsSignature . self::CACHE_SUFFIX;
         if (!file_exists($cachePath)) {
             $certificates = [];
             $payload = $this->getJwsPayload($contents, $certificates);
             $this->validateCertificates(... $certificates);
+            $payload = $this->normalizePayload($payload);
             file_put_contents($cachePath, $payload);
         }
         if (!isset($payload)) {
