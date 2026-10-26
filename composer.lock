@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "329370a0cdf23e59d8969d63f2d028e5",
+    "content-hash": "dbdbb867c5829736d03ea4cf32247466",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3405,26 +3405,30 @@
         },
         {
             "name": "surfnet/stepup-gssp-bundle",
-            "version": "6.1.0-beta1",
+            "version": "6.1.0-beta4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/Stepup-gssp-bundle.git",
-                "reference": "72f8ff1d40b51d2d07e871ed3d4be00d392ce942"
+                "reference": "822ea68ae865357be023446928b3f9717cc05a6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/Stepup-gssp-bundle/zipball/72f8ff1d40b51d2d07e871ed3d4be00d392ce942",
-                "reference": "72f8ff1d40b51d2d07e871ed3d4be00d392ce942",
+                "url": "https://api.github.com/repos/OpenConext/Stepup-gssp-bundle/zipball/822ea68ae865357be023446928b3f9717cc05a6c",
+                "reference": "822ea68ae865357be023446928b3f9717cc05a6c",
                 "shasum": ""
             },
             "require": {
                 "beberlei/assert": "^3",
                 "ext-openssl": "*",
                 "php": "^8.2",
-                "surfnet/stepup-saml-bundle": "7.1.0-beta1",
+                "surfnet/stepup-saml-bundle": "7.1.0-beta3",
                 "symfony/dependency-injection": "^7.4",
                 "symfony/framework-bundle": "^7.4",
+                "symfony/http-foundation": "^7.4",
                 "symfony/monolog-bundle": "^4.0"
+            },
+            "conflict": {
+                "simplesamlphp/saml2": ">=4.20.0 <4.21.0"
             },
             "require-dev": {
                 "behat/behat": "^3.13",
@@ -3436,7 +3440,7 @@
                 "phpstan/phpstan-symfony": "^2.0",
                 "phpunit/phpcov": "^10.0",
                 "phpunit/phpunit": "^11",
-                "rector/rector": "^2.3",
+                "rector/rector": "^2.4",
                 "slevomat/coding-standard": "^8.26",
                 "squizlabs/php_codesniffer": "^4.0",
                 "symfony/phpunit-bridge": "^7.4"
@@ -3509,23 +3513,23 @@
             ],
             "description": "A Symfony 6 bundle to aid the creation of GSSP (Generic SAML Step-up Provider) device support.",
             "support": {
-                "source": "https://github.com/OpenConext/Stepup-gssp-bundle/tree/6.1.0-beta1",
+                "source": "https://github.com/OpenConext/Stepup-gssp-bundle/tree/6.1.0-beta4",
                 "issues": "https://github.com/OpenConext/Stepup-gssp-bundle/issues"
             },
-            "time": "2026-08-03T13:05:17+00:00"
+            "time": "2026-10-26T12:49:07+00:00"
         },
         {
             "name": "surfnet/stepup-saml-bundle",
-            "version": "7.1.0-beta1",
+            "version": "7.1.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/Stepup-saml-bundle.git",
-                "reference": "7f67d77102dba170f2d8fe7f7e9a826d7d2aa329"
+                "reference": "eb9625777fed525bde86561cbeb430b07631b468"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/Stepup-saml-bundle/zipball/7f67d77102dba170f2d8fe7f7e9a826d7d2aa329",
-                "reference": "7f67d77102dba170f2d8fe7f7e9a826d7d2aa329",
+                "url": "https://api.github.com/repos/OpenConext/Stepup-saml-bundle/zipball/eb9625777fed525bde86561cbeb430b07631b468",
+                "reference": "eb9625777fed525bde86561cbeb430b07631b468",
                 "shasum": ""
             },
             "require": {
@@ -3634,10 +3638,10 @@
                 "surfnet"
             ],
             "support": {
-                "source": "https://github.com/OpenConext/Stepup-saml-bundle/tree/7.1.0-beta1",
+                "source": "https://github.com/OpenConext/Stepup-saml-bundle/tree/7.1.0-beta3",
                 "issues": "https://github.com/OpenConext/Stepup-saml-bundle/issues"
             },
-            "time": "2026-07-30T12:37:17+00:00"
+            "time": "2026-08-06T10:53:12+00:00"
         },
         {
             "name": "symfony/asset",
