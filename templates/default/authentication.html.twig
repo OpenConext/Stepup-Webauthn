@@ -3,6 +3,10 @@
 {% block body %}
     <h2>{{ 'authentication.sub_title'|trans }}</h2>
 
+    {% if serviceName %}
+        <p>{{ 'authentication.service_name'|trans({'%serviceName%': serviceName}) }}</p>
+    {% endif %}
+
     <form id="form"
         {{ stimulus_controller('@web-auth/authentication',
                 {

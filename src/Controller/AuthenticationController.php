@@ -30,6 +30,7 @@ use Surfnet\Webauthn\WithContextLogger;
 use Psr\Log\LoggerInterface;
 use Surfnet\GsspBundle\Exception\UnrecoverableErrorException;
 use Surfnet\GsspBundle\Service\AuthenticationService;
+use Surfnet\GsspBundle\Service\ServiceName\ServiceNameResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,13 +107,16 @@ class AuthenticationController extends AbstractController
 
         $this->store->set($publicKeyCredentialRequestOptions);
 
+        $serviceName = ServiceNameResolver::resolve($this->authenticationService->getMdui(), $request->getLocale());
+
         $logger->info('Return authentication page with public key credential request options');
 
         return $this->render(
             'default/authentication.html.twig',
             [
                 'publicKeyOptions' => $publicKeyCredentialRequestOptions,
-                'nameId' => $nameId
+                'nameId' => $nameId,
+                'serviceName' => $serviceName,
             ] +
             $this->clientMetadataService->generateMetadata($request)
         );

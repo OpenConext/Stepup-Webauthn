@@ -39,7 +39,7 @@ final class UserRepository extends ServiceEntityRepository implements ServiceEnt
 {
     private readonly EntityManagerInterface $manager;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private readonly string $userDisplayName)
     {
         /** @var EntityManagerInterface $manager */
         $manager = $registry->getManagerForClass(User::class);
@@ -96,7 +96,7 @@ final class UserRepository extends ServiceEntityRepository implements ServiceEnt
     public function generateUserEntity(?string $username, ?string $displayName): PublicKeyCredentialUserEntity
     {
         $id = Uuid::uuid4()->toString();
-        return new User($username ?? '', $id, $displayName ?? '');
+        return new User($username ?? '', $id, $displayName ?: $this->userDisplayName);
     }
 
     public function generateUserName(): string
