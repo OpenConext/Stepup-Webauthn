@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased
+## 2.1.0
+- Upgrade to Symfony 7.4 LTS
+- Remove EOL sensiolabs/security-checker configuration
+- Update dev tooling and dependencies
 - Override CeremonyStepManagerFactory with explicit, controlled ceremony step lists for both registration and authentication
 - Enforce attestation quality during registration: reject TYPE_NONE attestation, require hardware key protection, require FIDO certification, and reject backup-eligible (multi-device/passkey) credentials
 - Restrict registration to cross-platform (hardware-bound) authenticators only
@@ -14,11 +17,6 @@ webauthn_registration_user_verification: 'preferred'
 webauthn_attestation_conveyance: 'direct'
 ```
 See `config/openconext/parameters.yaml.dist` for reference values and `\Webauthn\AuthenticatorSelectionCriteria` for available options.
-
-## 2.1.0
-- Upgrade to Symfony 7.4 LTS
-- Remove EOL sensiolabs/security-checker configuration
-- Update dev tooling and dependencies
 
 ## 2.0.8
 - Update node-forge and js-yaml

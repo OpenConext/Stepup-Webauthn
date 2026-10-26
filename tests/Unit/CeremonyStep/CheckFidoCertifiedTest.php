@@ -20,6 +20,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\CeremonyStep;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\NullLogger;
 use Surfnet\Webauthn\CeremonyStep\CheckFidoCertified;
 use Webauthn\AuthenticatorAssertionResponse;
@@ -46,7 +47,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
 
         $this->step->process(
             $this->credentialSource,
-            $this->createMock(AuthenticatorAssertionResponse::class),
+            $this->createStub(AuthenticatorAssertionResponse::class),
             $this->options,
             null,
             'example.com'
@@ -107,7 +108,7 @@ class CheckFidoCertifiedTest extends AbstractCeremonyStepTestCase
         );
     }
 
-    /** @dataProvider fidoCertifiedStatusProvider */
+    #[DataProvider('fidoCertifiedStatusProvider')]
     public function testPassesForAllFidoCertifiedLevels(string $status): void
     {
         $this->repository->method('findStatusReportsByAAGUID')->willReturn([

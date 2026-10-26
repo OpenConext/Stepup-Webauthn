@@ -61,9 +61,9 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
     {
         $this->factory = new SurfnetCeremonyStepManagerFactory(
             new NullLogger(),
-            $this->createMock(MetadataStatementRepository::class),
-            $this->createMock(StatusReportRepository::class),
-            $this->createMock(CertificateChainValidator::class),
+            $this->createStub(MetadataStatementRepository::class),
+            $this->createStub(StatusReportRepository::class),
+            $this->createStub(CertificateChainValidator::class),
         );
     }
 
@@ -142,9 +142,8 @@ class SurfnetCeremonyStepManagerFactoryTest extends TestCase
     {
         $reflection = new ReflectionClass($manager);
         $property = $reflection->getProperty('steps');
-        $property->setAccessible(true);
         $steps = $property->getValue($manager);
 
-        return array_map(fn($step) => get_class($step), $steps);
+        return array_map(get_class(...), $steps);
     }
 }

@@ -23,6 +23,7 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -31,6 +32,7 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20200210123511 extends AbstractMigration
 {
+    #[Override]
     public function getDescription() : string
     {
         return '';
@@ -48,6 +50,7 @@ final class Version20200210123511 extends AbstractMigration
         $this->addSql('ALTER TABLE users_user_handles ADD CONSTRAINT FK_EFD91D5DF4D23BE4 FOREIGN KEY (user_handle) REFERENCES public_key_credential_sources (id)');
     }
 
+    #[Override]
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs

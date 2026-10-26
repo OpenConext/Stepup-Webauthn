@@ -32,11 +32,11 @@ use Webauthn\PublicKeyCredentialRequestOptions;
  * First step in the creation ceremony. Logs the raw attestation data for audit/debugging purposes.
  * Never throws — purely observational.
  */
-final class LogRegistrationData implements CeremonyStep
+final readonly class LogRegistrationData implements CeremonyStep
 {
     use RegistrationIdFromChallenge;
 
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger)
     {
     }
 

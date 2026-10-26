@@ -25,7 +25,6 @@ use Webauthn\AuthenticatorAssertionResponse;
 use Webauthn\AuthenticatorAttestationResponse;
 use Webauthn\CeremonyStep\CeremonyStep;
 use Surfnet\Webauthn\Exception\BackupEligibleRejectedException;
-use Webauthn\Exception\AuthenticatorResponseVerificationException;
 use Webauthn\CredentialRecord;
 use Webauthn\PublicKeyCredentialCreationOptions;
 use Webauthn\PublicKeyCredentialRequestOptions;
@@ -35,11 +34,11 @@ use Webauthn\PublicKeyCredentialRequestOptions;
  * This is the runtime proxy for the MDS multiDeviceCredentialSupport field, which is not
  * exposed in webauthn-lib v5.
  */
-final class CheckNoBackupEligibility implements CeremonyStep
+final readonly class CheckNoBackupEligibility implements CeremonyStep
 {
     use RegistrationIdFromChallenge;
 
-    public function __construct(private readonly LoggerInterface $logger)
+    public function __construct(private LoggerInterface $logger)
     {
     }
 
